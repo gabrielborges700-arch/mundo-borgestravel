@@ -1,0 +1,814 @@
+/* ==========================================================================
+   style.css — Tema visual do Mundo Borgestrável
+   Consolidado a partir de Lovable (base, mais refinado/acessível) e
+   Base44 (efeitos extras: vela, névoa, manuscrito iluminado).
+   Sem Tailwind, sem frameworks — CSS puro.
+   ========================================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700;900&family=Cinzel+Decorative:wght@700;900&family=Cormorant+Unicase:wght@500;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Nunito:wght@400;600;700;800&family=UnifrakturCook:wght@700&family=UnifrakturMaguntia&display=swap");
+
+/* ---------- 1. Variáveis de cor e fonte (o "DNA" visual do mundo) ---------- */
+:root {
+  --radius: 0.625rem;
+  --font-display: "Cinzel", serif;
+  --font-body: "EB Garamond", "Nunito", Georgia, serif;
+  --font-blackletter: "UnifrakturCook", "Cormorant Unicase", "Cinzel Decorative", serif;
+  --font-unicase: "Cormorant Unicase", "Cinzel", serif;
+  --font-gotico: "UnifrakturMaguntia", cursive;
+
+  --magia-profunda: #06070a;
+  --purpura-arcana: #1a0b26;
+  --bg-ceu-noturno: radial-gradient(circle at 50% 0%, #1a0b26 0%, #06070a 100%);
+  --pedra-ardosia: #1c1e22;
+  --pedra-clara: #2d3238;
+  --pedra-gradiente: linear-gradient(145deg, #2d3238, #1c1e22);
+  --pergaminho: #f1e4c3;
+  --pergaminho-escuro: #d4c49d;
+  --bronze-envelhecido: #8c6239;
+  --ouro-velho: #d4af37;
+  --laranja-forja: #ff6a00;
+  --vermelho-incandescente: #cc0000;
+  --ciano-mistico: #00e5ff;
+  --roxo-acento: #ab47bc;
+
+  --background: #06070a;
+  --foreground: #f1e4c3;
+  --border: #2d3238;
+  --primary: #d4af37;
+  --primary-foreground: #1c1e22;
+  --muted: #1c1e22;
+  --muted-foreground: #d4c49d;
+  --accent: #00e5ff;
+  --accent-foreground: #06070a;
+  --card: #1c1e22;
+  --card-foreground: #f1e4c3;
+
+  /* Paleta extra "Manuscrito Iluminado" (origem: Base44) */
+  --oxblood: #6b1a1a;
+  --oxblood-escuro: #4a1010;
+  --verdigris: #3a6b5a;
+  --lapis: #1c3b8c;
+  --ouro-folha: #d4af37;
+  --ouro-folha-brilho: #f7e08a;
+  --tinta-carvao: #1a1612;
+  --cera-vermelha: #a02020;
+  --pergaminho-claro: #f5e9c8;
+  --pergaminho-vinho: #efe2bd;
+}
+
+/* ---------- 2. Reset básico ---------- */
+* { box-sizing: border-box; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-ceu-noturno);
+  color: var(--pergaminho);
+  margin: 0;
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+
+.font-display { font-family: var(--font-display); }
+.font-blackletter { font-family: var(--font-blackletter); letter-spacing: 0.01em; }
+.font-unicase { font-family: var(--font-unicase); letter-spacing: 0.05em; }
+.font-serif-body { font-family: "EB Garamond", Georgia, serif; }
+
+/* ---------- 3. Acessibilidade ---------- */
+*:focus { outline: none; }
+*:focus-visible {
+  outline: 3px solid var(--ciano-mistico);
+  outline-offset: 2px;
+  border-radius: 6px;
+  box-shadow: 0 0 0 4px rgba(0, 229, 255, 0.25);
+}
+input[type="range"]:focus-visible {
+  outline: 2px solid var(--ouro-velho);
+  outline-offset: 4px;
+}
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+.skip-link {
+  position: absolute; top: -100px; left: 1rem;
+  background: var(--ouro-velho); color: var(--magia-profunda);
+  padding: 0.75rem 1.25rem; border-radius: 8px; font-weight: 800;
+  font-family: var(--font-display); z-index: 100;
+  transition: top 0.2s ease;
+}
+.skip-link:focus { top: 1rem; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------- 4. Fundo mágico fixo (céu, estrelas, lua) ---------- */
+.fundo-magico-fixo {
+  position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;
+  background: var(--bg-ceu-noturno);
+}
+.fundo-magico-fixo::before {
+  content: ''; position: absolute; inset: 0;
+  background-image:
+    radial-gradient(ellipse at 20% 10%, rgba(171, 71, 188, 0.18), transparent 55%),
+    radial-gradient(ellipse at 80% 30%, rgba(0, 229, 255, 0.10), transparent 60%),
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: auto, auto, 30px 30px, 30px 30px;
+  pointer-events: none; z-index: 1;
+}
+.fundo-magico-fixo::after {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 100%, rgba(6,7,10,0.9), transparent 60%);
+  pointer-events: none; z-index: 2;
+}
+.estrela {
+  position: absolute; border-radius: 50%; background: #e0f7fa;
+  box-shadow: 0 0 4px rgba(224,247,250,0.5);
+  animation: twinkle 3s ease-in-out infinite;
+}
+.lua {
+  position: absolute; width: 48px; height: 48px; border-radius: 50%;
+  background: #e0f7fa; opacity: 0.85;
+  animation: luaPulsar 6s ease-in-out infinite;
+}
+
+/* ---------- 5. Animações (keyframes) ---------- */
+@keyframes twinkle { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; } }
+@keyframes derivaHorizontal { from { transform: translateX(-15vw); } to { transform: translateX(115vw); } }
+@keyframes girarAnel { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes girarAnelReverso { from { transform: rotate(360deg); } to { transform: rotate(0deg); } }
+@keyframes flutuar { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes spinner { to { transform: rotate(360deg); } }
+@keyframes sparkBoom { 0% { transform: scale(0.5); opacity: 1; } 100% { transform: scale(2.2); opacity: 0; } }
+@keyframes derivaDourada {
+  0% { transform: translate(0, 0); opacity: 0; }
+  15% { opacity: 0.85; }
+  85% { opacity: 0.5; }
+  100% { transform: translate(24px, -48px); opacity: 0; }
+}
+@keyframes luaPulsar { 0%, 100% { filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.2)); } 50% { filter: drop-shadow(0 0 20px rgba(0, 229, 255, 0.5)); } }
+@keyframes brilhoBorda {
+  0%, 100% { box-shadow: 0 15px 35px rgba(0,0,0,0.8), 0 0 0 1px rgba(212,175,55,0.08), 0 0 22px rgba(0,229,255,0.05); }
+  50% { box-shadow: 0 15px 35px rgba(0,0,0,0.8), 0 0 0 1px rgba(212,175,55,0.18), 0 0 32px rgba(0,229,255,0.15); }
+}
+/* Vela / névoa / raios de luz (origem: Base44) */
+@keyframes flickerVela { 0%,100% { opacity:0.82; transform: scaleY(1);} 25%{opacity:1;transform:scaleY(1.08);} 50%{opacity:0.68;transform:scaleY(0.94);} 75%{opacity:0.94;transform:scaleY(1.04);} }
+@keyframes derivaNevoa { from { transform: translateX(-12%);} to { transform: translateX(12%);} }
+@keyframes godRays { 0%,100% { opacity:0.08;} 50% { opacity:0.18;} }
+@keyframes brasaSobe { 0% { transform: translateY(0) scale(1); opacity:0;} 15%{opacity:0.9;} 100% { transform: translateY(-48px) scale(0.2); opacity:0;} }
+
+.animate-fadeIn { animation: fadeIn 0.4s ease-out forwards; }
+.flutuando { animation: flutuar 4s ease-in-out infinite; }
+.spinner-arcano {
+  width: 20px; height: 20px; border: 3px solid rgba(0,229,255,0.3);
+  border-top-color: var(--ciano-mistico); border-radius: 50%;
+  animation: spinner 1s linear infinite;
+}
+.booms-faisca { animation: sparkBoom 0.8s ease-out forwards; }
+.flame { animation: flickerVela 1.7s ease-in-out infinite; transform-origin: bottom; }
+.nevoa-drift { animation: derivaNevoa 32s ease-in-out infinite alternate; }
+.nevoa-drift-2 { animation: derivaNevoa 46s ease-in-out infinite alternate-reverse; }
+.god-rays { animation: godRays 7s ease-in-out infinite; }
+
+/* ---------- 6. Balão de fala do Oráculo ---------- */
+.balao-fala {
+  position: relative;
+  background: linear-gradient(to bottom, rgba(241,228,195,0.92), rgba(212,196,157,0.96));
+  border: 2px solid var(--bronze-envelhecido); border-radius: 14px;
+  color: #3e3222; box-shadow: 0 10px 25px rgba(0,0,0,0.8);
+}
+.balao-fala::after {
+  content: ""; position: absolute; bottom: -10px; right: 24px; width: 18px; height: 18px;
+  background: var(--pergaminho-escuro);
+  border-right: 2px solid var(--bronze-envelhecido); border-bottom: 2px solid var(--bronze-envelhecido);
+  transform: rotate(45deg);
+}
+.avatar-mago { box-shadow: 0 0 0 3px var(--pedra-ardosia), 0 0 0 5px var(--ouro-velho), 0 8px 20px rgba(0,0,0,0.8); }
+.chat-input { background: rgba(0,0,0,0.06); border: 1px solid var(--bronze-envelhecido); color: #3e3222; }
+.chat-input:focus { outline: none; border-color: var(--ciano-mistico); box-shadow: 0 0 8px rgba(0,229,255,0.4); }
+
+/* ---------- 7. Cards (as "runas" clicáveis) ---------- */
+.espada-card {
+  background: linear-gradient(145deg, #22262b, #16181c);
+  border: 1px solid var(--pedra-clara);
+  border-radius: 10px; padding: 12px 16px; display: flex; align-items: center;
+  gap: 15px; cursor: pointer; position: relative; overflow: hidden; width: 100%;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.5), inset 0 2px 4px rgba(255,255,255,0.03);
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.espada-card::before {
+  content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0,229,255,0.08), transparent);
+  transition: left 0.6s ease;
+}
+.espada-card:hover::before { left: 150%; }
+.espada-card:hover {
+  border-color: rgba(0, 229, 255, 0.5);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.75), 0 0 14px rgba(0, 229, 255, 0.35);
+  transform: translateY(-3px);
+}
+/* Variações de cor por bloco — 1 tema por reino, cor batendo com o hex de cada bloco em dados.js */
+.theme-indigo:hover   { border-color: rgba(92, 107, 192, 0.6);  box-shadow: 0 8px 20px rgba(0,0,0,0.7), 0 0 12px rgba(92, 107, 192, 0.35); transform: translateY(-3px); }   /* Bloco 0 */
+.theme-laranja:hover  { border-color: rgba(255, 112, 67, 0.6);  box-shadow: 0 8px 20px rgba(0,0,0,0.7), 0 0 12px rgba(255, 112, 67, 0.35); transform: translateY(-3px); }   /* Bloco 1 */
+.theme-ambar:hover    { border-color: rgba(224, 168, 62, 0.6);  box-shadow: 0 8px 20px rgba(0,0,0,0.7), 0 0 12px rgba(224, 168, 62, 0.35); transform: translateY(-3px); }   /* Bloco 2 */
+.theme-cinza:hover    { border-color: rgba(158, 158, 158, 0.6); box-shadow: 0 8px 20px rgba(0,0,0,0.7), 0 0 12px rgba(158, 158, 158, 0.35); transform: translateY(-3px); }  /* Bloco 3 */
+.theme-vermelho:hover { border-color: rgba(192, 57, 43, 0.65);  box-shadow: 0 8px 20px rgba(0,0,0,0.7), inset 0 0 15px rgba(192, 57, 43, 0.2); transform: translateY(-3px); } /* Bloco 4 */
+.theme-ciano:hover    { border-color: rgba(0, 229, 255, 0.55);  box-shadow: 0 8px 20px rgba(0,0,0,0.7), 0 0 12px rgba(0, 229, 255, 0.35); transform: translateY(-3px); }     /* Bloco 5 */
+.theme-roxo:hover     { border-color: rgba(171, 71, 188, 0.6);  box-shadow: 0 8px 20px rgba(0,0,0,0.7), 0 0 12px rgba(171, 71, 188, 0.35); transform: translateY(-3px); }   /* Bloco 6 */
+.theme-oxblood:hover  { border-color: rgba(160, 32, 32, 0.65);  box-shadow: 0 8px 20px rgba(0,0,0,0.7), 0 0 12px rgba(160, 32, 32, 0.4); transform: translateY(-3px); }    /* Ilha Amaldiçoada */
+.escudo-modulo-bloqueado { filter: grayscale(0.85) brightness(0.4); opacity: 0.65; }
+
+/* ---------- 8. Painéis (contêineres dos blocos/reinos) ---------- */
+.painel-reino-premium {
+  background: linear-gradient(145deg, rgba(45,50,56,0.82), rgba(28,30,34,0.92));
+  border: 2px solid #4a3e35;
+  border-radius: 16px; padding: 25px 20px; width: 100%;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.06), inset 0 -2px 6px rgba(0,0,0,0.55), inset 2px 2px 8px rgba(255,255,255,0.03);
+  position: relative;
+  animation: brilhoBorda 6s ease-in-out infinite;
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.35s ease, box-shadow 0.35s ease;
+}
+.painel-reino-premium::before {
+  content: ''; position: absolute; top: 8px; left: 8px; right: 8px; bottom: 8px;
+  border: 1px solid rgba(212, 175, 55, 0.18); border-radius: 10px; pointer-events: none;
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.35);
+}
+.painel-reino-premium:hover {
+  transform: translateY(-3px);
+  border-color: rgba(212,175,55,0.55);
+  box-shadow: 0 22px 45px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255,255,255,0.09), inset 0 -2px 6px rgba(0,0,0,0.55), inset 2px 2px 8px rgba(255,255,255,0.04), 0 0 30px rgba(0,229,255,0.18);
+}
+
+/* Painel "pergaminho" — pra ler os textos das runas */
+.painel-leitura {
+  background:
+    radial-gradient(ellipse at top, rgba(255,255,255,0.22), transparent 60%),
+    linear-gradient(to bottom, rgba(241,228,195,0.7), rgba(212,196,157,0.85));
+  color: #3e3222; border-radius: 12px; border: 1px solid var(--bronze-envelhecido);
+  box-shadow: inset 0 4px 10px rgba(0,0,0,0.25), inset 0 0 40px rgba(140,98,57,0.15), 0 12px 24px rgba(0,0,0,0.55);
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.35s ease, box-shadow 0.35s ease;
+}
+.painel-leitura:hover { transform: translateY(-2px); border-color: #a87a45; }
+
+/* Pergaminho velho — variação mais escura (origem: Base44) */
+.painel-pergaminho-velho {
+  background:
+    radial-gradient(circle at 20% 0%, rgba(107,26,26,0.06), transparent 40%),
+    radial-gradient(circle at 80% 100%, rgba(28,59,140,0.05), transparent 45%),
+    linear-gradient(160deg, var(--pergaminho-claro), var(--pergaminho-vinho));
+  color: var(--tinta-carvao);
+  border-radius: 10px; border: 1px solid var(--bronze-envelhecido);
+  box-shadow: inset 0 0 0 1px rgba(212,175,55,0.25), inset 0 6px 14px rgba(74,16,16,0.12), 0 10px 22px rgba(0,0,0,0.5);
+}
+
+/* ---------- 9. Anéis metalizados (progresso, decoração) ---------- */
+@keyframes especularAnel {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+.anel-runico { animation: girarAnel 24s linear infinite; transform-origin: center; }
+.anel-runico-interno { animation: girarAnelReverso 18s linear infinite; transform-origin: center; }
+.anel-metalico {
+  position: relative; border-radius: 9999px;
+  background: conic-gradient(from 0deg, #6b4a2c 0deg, #d4af37 45deg, #fff2c4 90deg, #d4af37 135deg, #8c6239 180deg, #d4af37 225deg, #fff2c4 270deg, #d4af37 315deg, #6b4a2c 360deg);
+  padding: 2px;
+  box-shadow: 0 0 18px rgba(212,175,55,0.35), inset 0 0 6px rgba(0,0,0,0.55);
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s ease;
+}
+.anel-metalico::before {
+  content: ''; position: absolute; inset: 2px; border-radius: 9999px;
+  background: radial-gradient(circle at 50% 50%, transparent 62%, rgba(0,0,0,0.75) 100%);
+  pointer-events: none;
+}
+.anel-metalico::after {
+  content: ''; position: absolute; top: 50%; left: 50%; width: 140%; height: 140%; border-radius: 9999px;
+  background: conic-gradient(from 0deg, transparent 0deg, transparent 60deg, rgba(255,255,255,0.55) 85deg, rgba(255,245,204,0.9) 90deg, rgba(255,255,255,0.55) 95deg, transparent 120deg, transparent 360deg);
+  filter: blur(6px); mix-blend-mode: screen;
+  animation: especularAnel 5s linear infinite;
+  pointer-events: none;
+}
+header:hover .anel-metalico { transform: translate(-50%, -50%) scale(1.02); box-shadow: 0 0 28px rgba(212,175,55,0.5), inset 0 0 8px rgba(0,0,0,0.6); }
+header:hover .anel-metalico::after { animation-duration: 2.4s; filter: blur(4px); }
+
+/* ---------- 10. Divisores decorativos ---------- */
+.divisor-rune { height: 1px; background: linear-gradient(90deg, transparent, rgba(212,175,55,0.4), transparent); margin: 0.75rem 0; }
+.divisor-losango { display: flex; align-items: center; gap: 0.75rem; justify-content: center; margin: 1rem 0; }
+.divisor-losango::before, .divisor-losango::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, rgba(212,175,55,0.5), transparent); }
+.divisor-losango > span { color: #d4af37; font-size: 0.85rem; transform: rotate(45deg); display: inline-block; }
+
+/* ---------- 11. Gótico — letras iluminadas, vitral, molduras ---------- */
+@keyframes girarRoseta { to { transform: rotate(360deg); } }
+@keyframes vitralPulsar { 0%, 100% { opacity: 0.55; filter: saturate(1.1); } 50% { opacity: 0.85; filter: saturate(1.4); } }
+
+.vitral-hero-fundo {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 20%, rgba(30,58,138,0.45), transparent 45%),
+    radial-gradient(ellipse at 80% 25%, rgba(153,27,27,0.35), transparent 45%),
+    radial-gradient(ellipse at 30% 80%, rgba(20,83,45,0.35), transparent 45%),
+    radial-gradient(ellipse at 75% 78%, rgba(180,83,9,0.30), transparent 45%);
+  mix-blend-mode: screen; pointer-events: none;
+  animation: vitralPulsar 12s ease-in-out infinite;
+}
+
+.capitular::first-letter {
+  font-family: var(--font-blackletter); font-size: 3.6em; float: left; line-height: 0.85;
+  padding: 0.05em 0.15em 0 0; margin: 0.05em 0.08em 0 0; color: #7a1414;
+  text-shadow: 0 0 1px #d4af37, 2px 2px 0 rgba(255,245,204,0.8), 3px 3px 0 rgba(212,175,55,0.5), 4px 4px 6px rgba(0,0,0,0.35);
+  font-weight: 700;
+}
+/* Letra capital alternativa em gradiente (origem: Base44) */
+.letra-capital {
+  font-family: "Cinzel Decorative", serif; float: left; font-size: 3.6rem; line-height: 0.74;
+  padding: 0.04em 0.1em 0 0; font-weight: 900;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.25), 0 0 10px rgba(212,175,55,0.4);
+  background: linear-gradient(180deg, #b03030, #6b1a1a);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+
+.moldura-gotica { position: relative; }
+.moldura-gotica > .topo-arco {
+  position: absolute; top: -32px; left: 50%; transform: translateX(-50%);
+  width: min(92%, 640px); height: 60px; pointer-events: none;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.6));
+}
+/* Moldura ogival (origem: Base44) */
+.moldura-ogival { position: relative; }
+.moldura-ogival::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 20;
+  border-radius: 130px 130px 14px 14px;
+  box-shadow: inset 0 0 0 2px rgba(212,175,55,0.55), inset 0 0 0 7px rgba(26,22,18,0.55), inset 0 0 0 8px rgba(212,175,55,0.28);
+}
+
+/* ---------- 12. Botões e selos ---------- */
+.btn-gotico {
+  font-family: var(--font-display); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700;
+  padding: 0.7rem 1.4rem; background: linear-gradient(180deg, #3a2410, #1c130a); color: #f5dc9a;
+  border: 1px solid #8c6239; border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,245,204,0.15), inset 0 -2px 4px rgba(0,0,0,0.5);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, color 0.25s ease;
+  cursor: pointer;
+}
+.btn-gotico:hover { color: #fff5cc; transform: translateY(-1px); box-shadow: 0 6px 16px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,245,204,0.25), 0 0 18px rgba(212,175,55,0.35); }
+
+/* Botão de lacre (origem: Base44) */
+.botao-lacre {
+  background: radial-gradient(circle at 35% 30%, #c93030, var(--oxblood) 70%);
+  color: var(--pergaminho-claro); border: 2px solid #7a1414;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5), inset 0 2px 4px rgba(255,160,160,0.35), inset 0 -3px 6px rgba(0,0,0,0.35);
+  font-family: var(--font-display); letter-spacing: 0.08em;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  cursor: pointer;
+}
+.botao-lacre:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 8px 16px rgba(0,0,0,0.6), inset 0 2px 4px rgba(255,160,160,0.4); }
+.botao-lacre:active { transform: translateY(0) scale(0.98); }
+.selo-cera {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: radial-gradient(circle at 38% 32%, #c93030, var(--oxblood) 72%);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.5), inset 0 2px 4px rgba(255,170,170,0.4), inset 0 -3px 6px rgba(0,0,0,0.4);
+  border: 2px solid #7a1414;
+  filter: drop-shadow(0 3px 6px rgba(0,0,0,0.7));
+}
+
+/* ---------- 13. Scrollbar customizada ---------- */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--magia-profunda); border-radius: 4px; }
+::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--bronze-envelhecido), #6b4a2c); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--ouro-velho); }
+.scrollbar-thin::-webkit-scrollbar { width: 5px; height: 5px; }
+
+/* ---------- 14. Responsivo ---------- */
+@media (max-width: 768px) {
+  .espada-card { padding: 10px 12px; gap: 10px; }
+  .painel-reino-premium { padding: 18px 14px; }
+}
+
+/* ---------- 15. Fase 3 — Efeitos ambientais (partículas, névoa) ---------- */
+.particula-dourada {
+  position: absolute;
+  width: 3px; height: 3px;
+  border-radius: 50%;
+  background: var(--ouro-velho);
+  box-shadow: 0 0 6px rgba(212,175,55,0.8);
+  animation: derivaDourada linear infinite;
+  pointer-events: none;
+}
+
+.nevoa {
+  position: absolute;
+  bottom: 0; left: -20%;
+  width: 140%; height: 200px;
+  background: linear-gradient(to top, rgba(28,30,34,0.55), transparent);
+  filter: blur(18px);
+  pointer-events: none;
+}
+
+/* ---------- 16. Fase 4 — Lista de runas dentro do bloco ---------- */
+.lista-runas {
+  grid-template-columns: 1fr;
+}
+@media (min-width: 640px) {
+  .lista-runas { grid-template-columns: 1fr 1fr; }
+}
+
+/* ---------- 17. Fase 9 — Sistema de jogo: desafios resolvidos, certificado e impressão ---------- */
+
+/* Card de runa com desafio resolvido: brilho dourado extra */
+.espada-card.runa-desafio-resolvido {
+  border-color: var(--ouro-velho);
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.5);
+}
+
+/* Certificado: escondido na tela normal, só aparece na hora de imprimir */
+#certificado-imprimivel { display: none; }
+
+@media print {
+  /* Esconde tudo do site, exceto o overlay do certificado */
+  body.modo-impressao-certificado > *:not(#modal-certificado-overlay) {
+    display: none !important;
+  }
+  body.modo-impressao-certificado #modal-certificado-overlay {
+    position: static !important;
+    background: #fff !important;
+    padding: 0 !important;
+  }
+  body.modo-impressao-certificado #area-nao-imprimir {
+    display: none !important;
+  }
+  body.modo-impressao-certificado #certificado-imprimivel {
+    display: block !important;
+  }
+  body.modo-impressao-certificado .painel-leitura {
+    max-height: none !important;
+    overflow: visible !important;
+    box-shadow: none !important;
+  }
+  .certificado-conteudo {
+    width: 100%;
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .certificado-borda {
+    border: 6px double #b07a3c;
+    padding: 3rem 2rem;
+    text-align: center;
+    color: #1c1e22;
+    background: #fdf6e3;
+    width: 100%;
+  }
+  .certificado-borda h1 { font-size: 1.8rem; margin: 0.5rem 0; }
+  .certificado-borda h2 { font-size: 1.4rem; color: #8a6d1a; margin: 0.75rem 0; }
+}
+
+/* ---------- 18. Fase Layout — Hero (estilos extraídos do index.html) ---------- */
+
+.hero-principal {
+  --emblema-tamanho: 84px;
+  position: relative; z-index: 10; overflow: hidden;
+  padding: 3rem 1rem 4rem; text-align: center;
+  transition: padding 0.35s ease;
+}
+
+.hero-emblema-container {
+  position: relative;
+  width: var(--emblema-tamanho); height: var(--emblema-tamanho);
+  margin: 0 auto 1rem;
+  transition: width 0.35s ease, height 0.35s ease;
+}
+.hero-anel {
+  position: absolute; top: 50%; left: 50%;
+  width: var(--emblema-tamanho); height: var(--emblema-tamanho);
+  transform: translate(-50%, -50%);
+  transition: width 0.35s ease, height 0.35s ease;
+}
+.hero-emblema-nucleo {
+  position: absolute; inset: 6px; border-radius: 50%;
+  background: linear-gradient(145deg, #2d3238, #0d0f12);
+  border: 2px solid var(--ouro-velho);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.7), 0 0 18px rgba(212,175,55,0.25);
+}
+.hero-emblema-nucleo > span {
+  font-size: calc(var(--emblema-tamanho) * 0.34);
+  transition: font-size 0.35s ease;
+}
+
+.hero-divisor { max-width: 260px; margin: 0.75rem auto; }
+
+.hero-kicker {
+  display: block; font-size: 1rem; color: #e6c34a; margin-bottom: 0.5rem;
+  text-shadow: 0 0 10px rgba(212,175,55,0.45);
+}
+
+.hero-titulo { margin: 0; line-height: 0.95; font-weight: 900; }
+.hero-titulo-linha1 {
+  display: block; font-size: clamp(1.6rem, 6vw, 2.1rem); letter-spacing: 0.03em;
+  background: linear-gradient(to bottom, #ffffff 0%, #f7ecd0 35%, #e0bc4e 70%, #b07a3c 100%);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 3px 6px rgba(0,0,0,0.85)) drop-shadow(0 0 18px rgba(212,175,55,0.25));
+}
+.hero-titulo-linha2 {
+  display: block; font-size: clamp(1.05rem, 4vw, 1.4rem); letter-spacing: 0.12em; margin-top: 0.25rem;
+  background: linear-gradient(to bottom, #e0bc4e 0%, #f7ecd0 50%, #e0bc4e 100%);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 3px 6px rgba(0,0,0,0.8));
+}
+
+.hero-subtitulo {
+  font-style: italic; color: rgba(241,228,195,0.8);
+  max-width: 420px; margin: 0 auto; font-size: 0.9rem;
+}
+
+/* Segunda camada de vitral, mais lenta e deslocada — dá profundidade ao fundo do hero */
+@keyframes vitralPulsarLenta {
+  0%, 100% { opacity: 0.35; transform: translateY(0); }
+  50% { opacity: 0.7; transform: translateY(-10px); }
+}
+.vitral-hero-fundo::after {
+  content: ''; position: absolute; inset: -15%;
+  background:
+    radial-gradient(ellipse at 50% 8%, rgba(212,175,55,0.12), transparent 50%),
+    radial-gradient(ellipse at 12% 70%, rgba(0,229,255,0.08), transparent 42%),
+    radial-gradient(ellipse at 88% 62%, rgba(171,71,188,0.10), transparent 45%);
+  animation: vitralPulsarLenta 19s ease-in-out infinite;
+}
+
+/* Versão compacta — ativada por efeitos.js quando a página rola (classe .hero-compacto) */
+.hero-principal.hero-compacto {
+  --emblema-tamanho: 44px;
+  padding: 1.25rem 1rem 1.75rem;
+}
+.hero-principal.hero-compacto .hero-emblema-nucleo { inset: 4px; }
+
+@media (max-width: 768px) {
+  .hero-principal { --emblema-tamanho: 68px; padding: 2rem 1rem 2.5rem; }
+}
+
+/* ---------- 19. Fase Layout — Barra de navegação (estilos extraídos do navegacao.js) ---------- */
+
+:root { --altura-barra-nav: 56px; }
+
+.barra-navegacao {
+  position: sticky; top: 0; z-index: 40;
+  min-height: var(--altura-barra-nav);
+  background: rgba(6,7,10,0.92); backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--bronze-envelhecido);
+  padding: 0.5rem 0.75rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+
+.barra-navegacao-lista {
+  display: flex; gap: 0.4rem; flex: 1;
+  overflow-x: auto; padding: 4px 2px;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  /* fade nas bordas = pista visual de que a fileira rola pros lados */
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 14px, #000 calc(100% - 14px), transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 14px, #000 calc(100% - 14px), transparent);
+}
+
+.botao-bloco-nav {
+  flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%;
+  color: #fff; border: 2px solid rgba(255,255,255,0.15);
+  font-family: var(--font-display); font-weight: bold; font-size: 0.8rem;
+  cursor: pointer; scroll-snap-align: center;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* Bloco atualmente visível na tela (marcado pelo IntersectionObserver do navegacao.js).
+   Dourado de propósito: diferente do ciano do :focus-visible, pra "onde estou" e
+   "onde está o foco do teclado" nunca se confundirem. */
+.botao-bloco-nav.ativo {
+  outline: 2px solid var(--ouro-velho); outline-offset: 2px;
+  transform: scale(1.15);
+  box-shadow: 0 0 10px rgba(212,175,55,0.55);
+}
+.botao-bloco-nav.ativo:focus-visible { outline-color: var(--ciano-mistico); }
+
+.contador-progresso {
+  font-size: 0.7rem; color: var(--ouro-velho);
+  white-space: nowrap; font-weight: bold;
+}
+
+/* Com a barra sticky, o scrollIntoView precisa parar ANTES dela — senão o
+   título do bloco fica escondido embaixo da barra. */
+#lista-blocos [data-bloco-id] { scroll-margin-top: calc(var(--altura-barra-nav) + 12px); }
+
+/* ---------- 20. Fase Layout — Mapa do Reino (só telas largas) ---------- */
+
+/* Estilos base do <main>, extraídos do inline do index.html pra permitir
+   alargar o conteúdo no modo mapa */
+#conteudo-principal {
+  position: relative; z-index: 10;
+  max-width: 900px; margin: 0 auto; padding: 0 1rem 4rem;
+}
+
+@keyframes trilhaFluindoX { to { background-position-x: 16px; } }
+@keyframes trilhaFluindoY { to { background-position-y: 16px; } }
+
+@media (min-width: 1024px) {
+  #conteudo-principal { max-width: 1080px; }
+
+  /* Grid fixo em serpentina: trilha 0→1→2→3 na linha de cima,
+     desce pro 4 e volta 4→5→6 na linha de baixo (estilo mapa de RPG) */
+  .mapa-reino-grid {
+    --trilha-cor: rgba(212, 175, 55, 0.5);
+    --gap-mapa-x: 2.25rem;
+    --gap-mapa-y: 2.75rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-areas:
+      "b0 b1 b2 b3"
+      "ilha b6 b5 b4";
+    gap: var(--gap-mapa-y) var(--gap-mapa-x);
+    margin-bottom: 2rem;
+  }
+  .tile-pos-0 { grid-area: b0; }
+  .tile-pos-1 { grid-area: b1; }
+  .tile-pos-2 { grid-area: b2; }
+  .tile-pos-3 { grid-area: b3; }
+  .tile-pos-4 { grid-area: b4; }
+  .tile-pos-5 { grid-area: b5; }
+  .tile-pos-6 { grid-area: b6; }
+
+  .tile-reino { padding: 16px 14px; position: relative; }
+  .tile-cabecalho {
+    cursor: pointer;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 0.4rem; text-align: center;
+  }
+  .tile-numero {
+    width: 34px; height: 34px; border-radius: 50%;
+    color: #fff; display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-weight: bold;
+    border: 2px solid rgba(255,255,255,0.2);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.5);
+  }
+  .tile-titulo { margin: 0; font-size: 0.98rem; line-height: 1.15; }
+  .tile-subtitulo { margin: 0; font-size: 0.72rem; color: var(--pergaminho-escuro); }
+  .tile-estado { font-size: 0.8rem; color: var(--pergaminho-escuro); }
+
+  /* Estados visuais (cosméticos — nenhum bloco fica travado) */
+  .tile-reino.estado-nao-iniciado { filter: saturate(0.65); opacity: 0.85; }
+  .tile-reino.estado-completo .tile-estado { color: var(--ouro-velho); font-weight: bold; }
+  .tile-reino.tile-aberto {
+    border-color: var(--ouro-velho);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.8), 0 0 20px rgba(212,175,55,0.35);
+  }
+
+  /* Botões de Julgamento (injetados pelo jogo.js na raiz do tile) — versão compacta */
+  .tile-reino .btn-gotico { font-size: 0.62rem !important; padding: 0.4rem 0.5rem; letter-spacing: 0.08em; }
+
+  /* Trilha tracejada "fluindo" ligando os blocos na ordem 0→6.
+     Tracejado via repeating-linear-gradient (borda dashed não anima). */
+  .tile-pos-1::after, .tile-pos-2::after, .tile-pos-3::after,
+  .tile-pos-5::after, .tile-pos-6::after {
+    content: ''; position: absolute; top: 50%; height: 2px;
+    width: var(--gap-mapa-x); pointer-events: none;
+    background: repeating-linear-gradient(90deg, var(--trilha-cor) 0 8px, transparent 8px 16px);
+    animation: trilhaFluindoX 1.6s linear infinite;
+  }
+  /* linha de cima: o bloco anterior está à esquerda */
+  .tile-pos-1::after, .tile-pos-2::after, .tile-pos-3::after { left: calc(-1 * var(--gap-mapa-x)); }
+  /* linha de baixo: o bloco anterior está à direita, então a trilha flui invertida */
+  .tile-pos-5::after, .tile-pos-6::after {
+    right: calc(-1 * var(--gap-mapa-x));
+    animation-direction: reverse;
+  }
+  /* descida 3→4: trilha vertical */
+  .tile-pos-4::after {
+    content: ''; position: absolute; left: 50%; width: 2px;
+    height: var(--gap-mapa-y); top: calc(-1 * var(--gap-mapa-y)); pointer-events: none;
+    background: repeating-linear-gradient(180deg, var(--trilha-cor) 0 8px, transparent 8px 16px);
+    animation: trilhaFluindoY 1.6s linear infinite;
+  }
+
+  /* Painel largo com as runas do bloco aberto, abaixo do mapa */
+  .painel-runas-aberto { margin-bottom: 1.5rem; }
+  .painel-runas-cabecalho {
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;
+  }
+  .painel-runas-aberto .lista-runas { grid-template-columns: repeat(3, 1fr); }
+
+  /* Tile da Ilha Amaldiçoada: célula "ilha" do grid + trilha morta */
+  .tile-pos-ilha { grid-area: ilha; }
+  /* Tracejado rubro irregular apontando pro Reino 6 — sem animação de fluxo:
+     é uma trilha morta, ninguém deveria tê-la percorrido */
+  .tile-pos-ilha::after {
+    content: ''; position: absolute; top: 50%; height: 2px;
+    right: calc(-1 * var(--gap-mapa-x)); width: var(--gap-mapa-x); pointer-events: none;
+    background: repeating-linear-gradient(90deg, rgba(160,32,32,0.55) 0 5px, transparent 5px 14px);
+  }
+}
+
+/* ---------- 21. Ilha Amaldiçoada (Reino dos Erros Famosos) ---------- */
+
+/* Painel/tile sombrio — vale no acordeão (celular) e no mapa (desktop) */
+.painel-ilha {
+  border-color: #4a1010;
+  background: linear-gradient(145deg, rgba(46,26,26,0.88), rgba(22,12,12,0.94));
+}
+.painel-ilha::before { border-color: rgba(160,32,32,0.25); }
+.painel-ilha:hover {
+  border-color: rgba(201,48,48,0.6);
+  box-shadow: 0 22px 45px rgba(0,0,0,0.85), 0 0 30px rgba(160,32,32,0.2);
+}
+
+.espada-card.runa-negra { border-color: rgba(160,32,32,0.35); }
+
+/* Modal de leitura da runa negra: pergaminho envelhecido com tinta de sangue */
+.modal-runa-negra {
+  border-color: #6b1a1a;
+  background:
+    radial-gradient(ellipse at top, rgba(255,255,255,0.18), transparent 60%),
+    linear-gradient(to bottom, rgba(232,214,186,0.82), rgba(199,175,144,0.9));
+  box-shadow:
+    inset 0 4px 10px rgba(74,16,16,0.3),
+    inset 0 0 40px rgba(107,26,26,0.18),
+    0 12px 24px rgba(0,0,0,0.55);
+}
+.modal-runa-negra.capitular::first-letter { color: #4a1010; }
+
+/* ---------- 22. Guardiões dos Reinos ---------- */
+
+.guardiao-faixa {
+  display: flex; align-items: flex-start; gap: 0.6rem;
+  margin: 0.75rem 0 0.25rem;
+}
+.guardiao-avatar {
+  flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; font-size: 1.3rem;
+  background: linear-gradient(145deg, #2d3238, #14161a);
+  border: 2px solid var(--bronze-envelhecido);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.6), 0 0 10px rgba(212,175,55,0.15);
+}
+.guardiao-balao { padding: 0.6rem 0.85rem; font-size: 0.85rem; flex: 1; }
+.guardiao-balao::after { display: none; } /* sem o rabinho padrão do balão (aponta pro lado errado aqui) */
+.guardiao-nome { display: block; font-size: 0.8rem; margin-bottom: 0.15rem; color: #6b1a1a; letter-spacing: 0.04em; }
+
+/* O Cronista Caído fala em tom mais sombrio */
+.painel-ilha .guardiao-avatar { border-color: #6b1a1a; box-shadow: 0 4px 10px rgba(0,0,0,0.6), 0 0 10px rgba(160,32,32,0.25); }
+
+/* ---------- 22b. Caderno do Aprendiz (anotações no modal da runa) ---------- */
+
+.caderno-textarea {
+  width: 100%; min-height: 90px; resize: vertical; box-sizing: border-box;
+  font-family: var(--font-body); font-size: 0.9rem; line-height: 1.45;
+  color: #3e3222; background: rgba(255, 252, 240, 0.55);
+  border: 1px solid var(--bronze-envelhecido); border-radius: 8px;
+  padding: 0.6rem 0.75rem;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.12);
+}
+.caderno-textarea:focus {
+  outline: none;
+  border-color: var(--ouro-velho);
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.12), 0 0 8px rgba(212,175,55,0.35);
+}
+
+/* ---------- 23. Clima no mapa (estado visual dos reinos, só telas largas) ---------- */
+
+@media (min-width: 1024px) {
+  .tile-clima {
+    position: absolute; inset: 0;
+    pointer-events: none; overflow: hidden;
+    border-radius: inherit;
+  }
+
+  /* Reino não iniciado: névoa cinzenta vagando por cima do tile */
+  .tile-reino.estado-nao-iniciado .tile-clima::before {
+    content: ''; position: absolute; inset: -20%;
+    background: linear-gradient(100deg, transparent 15%, rgba(158,158,158,0.18) 45%, transparent 75%);
+    filter: blur(6px);
+    animation: derivaNevoa 18s ease-in-out infinite alternate;
+  }
+
+  /* Reino em progresso: tocha acesa no canto */
+  .tile-reino.estado-em-progresso .tile-clima::after {
+    content: '🔥'; position: absolute; bottom: 6px; right: 8px; font-size: 0.95rem;
+    animation: flickerVela 1.7s ease-in-out infinite; transform-origin: bottom;
+    filter: drop-shadow(0 0 6px rgba(255,106,0,0.5));
+  }
+
+  /* Reino completo: bandeira dourada tremulando */
+  .tile-reino.estado-completo .tile-clima::after {
+    content: '⚑'; position: absolute; top: 6px; right: 10px; font-size: 1.05rem;
+    color: var(--ouro-velho); text-shadow: 0 0 8px rgba(212,175,55,0.6);
+    animation: flutuar 4s ease-in-out infinite;
+  }
+
+  /* A Ilha vive sob névoa rubra perpétua — amaldiçoada é amaldiçoada */
+  .tile-pos-ilha .tile-clima::before {
+    content: ''; position: absolute; inset: -20%;
+    background: linear-gradient(100deg, transparent 15%, rgba(160,32,32,0.16) 45%, transparent 75%);
+    filter: blur(7px);
+    animation: derivaNevoa 24s ease-in-out infinite alternate-reverse;
+  }
+}

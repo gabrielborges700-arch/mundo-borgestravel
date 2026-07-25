@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mundo Borgestrável — O Reino das Super Estruturas</title>
+  <meta name="description" content="Aventura pedagógica pelos 7 reinos da engenharia estrutural: forças, materiais, análise e a Grande Aliança Estrutural.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Link de acessibilidade: pula direto pro conteúdo principal -->
+  <a href="#conteudo-principal" class="skip-link">Pular para o conteúdo</a>
+
+  <!-- Fundo mágico fixo: céu, estrelas e lua (populado via JS em efeitos.js na Fase 3) -->
+  <div class="fundo-magico-fixo" id="fundo-magico" aria-hidden="true"></div>
+
+  <!-- ===================== CABEÇALHO ===================== -->
+  <!-- Estilos do hero ficam na seção 18 do style.css (classes .hero-*) -->
+  <header class="moldura-gotica hero-principal">
+
+    <!-- Fundo de vitral (só CSS, sem imagem externa) -->
+    <div class="vitral-hero-fundo"></div>
+
+    <!-- Brasão central com anel metálico girando -->
+    <div class="hero-emblema-container">
+      <div class="anel-metalico hero-anel"></div>
+      <div class="hero-emblema-nucleo">
+        <span id="brasao-avatar" title="Nível 1: Aprendiz de Pedra">🪨</span>
+      </div>
+    </div>
+
+    <div class="divisor-losango hero-divisor"><span>❖</span></div>
+
+    <span class="font-gotico hero-kicker">
+      Crônica de Engenharia
+    </span>
+
+    <h1 class="font-display hero-titulo">
+      <span class="hero-titulo-linha1">MUNDO BORGESTRÁVEL</span>
+      <span class="hero-titulo-linha2">O REINO DAS SUPER ESTRUTURAS</span>
+    </h1>
+
+    <div class="divisor-losango hero-divisor"><span>❖</span></div>
+
+    <p class="font-serif-body hero-subtitulo">
+      Forje seu conhecimento nas forjas antigas dos Mestres Construtores
+    </p>
+  </header>
+
+  <!-- ===================== CONTEÚDO PRINCIPAL ===================== -->
+  <!-- Estilos do main ficam na seção 20 do style.css (#conteudo-principal) -->
+  <main id="conteudo-principal">
+
+    <!-- Aqui entram os 7 blocos e as 45 runas, renderizados dinamicamente pelo app.js na Fase 4 -->
+    <section id="lista-blocos" aria-label="Blocos do reino">
+      <!-- Placeholder temporário — será substituído por app.js -->
+      <p class="font-body" style="text-align:center; color: var(--pergaminho-escuro);">
+        Carregando o mapa do reino...
+      </p>
+    </section>
+
+    <!-- Galeria de conquistas — populada dinamicamente pelo jogo.js -->
+    <section id="galeria-conquistas" aria-label="Conquistas" style="margin-top:2.5rem;"></section>
+
+  </main>
+
+  <!-- ===================== RODAPÉ ===================== -->
+  <footer style="position: relative; z-index: 10; text-align: center; padding: 2rem 1rem; color: var(--pergaminho-escuro); font-size: 0.85rem;">
+    <div class="divisor-rune" style="max-width: 300px; margin: 0 auto 1rem;"></div>
+    Mundo Borgestrável — um projeto de engenharia + didática
+  </footer>
+
+  <!-- ===================== SCRIPTS ===================== -->
+  <!-- type="module" permite usar import/export sem precisar de bundler -->
+  <script src="dados.js"></script>
+  <script src="efeitos.js"></script>
+  <script src="simuladores.js"></script>
+  <script src="oraculo.js"></script>
+  <script src="navegacao.js"></script>
+  <script src="app.js"></script>
+  <script src="jogo.js"></script>
+
+</body>
+</html>
