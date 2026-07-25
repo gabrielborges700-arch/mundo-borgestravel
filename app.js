@@ -615,9 +615,11 @@ function abrirModalRuna(runaId) {
 
   // Se essa runa tiver um simulador interativo (definido em simuladores.js),
   // ele é inserido logo depois da dica, antes da frase de fechamento.
+  // Usa o PRIMEIRO .divisor-rune (o do fechamento) — o Caderno do Aprendiz
+  // adicionou um segundo divisor no fim, então ":last-of-type" pegaria o errado.
   const painelSimulacao = criarPainelSimulacao(runaId);
   if (painelSimulacao) {
-    const divisor = painel.querySelector(".divisor-rune:last-of-type");
+    const divisor = painel.querySelector(".divisor-rune");
     painel.insertBefore(painelSimulacao, divisor);
   }
 
