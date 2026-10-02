@@ -43,6 +43,16 @@
   --card: #1c1e22;
   --card-foreground: #f1e4c3;
 
+  /* Design System v2 — "Forja Real": elevação, vidro e metal */
+  --transicao-suave: 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+  --vidro-fundo: linear-gradient(160deg, rgba(38, 42, 50, 0.72), rgba(17, 19, 25, 0.88));
+  --sombra-1: 0 2px 8px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.05);
+  --sombra-2: 0 10px 28px rgba(0,0,0,0.55), 0 2px 6px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.07);
+  --sombra-3: 0 24px 60px rgba(0,0,0,0.65), 0 6px 16px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.09);
+  --borda-metal: linear-gradient(135deg,
+    rgba(212,175,55,0.7), rgba(140,98,57,0.35) 35%,
+    rgba(255,242,196,0.6) 50%, rgba(140,98,57,0.3) 68%, rgba(212,175,55,0.6));
+
   /* Paleta extra "Manuscrito Iluminado" (origem: Base44) */
   --oxblood: #6b1a1a;
   --oxblood-escuro: #4a1010;
@@ -195,12 +205,27 @@ input[type="range"]:focus-visible {
 
 /* ---------- 7. Cards (as "runas" clicáveis) ---------- */
 .espada-card {
-  background: linear-gradient(145deg, #22262b, #16181c);
-  border: 1px solid var(--pedra-clara);
+  background: linear-gradient(150deg, rgba(42,46,54,0.85), rgba(18,20,25,0.95));
+  border: 1px solid rgba(255,255,255,0.09);
   border-radius: 10px; padding: 12px 16px; display: flex; align-items: center;
-  gap: 15px; cursor: pointer; position: relative; overflow: hidden; width: 100%;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.5), inset 0 2px 4px rgba(255,255,255,0.03);
-  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+  gap: 13px; cursor: pointer; position: relative; overflow: hidden; width: 100%;
+  box-shadow: var(--sombra-1);
+  transition: transform var(--transicao-suave), border-color var(--transicao-suave), box-shadow var(--transicao-suave);
+}
+
+/* Medalhinha do número da runa dentro do card */
+.runa-numero {
+  flex-shrink: 0; min-width: 2.4rem; text-align: center;
+  padding: 0.18rem 0.4rem; border-radius: 8px;
+  font-size: 0.88rem; color: var(--ouro-velho);
+  background: rgba(212,175,55,0.09);
+  border: 1px solid rgba(212,175,55,0.32);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
+}
+.runa-negra .runa-numero {
+  color: #e05555;
+  background: rgba(160,32,32,0.12);
+  border-color: rgba(160,32,32,0.4);
 }
 .espada-card::before {
   content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
@@ -225,24 +250,31 @@ input[type="range"]:focus-visible {
 .escudo-modulo-bloqueado { filter: grayscale(0.85) brightness(0.4); opacity: 0.65; }
 
 /* ---------- 8. Painéis (contêineres dos blocos/reinos) ---------- */
+/* Vidro real com borda metálica: a moldura dourada vem de um gradiente
+   pintado só na área da borda (border-box), sob um vidro escuro (padding-box).
+   O tinte da cor do reino entra por --cor-reino (setada pelo app.js). */
 .painel-reino-premium {
-  background: linear-gradient(145deg, rgba(45,50,56,0.82), rgba(28,30,34,0.92));
-  border: 2px solid #4a3e35;
+  border: 1px solid transparent;
   border-radius: 16px; padding: 25px 20px; width: 100%;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.06), inset 0 -2px 6px rgba(0,0,0,0.55), inset 2px 2px 8px rgba(255,255,255,0.03);
+  /* fallback pra navegador sem color-mix: vidro simples */
+  background: linear-gradient(160deg, rgba(38,42,50,0.8), rgba(17,19,25,0.92));
+  background:
+    linear-gradient(160deg, color-mix(in srgb, var(--cor-reino, transparent) 13%, transparent), transparent 58%) padding-box,
+    var(--vidro-fundo) padding-box,
+    var(--borda-metal) border-box;
+  backdrop-filter: blur(10px) saturate(1.25);
+  -webkit-backdrop-filter: blur(10px) saturate(1.25);
+  box-shadow: var(--sombra-2);
   position: relative;
-  animation: brilhoBorda 6s ease-in-out infinite;
-  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.35s ease, box-shadow 0.35s ease;
+  transition: transform var(--transicao-suave), box-shadow var(--transicao-suave);
 }
 .painel-reino-premium::before {
   content: ''; position: absolute; top: 8px; left: 8px; right: 8px; bottom: 8px;
-  border: 1px solid rgba(212, 175, 55, 0.18); border-radius: 10px; pointer-events: none;
-  box-shadow: inset 0 0 20px rgba(0,0,0,0.35);
+  border: 1px solid rgba(212, 175, 55, 0.10); border-radius: 10px; pointer-events: none;
 }
 .painel-reino-premium:hover {
   transform: translateY(-3px);
-  border-color: rgba(212,175,55,0.55);
-  box-shadow: 0 22px 45px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255,255,255,0.09), inset 0 -2px 6px rgba(0,0,0,0.55), inset 2px 2px 8px rgba(255,255,255,0.04), 0 0 30px rgba(0,229,255,0.18);
+  box-shadow: var(--sombra-3), 0 0 28px color-mix(in srgb, var(--cor-reino, #d4af37) 24%, transparent);
 }
 
 /* Painel "pergaminho" — pra ler os textos das runas */
@@ -471,22 +503,30 @@ header:hover .anel-metalico::after { animation-duration: 2.4s; filter: blur(4px)
 /* ---------- 18. Fase Layout — Hero (estilos extraídos do index.html) ---------- */
 
 .hero-principal {
-  --emblema-tamanho: 84px;
+  --emblema-tamanho: 108px;
   position: relative; z-index: 10; overflow: hidden;
-  padding: 3rem 1rem 4rem; text-align: center;
+  padding: clamp(3.25rem, 7vw, 5rem) 1rem 4.5rem; text-align: center;
   transition: padding 0.35s ease;
 }
 
 .hero-emblema-container {
   position: relative;
   width: var(--emblema-tamanho); height: var(--emblema-tamanho);
-  margin: 0 auto 1rem;
+  margin: 0 auto 1.25rem;
   transition: width 0.35s ease, height 0.35s ease;
+}
+/* Halo dourado difuso atrás do brasão — dá presença sem pesar */
+.hero-emblema-container::before {
+  content: ''; position: absolute; inset: -60%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(212,175,55,0.30), rgba(212,175,55,0.10) 45%, transparent 72%);
+  filter: blur(5px); pointer-events: none;
 }
 .hero-anel {
   position: absolute; top: 50%; left: 50%;
   width: var(--emblema-tamanho); height: var(--emblema-tamanho);
   transform: translate(-50%, -50%);
+  padding: 3px; /* anel mais grosso que o padrão do .anel-metalico */
   transition: width 0.35s ease, height 0.35s ease;
 }
 .hero-emblema-nucleo {
@@ -501,30 +541,39 @@ header:hover .anel-metalico::after { animation-duration: 2.4s; filter: blur(4px)
   transition: font-size 0.35s ease;
 }
 
-.hero-divisor { max-width: 260px; margin: 0.75rem auto; }
+.hero-divisor { max-width: 340px; margin: 0.9rem auto; }
+.hero-divisor > span { font-size: 1.05rem; text-shadow: 0 0 10px rgba(212,175,55,0.6); }
+.hero-divisor::before, .hero-divisor::after {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(212,175,55,0.65), transparent);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.6);
+}
 
 .hero-kicker {
-  display: block; font-size: 1rem; color: #e6c34a; margin-bottom: 0.5rem;
-  text-shadow: 0 0 10px rgba(212,175,55,0.45);
+  display: block; font-size: 1.1rem; color: #e6c34a; margin-bottom: 0.6rem;
+  text-shadow: 0 0 14px rgba(212,175,55,0.55), 0 2px 4px rgba(0,0,0,0.7);
 }
 
-.hero-titulo { margin: 0; line-height: 0.95; font-weight: 900; }
+.hero-titulo { margin: 0; line-height: 0.98; font-weight: 900; padding: 0 0.5rem; }
 .hero-titulo-linha1 {
-  display: block; font-size: clamp(1.6rem, 6vw, 2.1rem); letter-spacing: 0.03em;
-  background: linear-gradient(to bottom, #ffffff 0%, #f7ecd0 35%, #e0bc4e 70%, #b07a3c 100%);
+  display: block; font-size: clamp(1.45rem, 5.2vw, 3.3rem); letter-spacing: 0.04em;
+  background: linear-gradient(to bottom, #ffffff 0%, #f7ecd0 32%, #e0bc4e 68%, #a8712f 100%);
   -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 3px 6px rgba(0,0,0,0.85)) drop-shadow(0 0 18px rgba(212,175,55,0.25));
+  filter:
+    drop-shadow(0 4px 10px rgba(0,0,0,0.9))
+    drop-shadow(0 0 26px rgba(212,175,55,0.35))
+    drop-shadow(0 0 60px rgba(212,175,55,0.18));
 }
 .hero-titulo-linha2 {
-  display: block; font-size: clamp(1.05rem, 4vw, 1.4rem); letter-spacing: 0.12em; margin-top: 0.25rem;
+  display: block; font-size: clamp(0.88rem, 2.6vw, 1.55rem); letter-spacing: 0.24em; margin-top: 0.45rem;
   background: linear-gradient(to bottom, #e0bc4e 0%, #f7ecd0 50%, #e0bc4e 100%);
   -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 3px 6px rgba(0,0,0,0.8));
+  filter: drop-shadow(0 3px 7px rgba(0,0,0,0.85)) drop-shadow(0 0 16px rgba(212,175,55,0.22));
 }
 
 .hero-subtitulo {
-  font-style: italic; color: rgba(241,228,195,0.8);
-  max-width: 420px; margin: 0 auto; font-size: 0.9rem;
+  font-style: italic; color: rgba(241,228,195,0.85);
+  max-width: 460px; margin: 0 auto; font-size: 0.95rem; letter-spacing: 0.02em;
 }
 
 /* Segunda camada de vitral, mais lenta e deslocada — dá profundidade ao fundo do hero */
@@ -543,13 +592,13 @@ header:hover .anel-metalico::after { animation-duration: 2.4s; filter: blur(4px)
 
 /* Versão compacta — ativada por efeitos.js quando a página rola (classe .hero-compacto) */
 .hero-principal.hero-compacto {
-  --emblema-tamanho: 44px;
+  --emblema-tamanho: 52px;
   padding: 1.25rem 1rem 1.75rem;
 }
 .hero-principal.hero-compacto .hero-emblema-nucleo { inset: 4px; }
 
 @media (max-width: 768px) {
-  .hero-principal { --emblema-tamanho: 68px; padding: 2rem 1rem 2.5rem; }
+  .hero-principal { --emblema-tamanho: 80px; padding: 2.25rem 1rem 2.75rem; }
 }
 
 /* ---------- 19. Fase Layout — Barra de navegação (estilos extraídos do navegacao.js) ---------- */
@@ -559,43 +608,128 @@ header:hover .anel-metalico::after { animation-duration: 2.4s; filter: blur(4px)
 .barra-navegacao {
   position: sticky; top: 0; z-index: 40;
   min-height: var(--altura-barra-nav);
-  background: rgba(6,7,10,0.92); backdrop-filter: blur(6px);
-  border-bottom: 1px solid var(--bronze-envelhecido);
-  padding: 0.5rem 0.75rem;
-  display: flex; align-items: center; gap: 0.5rem;
+  background: linear-gradient(180deg, rgba(12,13,19,0.85), rgba(8,9,13,0.72));
+  backdrop-filter: blur(14px) saturate(1.35);
+  -webkit-backdrop-filter: blur(14px) saturate(1.35);
+  padding: 0.5rem 0.9rem;
+  display: flex; align-items: center; gap: 0.75rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+/* Fio de ouro na base da barra (borda inferior em gradiente) */
+.barra-navegacao::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212,175,55,0.6) 25%, rgba(255,242,196,0.5) 50%, rgba(212,175,55,0.6) 75%, transparent);
+  pointer-events: none;
 }
 
 .barra-navegacao-lista {
-  display: flex; gap: 0.4rem; flex: 1;
-  overflow-x: auto; padding: 4px 2px;
+  display: flex; gap: 0.5rem; flex: 1;
+  overflow-x: auto; padding: 6px 2px;
   scroll-snap-type: x proximity;
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* nada de scrollbar aparente — o fade indica a rolagem */
   /* fade nas bordas = pista visual de que a fileira rola pros lados */
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 14px, #000 calc(100% - 14px), transparent);
   mask-image: linear-gradient(90deg, transparent, #000 14px, #000 calc(100% - 14px), transparent);
 }
+.barra-navegacao-lista::-webkit-scrollbar { display: none; }
 
+/* Gema do reino: disco com luz no topo, profundidade embaixo e anel fino */
 .botao-bloco-nav {
-  flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%;
-  color: #fff; border: 2px solid rgba(255,255,255,0.15);
+  flex-shrink: 0; width: 34px; height: 34px; border-radius: 50%;
+  color: #fff; cursor: pointer; scroll-snap-align: center;
+  border: 1px solid rgba(255,255,255,0.25);
+  background:
+    radial-gradient(circle at 32% 26%, rgba(255,255,255,0.55), transparent 42%),
+    radial-gradient(circle at 50% 125%, rgba(0,0,0,0.6), transparent 62%),
+    var(--cor-reino, #5c6bc0);
+  box-shadow:
+    0 3px 8px rgba(0,0,0,0.55),
+    0 0 10px color-mix(in srgb, var(--cor-reino, #d4af37) 40%, transparent),
+    inset 0 1px 2px rgba(255,255,255,0.4),
+    inset 0 -3px 6px rgba(0,0,0,0.45);
   font-family: var(--font-display); font-weight: bold; font-size: 0.8rem;
-  cursor: pointer; scroll-snap-align: center;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.85);
+  transition: transform var(--transicao-suave), box-shadow var(--transicao-suave);
+}
+.botao-bloco-nav:hover {
+  transform: translateY(-2px) scale(1.07);
+  box-shadow:
+    0 6px 14px rgba(0,0,0,0.6),
+    0 0 18px color-mix(in srgb, var(--cor-reino, #d4af37) 65%, transparent),
+    inset 0 1px 2px rgba(255,255,255,0.45),
+    inset 0 -3px 6px rgba(0,0,0,0.45);
 }
 
 /* Bloco atualmente visível na tela (marcado pelo IntersectionObserver do navegacao.js).
-   Dourado de propósito: diferente do ciano do :focus-visible, pra "onde estou" e
-   "onde está o foco do teclado" nunca se confundirem. */
+   Anel dourado de propósito: diferente do ciano do :focus-visible, pra "onde estou"
+   e "onde está o foco do teclado" nunca se confundirem. */
 .botao-bloco-nav.ativo {
-  outline: 2px solid var(--ouro-velho); outline-offset: 2px;
-  transform: scale(1.15);
-  box-shadow: 0 0 10px rgba(212,175,55,0.55);
+  transform: scale(1.16);
+  border-color: rgba(255,242,196,0.85);
+  box-shadow:
+    0 0 0 2px var(--ouro-velho),
+    0 4px 12px rgba(0,0,0,0.6),
+    0 0 18px color-mix(in srgb, var(--cor-reino, #d4af37) 70%, transparent),
+    inset 0 1px 2px rgba(255,255,255,0.45),
+    inset 0 -3px 6px rgba(0,0,0,0.45);
 }
-.botao-bloco-nav.ativo:focus-visible { outline-color: var(--ciano-mistico); }
 
 .contador-progresso {
-  font-size: 0.7rem; color: var(--ouro-velho);
-  white-space: nowrap; font-weight: bold;
+  font-size: 0.68rem; color: var(--ouro-velho);
+  white-space: nowrap; font-weight: bold; letter-spacing: 0.03em;
+  padding: 0.28rem 0.65rem; border-radius: 999px;
+  border: 1px solid rgba(212,175,55,0.35);
+  background: rgba(212,175,55,0.08);
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.4);
+}
+
+/* Widgets do jogo na barra (classes aplicadas pelo jogo.js) */
+.widget-chama {
+  font-size: 0.72rem; color: #ff9166; white-space: nowrap; font-weight: bold;
+  flex-shrink: 0; text-shadow: 0 0 10px rgba(255,106,0,0.5);
+}
+.widget-xp { display: flex; flex-direction: column; gap: 3px; min-width: 132px; flex-shrink: 0; }
+.widget-xp-nome {
+  font-size: 0.62rem; color: var(--pergaminho-escuro); white-space: nowrap;
+  font-weight: bold; letter-spacing: 0.04em;
+}
+.widget-xp-trilho {
+  height: 6px; width: 100%; border-radius: 4px; overflow: hidden;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(212,175,55,0.28);
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.6);
+}
+.widget-xp-preenchida {
+  height: 100%; width: 0%; border-radius: 3px;
+  background: linear-gradient(90deg, #8c6239, #d4af37 55%, #f7e08a);
+  box-shadow: 0 0 8px rgba(212,175,55,0.55);
+  transition: width 0.4s ease;
+}
+.widget-diario {
+  flex-shrink: 0; width: 34px; height: 34px; border-radius: 50%;
+  background: linear-gradient(145deg, #2d3238, #14161a);
+  color: var(--ouro-velho); border: 1px solid rgba(212,175,55,0.45);
+  font-size: 0.9rem; cursor: pointer;
+  box-shadow: var(--sombra-1);
+  transition: transform var(--transicao-suave), box-shadow var(--transicao-suave);
+}
+.widget-diario:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.6), 0 0 12px rgba(212,175,55,0.4);
+}
+
+/* Em tela estreita, as gemas ocupam a primeira linha inteira e os widgets
+   do jogo (contador, XP, chama, diário) se compactam pra caber na segunda */
+@media (max-width: 700px) {
+  :root { --altura-barra-nav: 100px; }
+  .barra-navegacao { flex-wrap: wrap; row-gap: 0.35rem; gap: 0.45rem; }
+  .barra-navegacao-lista { order: -1; flex-basis: 100%; }
+  .contador-progresso { font-size: 0.6rem; padding: 0.22rem 0.5rem; }
+  .widget-xp { min-width: 88px; flex: 1 1 88px; }
+  .widget-xp-nome { font-size: 0.56rem; overflow: hidden; text-overflow: ellipsis; max-width: 160px; }
+  .widget-chama { font-size: 0.66rem; }
+  .widget-diario { width: 30px; height: 30px; font-size: 0.8rem; }
 }
 
 /* Com a barra sticky, o scrollIntoView precisa parar ANTES dela — senão o
@@ -615,21 +749,21 @@ header:hover .anel-metalico::after { animation-duration: 2.4s; filter: blur(4px)
 @keyframes trilhaFluindoY { to { background-position-y: 16px; } }
 
 @media (min-width: 1024px) {
-  #conteudo-principal { max-width: 1080px; }
+  #conteudo-principal { max-width: 1120px; }
 
   /* Grid fixo em serpentina: trilha 0→1→2→3 na linha de cima,
      desce pro 4 e volta 4→5→6 na linha de baixo (estilo mapa de RPG) */
   .mapa-reino-grid {
-    --trilha-cor: rgba(212, 175, 55, 0.5);
-    --gap-mapa-x: 2.25rem;
-    --gap-mapa-y: 2.75rem;
+    --trilha-cor: rgba(212, 175, 55, 0.78);
+    --gap-mapa-x: 1.9rem;
+    --gap-mapa-y: 2.3rem;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-template-areas:
       "b0 b1 b2 b3"
       "ilha b6 b5 b4";
     gap: var(--gap-mapa-y) var(--gap-mapa-x);
-    margin-bottom: 2rem;
+    margin-bottom: 2.25rem;
   }
   .tile-pos-0 { grid-area: b0; }
   .tile-pos-1 { grid-area: b1; }
@@ -639,29 +773,63 @@ header:hover .anel-metalico::after { animation-duration: 2.4s; filter: blur(4px)
   .tile-pos-5 { grid-area: b5; }
   .tile-pos-6 { grid-area: b6; }
 
-  .tile-reino { padding: 16px 14px; position: relative; }
+  .tile-reino { padding: 18px 15px 15px; position: relative; min-height: 150px; }
   .tile-cabecalho {
     cursor: pointer;
     display: flex; flex-direction: column; align-items: center;
-    gap: 0.4rem; text-align: center;
+    gap: 0.45rem; text-align: center;
   }
+
+  /* Medalhão do reino: mesmo material das gemas da nav, maior */
   .tile-numero {
-    width: 34px; height: 34px; border-radius: 50%;
+    width: 44px; height: 44px; border-radius: 50%;
     color: #fff; display: flex; align-items: center; justify-content: center;
-    font-family: var(--font-display); font-weight: bold;
-    border: 2px solid rgba(255,255,255,0.2);
-    box-shadow: 0 3px 8px rgba(0,0,0,0.5);
+    font-family: var(--font-display); font-weight: bold; font-size: 1rem;
+    border: 1px solid rgba(255,255,255,0.28);
+    background:
+      radial-gradient(circle at 32% 26%, rgba(255,255,255,0.5), transparent 45%),
+      radial-gradient(circle at 50% 125%, rgba(0,0,0,0.55), transparent 62%),
+      var(--cor-reino, #5c6bc0);
+    box-shadow:
+      0 4px 10px rgba(0,0,0,0.55),
+      0 0 14px color-mix(in srgb, var(--cor-reino, #d4af37) 40%, transparent),
+      inset 0 1px 2px rgba(255,255,255,0.4),
+      inset 0 -4px 8px rgba(0,0,0,0.45);
+    text-shadow: 0 1px 3px rgba(0,0,0,0.85);
   }
-  .tile-titulo { margin: 0; font-size: 0.98rem; line-height: 1.15; }
-  .tile-subtitulo { margin: 0; font-size: 0.72rem; color: var(--pergaminho-escuro); }
-  .tile-estado { font-size: 0.8rem; color: var(--pergaminho-escuro); }
+
+  .tile-titulo {
+    margin: 0; font-size: 1.02rem; line-height: 1.18; font-weight: 700;
+    color: color-mix(in srgb, var(--cor-reino, var(--pergaminho)) 72%, #fff);
+    text-shadow: 0 1px 3px rgba(0,0,0,0.75);
+  }
+  .tile-subtitulo { margin: 0; font-size: 0.75rem; color: var(--pergaminho-escuro); opacity: 0.9; }
+  .tile-estado {
+    font-size: 0.72rem; color: var(--pergaminho-escuro);
+    padding: 0.18rem 0.55rem; border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.14);
+    background: rgba(0,0,0,0.3);
+  }
 
   /* Estados visuais (cosméticos — nenhum bloco fica travado) */
-  .tile-reino.estado-nao-iniciado { filter: saturate(0.65); opacity: 0.85; }
-  .tile-reino.estado-completo .tile-estado { color: var(--ouro-velho); font-weight: bold; }
+  .tile-reino.estado-nao-iniciado { filter: saturate(0.6); }
+  .tile-reino.estado-nao-iniciado .tile-cabecalho { opacity: 0.88; }
+  .tile-reino.estado-completo .tile-estado {
+    color: var(--ouro-velho); font-weight: bold;
+    border-color: rgba(212,175,55,0.45); background: rgba(212,175,55,0.1);
+  }
+  /* Fita de ouro no topo do reino conquistado */
+  .tile-reino.estado-completo::before {
+    top: 0; left: 18%; right: 18%; bottom: auto; height: 2px; border: none; border-radius: 2px;
+    background: linear-gradient(90deg, transparent, rgba(212,175,55,0.9), rgba(255,242,196,0.9), rgba(212,175,55,0.9), transparent);
+    box-shadow: 0 0 10px rgba(212,175,55,0.6);
+  }
   .tile-reino.tile-aberto {
-    border-color: var(--ouro-velho);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.8), 0 0 20px rgba(212,175,55,0.35);
+    transform: translateY(-2px);
+    box-shadow:
+      var(--sombra-3),
+      0 0 0 1px rgba(212,175,55,0.55),
+      0 0 26px color-mix(in srgb, var(--cor-reino, #d4af37) 45%, transparent);
   }
 
   /* Botões de Julgamento (injetados pelo jogo.js na raiz do tile) — versão compacta */
@@ -671,10 +839,11 @@ header:hover .anel-metalico::after { animation-duration: 2.4s; filter: blur(4px)
      Tracejado via repeating-linear-gradient (borda dashed não anima). */
   .tile-pos-1::after, .tile-pos-2::after, .tile-pos-3::after,
   .tile-pos-5::after, .tile-pos-6::after {
-    content: ''; position: absolute; top: 50%; height: 2px;
-    width: var(--gap-mapa-x); pointer-events: none;
-    background: repeating-linear-gradient(90deg, var(--trilha-cor) 0 8px, transparent 8px 16px);
-    animation: trilhaFluindoX 1.6s linear infinite;
+    content: ''; position: absolute; top: 50%; height: 3px; margin-top: -1px;
+    width: var(--gap-mapa-x); pointer-events: none; border-radius: 2px;
+    background: repeating-linear-gradient(90deg, var(--trilha-cor) 0 10px, rgba(212,175,55,0.12) 10px 18px);
+    filter: drop-shadow(0 0 4px rgba(212,175,55,0.55));
+    animation: trilhaFluindoX 1.4s linear infinite;
   }
   /* linha de cima: o bloco anterior está à esquerda */
   .tile-pos-1::after, .tile-pos-2::after, .tile-pos-3::after { left: calc(-1 * var(--gap-mapa-x)); }
@@ -685,17 +854,20 @@ header:hover .anel-metalico::after { animation-duration: 2.4s; filter: blur(4px)
   }
   /* descida 3→4: trilha vertical */
   .tile-pos-4::after {
-    content: ''; position: absolute; left: 50%; width: 2px;
-    height: var(--gap-mapa-y); top: calc(-1 * var(--gap-mapa-y)); pointer-events: none;
-    background: repeating-linear-gradient(180deg, var(--trilha-cor) 0 8px, transparent 8px 16px);
-    animation: trilhaFluindoY 1.6s linear infinite;
+    content: ''; position: absolute; left: 50%; width: 3px; margin-left: -1px;
+    height: var(--gap-mapa-y); top: calc(-1 * var(--gap-mapa-y)); pointer-events: none; border-radius: 2px;
+    background: repeating-linear-gradient(180deg, var(--trilha-cor) 0 10px, rgba(212,175,55,0.12) 10px 18px);
+    filter: drop-shadow(0 0 4px rgba(212,175,55,0.55));
+    animation: trilhaFluindoY 1.4s linear infinite;
   }
 
   /* Painel largo com as runas do bloco aberto, abaixo do mapa */
-  .painel-runas-aberto { margin-bottom: 1.5rem; }
+  .painel-runas-aberto { margin-bottom: 1.5rem; box-shadow: var(--sombra-3); }
   .painel-runas-cabecalho {
     display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;
   }
+  .painel-runas-identidade { display: flex; align-items: center; gap: 0.8rem; }
+  .painel-runas-medalhao { width: 38px; height: 38px; font-size: 0.9rem; flex-shrink: 0; }
   .painel-runas-aberto .lista-runas { grid-template-columns: repeat(3, 1fr); }
 
   /* Tile da Ilha Amaldiçoada: célula "ilha" do grid + trilha morta */
@@ -703,23 +875,27 @@ header:hover .anel-metalico::after { animation-duration: 2.4s; filter: blur(4px)
   /* Tracejado rubro irregular apontando pro Reino 6 — sem animação de fluxo:
      é uma trilha morta, ninguém deveria tê-la percorrido */
   .tile-pos-ilha::after {
-    content: ''; position: absolute; top: 50%; height: 2px;
-    right: calc(-1 * var(--gap-mapa-x)); width: var(--gap-mapa-x); pointer-events: none;
-    background: repeating-linear-gradient(90deg, rgba(160,32,32,0.55) 0 5px, transparent 5px 14px);
+    content: ''; position: absolute; top: 50%; height: 3px; margin-top: -1px;
+    right: calc(-1 * var(--gap-mapa-x)); width: var(--gap-mapa-x); pointer-events: none; border-radius: 2px;
+    background: repeating-linear-gradient(90deg, rgba(160,32,32,0.6) 0 6px, transparent 6px 15px);
+    filter: drop-shadow(0 0 3px rgba(160,32,32,0.5));
   }
 }
 
 /* ---------- 21. Ilha Amaldiçoada (Reino dos Erros Famosos) ---------- */
 
-/* Painel/tile sombrio — vale no acordeão (celular) e no mapa (desktop) */
+/* Painel/tile sombrio — vale no acordeão (celular) e no mapa (desktop).
+   Mesma técnica de borda metálica do painel-reino-premium, só que em rubro. */
 .painel-ilha {
-  border-color: #4a1010;
+  border: 1px solid transparent;
   background: linear-gradient(145deg, rgba(46,26,26,0.88), rgba(22,12,12,0.94));
+  background:
+    linear-gradient(145deg, rgba(46,26,26,0.88), rgba(22,12,12,0.94)) padding-box,
+    linear-gradient(135deg, rgba(160,32,32,0.75), rgba(74,16,16,0.4) 38%, rgba(255,160,160,0.4) 52%, rgba(74,16,16,0.4) 68%, rgba(160,32,32,0.65)) border-box;
 }
-.painel-ilha::before { border-color: rgba(160,32,32,0.25); }
+.painel-ilha::before { border-color: rgba(160,32,32,0.18); }
 .painel-ilha:hover {
-  border-color: rgba(201,48,48,0.6);
-  box-shadow: 0 22px 45px rgba(0,0,0,0.85), 0 0 30px rgba(160,32,32,0.2);
+  box-shadow: var(--sombra-3), 0 0 30px rgba(160,32,32,0.28);
 }
 
 .espada-card.runa-negra { border-color: rgba(160,32,32,0.35); }

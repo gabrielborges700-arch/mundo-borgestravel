@@ -73,7 +73,8 @@ function montarBarraNavegacao() {
     // data-bloco-id é o contrato dos painéis com jogo.js/app.js, e usá-lo
     // aqui faria os botões da barra serem confundidos com os painéis.
     botao.dataset.navBloco = bloco.id;
-    botao.style.background = bloco.hex; // cor vem dos dados de cada bloco, por isso fica inline
+    // A cor vem dos dados de cada bloco; o CSS deriva gradiente e brilho dela
+    botao.style.setProperty("--cor-reino", bloco.hex);
     botao.addEventListener("click", () => irParaBloco(bloco.id));
     listaBotoes.appendChild(botao);
   });
@@ -85,7 +86,7 @@ function montarBarraNavegacao() {
     botaoIlha.title = ilhaAmaldicoada.title;
     botaoIlha.className = "botao-bloco-nav";
     botaoIlha.dataset.navBloco = ilhaAmaldicoada.id;
-    botaoIlha.style.background = ilhaAmaldicoada.hex;
+    botaoIlha.style.setProperty("--cor-reino", ilhaAmaldicoada.hex);
     botaoIlha.addEventListener("click", () => irParaBloco(ilhaAmaldicoada.id));
     listaBotoes.appendChild(botaoIlha);
   }

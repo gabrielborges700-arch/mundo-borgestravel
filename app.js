@@ -47,6 +47,7 @@ function renderizarAcordeaoBlocos(container) {
     painel.className = "painel-reino-premium";
     painel.style.marginBottom = "1.5rem";
     painel.style.cursor = "pointer";
+    painel.style.setProperty("--cor-reino", bloco.hex); // tinte e brilho do reino via CSS
     painel.dataset.blocoId = bloco.id;
 
     const aberto = blocoAbertoId === bloco.id;
@@ -192,9 +193,7 @@ function criarCardRunaNegra(runa) {
   if (lida || construiu) card.style.opacity = "0.7";
 
   card.innerHTML = `
-    <span class="font-display" style="color: #c93030; font-size: 1.1rem; min-width: 2.2rem;">
-      ${runa.id}
-    </span>
+    <span class="font-display runa-numero">${runa.id}</span>
     <span class="font-body" style="color: var(--pergaminho); flex:1;">
       ${runa.title}
     </span>
@@ -336,13 +335,14 @@ function renderizarMapaReino(container) {
     tile.className =
       `painel-reino-premium tile-reino tile-pos-${bloco.num} estado-${estado}` +
       (aberto ? " tile-aberto" : "");
+    tile.style.setProperty("--cor-reino", bloco.hex); // medalhão, tinte e brilho via CSS
     tile.dataset.blocoId = bloco.id;
 
     tile.innerHTML = `
       <div class="cabecalho-bloco tile-cabecalho" role="button" tabindex="0"
            aria-expanded="${aberto}" aria-label="${bloco.title} — ${rotuloEstado}">
-        <span class="tile-numero" style="background:${bloco.hex}">${bloco.num}</span>
-        <h2 class="font-display tile-titulo" style="color:${bloco.hex}">${bloco.title}</h2>
+        <span class="tile-numero">${bloco.num}</span>
+        <h2 class="font-display tile-titulo">${bloco.title}</h2>
         <p class="font-body tile-subtitulo">${bloco.subtitle}</p>
         <span class="tile-estado" title="${rotuloEstado}">
           ${ICONES_ESTADO_BLOCO[estado]} ${progresso.lidas}/${progresso.total}
@@ -402,12 +402,13 @@ function criarTileIlha() {
   const tile = document.createElement("div");
   tile.className =
     "painel-reino-premium tile-reino tile-pos-ilha painel-ilha" + (aberto ? " tile-aberto" : "");
+  tile.style.setProperty("--cor-reino", ilhaAmaldicoada.hex);
   tile.dataset.blocoId = ilhaAmaldicoada.id;
 
   tile.innerHTML = `
     <div class="cabecalho-bloco tile-cabecalho" role="button" tabindex="0"
          aria-expanded="${aberto}" aria-label="${ilhaAmaldicoada.title} — ${rotulo}">
-      <span class="tile-numero" style="background:${ilhaAmaldicoada.hex}">💀</span>
+      <span class="tile-numero">💀</span>
       <h2 class="font-display tile-titulo" style="color:#c93030">${ilhaAmaldicoada.title}</h2>
       <p class="font-body tile-subtitulo">${ilhaAmaldicoada.subtitle}</p>
       <span class="tile-estado" title="${rotulo}">${lidas}/${total}</span>
@@ -441,12 +442,16 @@ function criarTileIlha() {
 function criarPainelRunasIlha() {
   const painel = document.createElement("div");
   painel.className = "painel-reino-premium painel-runas-aberto painel-ilha animate-fadeIn";
+  painel.style.setProperty("--cor-reino", ilhaAmaldicoada.hex);
 
   painel.innerHTML = `
     <div class="painel-runas-cabecalho">
-      <div>
-        <h3 class="font-display" style="color:#c93030; margin:0 0 0.25rem; font-size:1.2rem;">${ilhaAmaldicoada.title}</h3>
-        <p class="font-body" style="color: var(--pergaminho-escuro); margin:0;">${ilhaAmaldicoada.subtitle}</p>
+      <div class="painel-runas-identidade">
+        <span class="tile-numero painel-runas-medalhao">💀</span>
+        <div>
+          <h3 class="font-display" style="color:#c93030; margin:0 0 0.25rem; font-size:1.2rem;">${ilhaAmaldicoada.title}</h3>
+          <p class="font-body" style="color: var(--pergaminho-escuro); margin:0;">${ilhaAmaldicoada.subtitle}</p>
+        </div>
       </div>
       <button class="btn-gotico botao-fechar-painel" aria-label="Fechar runas da Ilha Amaldiçoada"
         style="padding:0.3rem 0.7rem; font-size:0.9rem;">✕</button>
@@ -472,12 +477,16 @@ function criarPainelRunasIlha() {
 function criarPainelRunasAberto(bloco) {
   const painel = document.createElement("div");
   painel.className = "painel-reino-premium painel-runas-aberto animate-fadeIn";
+  painel.style.setProperty("--cor-reino", bloco.hex);
 
   painel.innerHTML = `
     <div class="painel-runas-cabecalho">
-      <div>
-        <h3 class="font-display" style="color:${bloco.hex}; margin:0 0 0.25rem; font-size:1.2rem;">${bloco.title}</h3>
-        <p class="font-body" style="color: var(--pergaminho-escuro); margin:0;">${bloco.subtitle}</p>
+      <div class="painel-runas-identidade">
+        <span class="tile-numero painel-runas-medalhao">${bloco.num}</span>
+        <div>
+          <h3 class="font-display" style="color:${bloco.hex}; margin:0 0 0.25rem; font-size:1.2rem;">${bloco.title}</h3>
+          <p class="font-body" style="color: var(--pergaminho-escuro); margin:0;">${bloco.subtitle}</p>
+        </div>
       </div>
       <button class="btn-gotico botao-fechar-painel" aria-label="Fechar runas de ${bloco.title}"
         style="padding:0.3rem 0.7rem; font-size:0.9rem;">✕</button>
@@ -514,9 +523,7 @@ function criarCardRuna(subtema, bloco) {
   if (lida) card.style.opacity = "0.7";
 
   card.innerHTML = `
-    <span class="font-display" style="color: var(--ouro-velho); font-size: 1.1rem; min-width: 2.2rem;">
-      ${subtema.id}
-    </span>
+    <span class="font-display runa-numero">${subtema.id}</span>
     <span class="font-body" style="color: var(--pergaminho); flex:1;">
       ${dadosRuna ? dadosRuna.title : subtema.title}
     </span>

@@ -160,7 +160,7 @@ function montarChamaForjador() {
   const elemento = document.createElement("span");
   elemento.id = "chama-forjador";
   elemento.title = "Dias seguidos visitando o reino";
-  elemento.style.cssText = "font-size:0.7rem; color:#ff7043; white-space:nowrap; font-weight:bold; flex-shrink:0;";
+  elemento.className = "widget-chama";
   barra.appendChild(elemento);
   atualizarChamaForjador();
 }
@@ -394,11 +394,11 @@ function montarBarraXP() {
 
   const container = document.createElement("div");
   container.id = "barra-xp";
-  container.style.cssText = "display:flex; flex-direction:column; gap:2px; min-width:120px; flex-shrink:0;";
+  container.className = "widget-xp";
   container.innerHTML = `
-    <span id="xp-nivel-nome" style="font-size:0.65rem; color: var(--ciano-mistico); white-space:nowrap; font-weight:bold;"></span>
-    <div style="height:5px; width:100%; background: rgba(255,255,255,0.1); border-radius:3px; overflow:hidden;">
-      <div id="xp-barra-preenchida" style="height:100%; width:0%; background: var(--ciano-mistico); transition: width 0.4s ease;"></div>
+    <span id="xp-nivel-nome" class="widget-xp-nome"></span>
+    <div class="widget-xp-trilho">
+      <div id="xp-barra-preenchida" class="widget-xp-preenchida"></div>
     </div>
   `;
   barra.appendChild(container);
@@ -747,11 +747,7 @@ function montarBotaoDiario() {
   botao.title = "Diário do Aprendiz — resumo do teu progresso";
   botao.setAttribute("aria-label", "Abrir o Diário do Aprendiz");
   botao.textContent = "📖";
-  botao.style.cssText = `
-    flex-shrink:0; width:32px; height:32px; border-radius:50%;
-    background: var(--pedra-ardosia); color: var(--ouro-velho);
-    border: 1px solid var(--bronze-envelhecido); font-size:0.9rem; cursor:pointer;
-  `;
+  botao.className = "widget-diario";
   botao.addEventListener("click", abrirModalDiario);
   barra.appendChild(botao);
 }
