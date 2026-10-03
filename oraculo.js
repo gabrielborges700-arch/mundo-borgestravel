@@ -30,14 +30,16 @@ const SAUDACAO_INICIAL =
 const RESPOSTA_PADRAO =
   "As correntes do éter mágico estão adormecidas no momento, mas a minha sabedoria antiga permanece: na engenharia, toda força invisível deve encontrar seu caminho até a terra sem que a matéria se quebra!";
 
-// Respostas por palavra-chave (ordem importa: a primeira que bater, ganha)
+// Respostas por palavra-chave (ordem importa: a primeira que bater, ganha).
+// Cada palavra-chave casa só com PALAVRA INTEIRA (ou o plural com "s"),
+// e acentos/maiúsculas não importam: "força" casa com "Forca" e "FORÇAS".
 const REGRAS_PALAVRA_CHAVE = [
   {
     palavras: ["curiosidade", "conta", "sabia", "fato"],
     responder: () => FATOS_CURIOSIDADE[Math.floor(Math.random() * FATOS_CURIOSIDADE.length)],
   },
   {
-    palavras: ["vento", "deflex", "torre"],
+    palavras: ["vento", "deflexão", "deflexões", "torre"],
     responder: () =>
       "Ah, o vento! Ele empurra as torres como um gigante invisível. Quanto mais alta e rígida a estrutura, maior o desafio — por isso os engenheiros usam amortecedores e fundações profundas para domar essa força. Vai até a runa 0.3 pra sentir isso na prática!",
   },
@@ -47,26 +49,68 @@ const REGRAS_PALAVRA_CHAVE = [
       "O arco é uma das invenções mais espertas da engenharia: ele transforma o peso de cima em compressão, empurrando as forças pelas próprias pedras até o chão — sem precisar de argamassa forte! Experimenta montar um na runa 0.8.",
   },
   {
-    palavras: ["forca", "força", "equilibrio", "equilíbrio"],
+    palavras: ["força", "equilíbrio"],
     responder: () =>
       "Toda estrutura parada obedece a uma lei sagrada: a soma de todas as forças deve ser zero. Peso pra baixo, reação pra cima — se não empatar, ela desaba! Vai na runa 0.7 pra testar esse equilíbrio com as próprias mãos.",
   },
   {
-    palavras: ["material", "concreto", "aço", "pedra"],
+    palavras: ["material", "materiais", "concreto", "aço", "pedra"],
     responder: () =>
       "Cada era escolheu seu material: pedra e tijolo pros antigos, aço e concreto armado pros modernos. O concreto é forte na compressão mas fraco na tração — por isso colocamos barras de aço dentro dele, que fazem o trabalho inverso!",
   },
   {
-    palavras: ["ola", "olá", "oi", "quem"],
+    palavras: ["olá", "oi", "oie", "quem"],
     responder: () => SAUDACAO_INICIAL,
   },
 ];
 
+// Deixa o texto "comparável": minúsculas, sem acentos (NFD separa a letra
+// do acento, e a regex apaga o acento), com pontuação/emoji virando espaço e
+// letra repetida virando uma só ("oiii"/"olaaa" -> "oi"/"ola", como criança
+// digita). As palavras-chave passam por aqui também, então "torre" vira "tore"
+// dos dois lados e continua casando.
+// Ex: "Olá, Mago!" -> "ola mago"
+function normalizarTextoOraculo(texto) {
+  return texto
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, " ")
+    .replace(/([a-z])\1+/g, "$1")
+    .trim();
+}
+
+// Quebra o texto já normalizado em palavras soltas (tokens)
+function separarPalavrasOraculo(texto) {
+  const normalizado = normalizarTextoOraculo(texto);
+  return normalizado ? normalizado.split(" ") : [];
+}
+
+// Procura a palavra-chave como PALAVRA INTEIRA dentro da lista de palavras da pergunta.
+// Antes era includes() por pedaço de texto, e aí "oi" casava com "foi"/"dois",
+// "ola" com "escola" e "arco" com "barco" — o Mago respondia fora de contexto.
+// Palavra-chave de várias palavras ("concreto armado") precisa aparecer na mesma
+// sequência. Cada palavra aceita um "s" no fim, pro plural simples ("arcos",
+// "concretos armados").
+function perguntaTemPalavraChave(palavrasPergunta, palavraChave) {
+  const palavrasChave = separarPalavrasOraculo(palavraChave);
+  if (palavrasChave.length === 0) return false;
+
+  for (let inicio = 0; inicio + palavrasChave.length <= palavrasPergunta.length; inicio++) {
+    const casou = palavrasChave.every((palavra, i) => {
+      const palavraPergunta = palavrasPergunta[inicio + i];
+      return palavraPergunta === palavra || palavraPergunta === palavra + "s";
+    });
+    if (casou) return true;
+  }
+  return false;
+}
+
 function obterRespostaOraculo(pergunta) {
-  const perguntaMin = pergunta.toLowerCase();
+  const palavrasPergunta = separarPalavrasOraculo(pergunta);
 
   for (const regra of REGRAS_PALAVRA_CHAVE) {
-    if (regra.palavras.some((palavra) => perguntaMin.includes(palavra))) {
+    if (regra.palavras.some((palavra) => perguntaTemPalavraChave(palavrasPergunta, palavra))) {
       return regra.responder();
     }
   }
