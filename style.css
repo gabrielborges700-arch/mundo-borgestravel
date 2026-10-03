@@ -163,10 +163,6 @@ input[type="range"]:focus-visible {
   100% { transform: translate(24px, -48px); opacity: 0; }
 }
 @keyframes luaPulsar { 0%, 100% { filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.2)); } 50% { filter: drop-shadow(0 0 20px rgba(0, 229, 255, 0.5)); } }
-@keyframes brilhoBorda {
-  0%, 100% { box-shadow: 0 15px 35px rgba(0,0,0,0.8), 0 0 0 1px rgba(212,175,55,0.08), 0 0 22px rgba(0,229,255,0.05); }
-  50% { box-shadow: 0 15px 35px rgba(0,0,0,0.8), 0 0 0 1px rgba(212,175,55,0.18), 0 0 32px rgba(0,229,255,0.15); }
-}
 /* Vela / névoa / raios de luz (origem: Base44) */
 @keyframes flickerVela { 0%,100% { opacity:0.82; transform: scaleY(1);} 25%{opacity:1;transform:scaleY(1.08);} 50%{opacity:0.68;transform:scaleY(0.94);} 75%{opacity:0.94;transform:scaleY(1.04);} }
 @keyframes derivaNevoa { from { transform: translateX(-12%);} to { transform: translateX(12%);} }
@@ -256,12 +252,12 @@ input[type="range"]:focus-visible {
 .painel-reino-premium {
   border: 1px solid transparent;
   border-radius: 16px; padding: 25px 20px; width: 100%;
-  /* fallback pra navegador sem color-mix: vidro simples */
-  background: linear-gradient(160deg, rgba(38,42,50,0.8), rgba(17,19,25,0.92));
-  background:
-    linear-gradient(160deg, color-mix(in srgb, var(--cor-reino, transparent) 13%, transparent), transparent 58%) padding-box,
-    var(--vidro-fundo) padding-box,
-    var(--borda-metal) border-box;
+  /* Fallback pra navegador sem color-mix (Safari < 16.2, Chrome < 111, Firefox < 113):
+     vidro + moldura metálica, só sem o tinte do reino, que entra no @supports logo abaixo.
+     Não dá pra fazer o fallback com 2 declarações seguidas: a que tem color-mix(var())
+     passa no parser por causa do var() e só falha no valor computado — aí o painel
+     ficava sem fundo e sem borda nenhuma. */
+  background: var(--vidro-fundo) padding-box, var(--borda-metal) border-box;
   backdrop-filter: blur(10px) saturate(1.25);
   -webkit-backdrop-filter: blur(10px) saturate(1.25);
   box-shadow: var(--sombra-2);
@@ -274,7 +270,20 @@ input[type="range"]:focus-visible {
 }
 .painel-reino-premium:hover {
   transform: translateY(-3px);
-  box-shadow: var(--sombra-3), 0 0 28px color-mix(in srgb, var(--cor-reino, #d4af37) 24%, transparent);
+  box-shadow: var(--sombra-3), 0 0 28px rgba(212,175,55,0.24);
+}
+/* Tinte e brilho na cor do reino — só onde o navegador entende color-mix.
+   (Mesmo esquema em todo o arquivo: fallback simples fora, color-mix dentro do @supports.) */
+@supports (color: color-mix(in srgb, red 50%, blue)) {
+  .painel-reino-premium {
+    background:
+      linear-gradient(160deg, color-mix(in srgb, var(--cor-reino, transparent) 13%, transparent), transparent 58%) padding-box,
+      var(--vidro-fundo) padding-box,
+      var(--borda-metal) border-box;
+  }
+  .painel-reino-premium:hover {
+    box-shadow: var(--sombra-3), 0 0 28px color-mix(in srgb, var(--cor-reino, #d4af37) 24%, transparent);
+  }
 }
 
 /* Painel "pergaminho" — pra ler os textos das runas */
@@ -349,12 +358,38 @@ header:hover .anel-metalico::after { animation-duration: 2.4s; filter: blur(4px)
   animation: vitralPulsar 12s ease-in-out infinite;
 }
 
-.capitular::first-letter {
+/* Capitular: 1ª letra do texto corrido da runa (o parágrafo depois do título e do subtítulo).
+   Não vai no painel inteiro (.capitular::first-letter) porque aí pegava o início do h2 —
+   e todo título de modal começa com emoji (🗺️, ⚔️...), que virava uma capitular gigante. */
+.capitular > h2 + p + p::first-letter {
   font-family: var(--font-blackletter); font-size: 3.6em; float: left; line-height: 0.85;
   padding: 0.05em 0.15em 0 0; margin: 0.05em 0.08em 0 0; color: #7a1414;
   text-shadow: 0 0 1px #d4af37, 2px 2px 0 rgba(255,245,204,0.8), 3px 3px 0 rgba(212,175,55,0.5), 4px 4px 6px rgba(0,0,0,0.35);
   font-weight: 700;
 }
+/* Parágrafo curto (2 linhas) não "vaza" a capitular flutuante pro divisor de baixo */
+.capitular > h2 + p + p { display: flow-root; }
+
+/* Modal da runa: o ✕ (e o ☆) ficam absolutos no canto de cima, na altura da 1ª linha do h2.
+   Um calço flutuante no começo do título reserva esse espaço — só na 1ª linha,
+   sem roubar largura das outras (no celular o título já quebra em várias). */
+#modal-overlay .painel-leitura > h2:first-of-type::before {
+  content: ''; float: right; width: 1.6rem; height: 1em; /* só o ✕ */
+}
+#modal-overlay .painel-leitura > #botao-favoritar-runa ~ h2:first-of-type::before { width: 4.25rem; } /* ☆ + ✕ */
+
+/* Modais do jogo.js (Julgamentos, Diário, Sprint, Torre, Certificado): mesmo ✕ no canto, mesmo calço.
+   Mais largo que o da runa porque esses painéis têm padding lateral menor (1.5rem–2rem).
+   No modal da runa continua valendo a regra de cima, que é mais específica. */
+.painel-leitura > [id^="fechar-modal"] ~ h2:first-of-type::before,
+#area-nao-imprimir > [id^="fechar-modal"] ~ h2:first-of-type::before {
+  content: ''; float: right; width: 2rem; height: 1em;
+}
+/* Card de Conquistas: o título é centralizado e o calço tiraria a 1ª linha do centro —
+   lá o recuo vai igual dos dois lados */
+#modal-card-overlay .painel-leitura > h2 { padding: 0 2rem; }
+#modal-card-overlay .painel-leitura > h2::before { content: none; }
+
 /* Letra capital alternativa em gradiente (origem: Base44) */
 .letra-capital {
   font-family: "Cinzel Decorative", serif; float: left; font-size: 3.6rem; line-height: 0.74;
@@ -557,6 +592,12 @@ header:hover .anel-metalico::after { animation-duration: 2.4s; filter: blur(4px)
 .hero-titulo { margin: 0; line-height: 0.98; font-weight: 900; padding: 0 0.5rem; }
 .hero-titulo-linha1 {
   display: block; font-size: clamp(1.45rem, 5.2vw, 3.3rem); letter-spacing: 0.04em;
+  /* Com line-height 0.98 o acento do "Á" sai por cima da caixa da linha, e o
+     background-clip:text só pinta dentro da caixa — o acento sumia. O padding
+     estica a área pintada pra cima; a margem negativa devolve o mesmo espaço,
+     então nada se mexe na tela. Com 0.15em a ponta do acento ainda saía
+     achatada; 0.3em pega o acento inteiro em todas as larguras. */
+  padding-top: 0.3em; margin-top: -0.3em;
   background: linear-gradient(to bottom, #ffffff 0%, #f7ecd0 32%, #e0bc4e 68%, #a8712f 100%);
   -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
   filter:
@@ -596,6 +637,9 @@ header:hover .anel-metalico::after { animation-duration: 2.4s; filter: blur(4px)
   padding: 1.25rem 1rem 1.75rem;
 }
 .hero-principal.hero-compacto .hero-emblema-nucleo { inset: 4px; }
+/* Usada só pelo navegacao.js (irParaBloco), por um instante, pra medir o hero
+   compacto sem animação — ver destinoRolagemComHeroCompacto() */
+.hero-sem-transicao, .hero-sem-transicao * { transition: none !important; }
 
 @media (max-width: 768px) {
   .hero-principal { --emblema-tamanho: 80px; padding: 2.25rem 1rem 2.75rem; }
@@ -624,7 +668,8 @@ header:hover .anel-metalico::after { animation-duration: 2.4s; filter: blur(4px)
 
 .barra-navegacao-lista {
   display: flex; gap: 0.5rem; flex: 1;
-  overflow-x: auto; padding: 6px 2px;
+  /* 6px nas laterais: a gema .ativo (scale 1.16 + anel) não é cortada na borda */
+  overflow-x: auto; padding: 6px 6px;
   scroll-snap-type: x proximity;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none; /* nada de scrollbar aparente — o fade indica a rolagem */
@@ -645,7 +690,7 @@ header:hover .anel-metalico::after { animation-duration: 2.4s; filter: blur(4px)
     var(--cor-reino, #5c6bc0);
   box-shadow:
     0 3px 8px rgba(0,0,0,0.55),
-    0 0 10px color-mix(in srgb, var(--cor-reino, #d4af37) 40%, transparent),
+    0 0 10px rgba(212,175,55,0.4),
     inset 0 1px 2px rgba(255,255,255,0.4),
     inset 0 -3px 6px rgba(0,0,0,0.45);
   font-family: var(--font-display); font-weight: bold; font-size: 0.8rem;
@@ -656,7 +701,7 @@ header:hover .anel-metalico::after { animation-duration: 2.4s; filter: blur(4px)
   transform: translateY(-2px) scale(1.07);
   box-shadow:
     0 6px 14px rgba(0,0,0,0.6),
-    0 0 18px color-mix(in srgb, var(--cor-reino, #d4af37) 65%, transparent),
+    0 0 18px rgba(212,175,55,0.65),
     inset 0 1px 2px rgba(255,255,255,0.45),
     inset 0 -3px 6px rgba(0,0,0,0.45);
 }
@@ -670,9 +715,36 @@ header:hover .anel-metalico::after { animation-duration: 2.4s; filter: blur(4px)
   box-shadow:
     0 0 0 2px var(--ouro-velho),
     0 4px 12px rgba(0,0,0,0.6),
-    0 0 18px color-mix(in srgb, var(--cor-reino, #d4af37) 70%, transparent),
+    0 0 18px rgba(212,175,55,0.7),
     inset 0 1px 2px rgba(255,255,255,0.45),
     inset 0 -3px 6px rgba(0,0,0,0.45);
+}
+
+/* Brilho das gemas na cor do reino (fallback dourado acima — ver seção 8).
+   Mesma ordem de cima: base, :hover, .ativo — o .ativo continua ganhando do :hover. */
+@supports (color: color-mix(in srgb, red 50%, blue)) {
+  .botao-bloco-nav {
+    box-shadow:
+      0 3px 8px rgba(0,0,0,0.55),
+      0 0 10px color-mix(in srgb, var(--cor-reino, #d4af37) 40%, transparent),
+      inset 0 1px 2px rgba(255,255,255,0.4),
+      inset 0 -3px 6px rgba(0,0,0,0.45);
+  }
+  .botao-bloco-nav:hover {
+    box-shadow:
+      0 6px 14px rgba(0,0,0,0.6),
+      0 0 18px color-mix(in srgb, var(--cor-reino, #d4af37) 65%, transparent),
+      inset 0 1px 2px rgba(255,255,255,0.45),
+      inset 0 -3px 6px rgba(0,0,0,0.45);
+  }
+  .botao-bloco-nav.ativo {
+    box-shadow:
+      0 0 0 2px var(--ouro-velho),
+      0 4px 12px rgba(0,0,0,0.6),
+      0 0 18px color-mix(in srgb, var(--cor-reino, #d4af37) 70%, transparent),
+      inset 0 1px 2px rgba(255,255,255,0.45),
+      inset 0 -3px 6px rgba(0,0,0,0.45);
+  }
 }
 
 .contador-progresso {
@@ -730,6 +802,14 @@ header:hover .anel-metalico::after { animation-duration: 2.4s; filter: blur(4px)
   .widget-xp-nome { font-size: 0.56rem; overflow: hidden; text-overflow: ellipsis; max-width: 160px; }
   .widget-chama { font-size: 0.66rem; }
   .widget-diario { width: 30px; height: 30px; font-size: 0.8rem; }
+}
+
+/* Celular bem estreito (abaixo de 375px, ex.: 320 e 360): com gemas de 34px a
+   8ª (💀 Ilha) ficava fora da fileira e só aparecia arrastando pro lado.
+   Gema e espaço um pouco menores e as 8 cabem sem rolar. */
+@media (max-width: 374px) {
+  .botao-bloco-nav { width: 30px; height: 30px; font-size: 0.72rem; }
+  .barra-navegacao-lista { gap: 0.3rem; }
 }
 
 /* Com a barra sticky, o scrollIntoView precisa parar ANTES dela — senão o
@@ -792,7 +872,7 @@ header:hover .anel-metalico::after { animation-duration: 2.4s; filter: blur(4px)
       var(--cor-reino, #5c6bc0);
     box-shadow:
       0 4px 10px rgba(0,0,0,0.55),
-      0 0 14px color-mix(in srgb, var(--cor-reino, #d4af37) 40%, transparent),
+      0 0 14px rgba(212,175,55,0.4),
       inset 0 1px 2px rgba(255,255,255,0.4),
       inset 0 -4px 8px rgba(0,0,0,0.45);
     text-shadow: 0 1px 3px rgba(0,0,0,0.85);
@@ -800,7 +880,7 @@ header:hover .anel-metalico::after { animation-duration: 2.4s; filter: blur(4px)
 
   .tile-titulo {
     margin: 0; font-size: 1.02rem; line-height: 1.18; font-weight: 700;
-    color: color-mix(in srgb, var(--cor-reino, var(--pergaminho)) 72%, #fff);
+    color: var(--pergaminho); /* sem color-mix: pergaminho; com, a cor do reino clareada (@supports abaixo) */
     text-shadow: 0 1px 3px rgba(0,0,0,0.75);
   }
   .tile-subtitulo { margin: 0; font-size: 0.75rem; color: var(--pergaminho-escuro); opacity: 0.9; }
@@ -829,7 +909,25 @@ header:hover .anel-metalico::after { animation-duration: 2.4s; filter: blur(4px)
     box-shadow:
       var(--sombra-3),
       0 0 0 1px rgba(212,175,55,0.55),
-      0 0 26px color-mix(in srgb, var(--cor-reino, #d4af37) 45%, transparent);
+      0 0 26px rgba(212,175,55,0.45);
+  }
+
+  /* Cor do reino no medalhão, no título e no brilho do tile aberto (fallback acima — ver seção 8) */
+  @supports (color: color-mix(in srgb, red 50%, blue)) {
+    .tile-numero {
+      box-shadow:
+        0 4px 10px rgba(0,0,0,0.55),
+        0 0 14px color-mix(in srgb, var(--cor-reino, #d4af37) 40%, transparent),
+        inset 0 1px 2px rgba(255,255,255,0.4),
+        inset 0 -4px 8px rgba(0,0,0,0.45);
+    }
+    .tile-titulo { color: color-mix(in srgb, var(--cor-reino, var(--pergaminho)) 72%, #fff); }
+    .tile-reino.tile-aberto {
+      box-shadow:
+        var(--sombra-3),
+        0 0 0 1px rgba(212,175,55,0.55),
+        0 0 26px color-mix(in srgb, var(--cor-reino, #d4af37) 45%, transparent);
+    }
   }
 
   /* Botões de Julgamento (injetados pelo jogo.js na raiz do tile) — versão compacta */
@@ -911,7 +1009,7 @@ header:hover .anel-metalico::after { animation-duration: 2.4s; filter: blur(4px)
     inset 0 0 40px rgba(107,26,26,0.18),
     0 12px 24px rgba(0,0,0,0.55);
 }
-.modal-runa-negra.capitular::first-letter { color: #4a1010; }
+.modal-runa-negra.capitular > h2 + p + p::first-letter { color: #4a1010; }
 
 /* ---------- 22. Guardiões dos Reinos ---------- */
 
