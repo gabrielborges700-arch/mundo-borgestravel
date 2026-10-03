@@ -657,8 +657,8 @@ function abrirModalRuna(runaId) {
       <div class="divisor-rune"></div>
       <h3 class="font-display" style="font-size:0.95rem; margin-bottom:0.4rem;">📝 Caderno do Aprendiz</h3>
       <textarea id="caderno-runa" class="caderno-textarea" maxlength="600" rows="4"
-        placeholder="Escreve aqui, com as tuas palavras, o que aprendeste nesta runa..."></textarea>
-      <p style="font-size:0.7rem; opacity:0.7; margin:0.25rem 0 0;">Salvo automaticamente no teu navegador. Anota em 5 runas e ganhas o selo ✍️ Escriba do Reino!</p>
+        placeholder="Escreva aqui, com suas palavras, o que você aprendeu nesta runa..."></textarea>
+      <p style="font-size:0.7rem; opacity:0.7; margin:0.25rem 0 0;">Salvo automaticamente no seu navegador. Faça anotações em 5 runas e ganhe o selo ✍️ Escriba do Reino!</p>
     ` : ""}
   `;
 

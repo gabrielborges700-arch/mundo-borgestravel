@@ -25,10 +25,10 @@ function extrairFatosCuriosidade() {
 const FATOS_CURIOSIDADE = extrairFatosCuriosidade();
 
 const SAUDACAO_INICIAL =
-  "Saudações, aprendiz de construtor! Eu sou o Mago Aurelius. Que enigmas estruturais de forças, materiais ou pontes tentas resolver hoje?";
+  "Saudações, aprendiz de construtor! Eu sou o Mago Aurelius. Que enigmas estruturais de forças, materiais ou pontes você quer resolver hoje?";
 
 const RESPOSTA_PADRAO =
-  "As correntes do éter mágico estão adormecidas no momento, mas a minha sabedoria antiga permanece: na engenharia, toda força invisível deve encontrar seu caminho até a terra sem que a matéria se quebra!";
+  "As correntes do éter mágico estão adormecidas no momento, mas a minha sabedoria antiga permanece: na engenharia, toda força invisível deve encontrar seu caminho até a terra sem que a matéria se quebre!";
 
 // Respostas por palavra-chave (ordem importa: a primeira que bater, ganha).
 // Cada palavra-chave casa só com PALAVRA INTEIRA (ou o plural com "s"),
@@ -41,17 +41,17 @@ const REGRAS_PALAVRA_CHAVE = [
   {
     palavras: ["vento", "deflexão", "deflexões", "torre"],
     responder: () =>
-      "Ah, o vento! Ele empurra as torres como um gigante invisível. Quanto mais alta e esbelta (fininha para a altura que tem) a estrutura, mais ela balança e maior o desafio. Por isso os engenheiros usam núcleos rígidos, amortecedores e fundações profundas para domar essa força. Vai até a runa 0.3 pra sentir isso na prática!",
+      "Ah, o vento! Ele empurra as torres como um gigante invisível. Quanto mais alta e esbelta (fininha para a altura que tem) a estrutura, mais ela balança e maior o desafio. Por isso os engenheiros usam núcleos rígidos, amortecedores e fundações profundas para domar essa força. Vá até a runa 0.3 pra sentir isso na prática!",
   },
   {
     palavras: ["arco", "ponte"],
     responder: () =>
-      "O arco é uma das invenções mais espertas da engenharia: ele transforma o peso de cima em compressão, empurrando as forças pelas próprias pedras até o chão — sem precisar de argamassa forte! Experimenta montar um na runa 0.8.",
+      "O arco é uma das invenções mais espertas da engenharia: ele transforma o peso de cima em compressão, empurrando as forças pelas próprias pedras até o chão — sem precisar de argamassa forte! Experimente montar um na runa 0.8.",
   },
   {
     palavras: ["força", "equilíbrio"],
     responder: () =>
-      "Toda estrutura parada obedece a uma lei sagrada: a soma de todas as forças deve ser zero. Peso pra baixo, reação pra cima — se não empatar, ela desaba! Vai na runa 0.7 pra testar esse equilíbrio com as próprias mãos.",
+      "Toda estrutura parada obedece a uma lei sagrada: a soma de todas as forças deve ser zero. Peso pra baixo, reação pra cima — se não empatar, ela desaba! Vá à runa 0.7 pra testar esse equilíbrio com as próprias mãos.",
   },
   {
     palavras: ["material", "materiais", "concreto", "aço", "pedra"],
@@ -148,7 +148,7 @@ function renderizarOraculo() {
       </div>
       <div id="mensagens-oraculo" style="flex:1; overflow-y:auto; padding:0.6rem; display:flex; flex-direction:column; gap:0.5rem; background:#f4e8cc;"></div>
       <form id="form-oraculo" style="padding:0.5rem; background:#e3d5b5; border-top:1px solid var(--bronze-envelhecido); display:flex; gap:0.4rem;">
-        <input id="input-oraculo" type="text" placeholder="Indaga o Mago..." class="chat-input" style="flex:1; padding:0.4rem 0.6rem; border-radius:6px; font-size:0.75rem;">
+        <input id="input-oraculo" type="text" placeholder="Pergunte ao Mago..." class="chat-input" style="flex:1; padding:0.4rem 0.6rem; border-radius:6px; font-size:0.75rem;">
         <button type="submit" style="background:#1c1e22; color:var(--ouro-velho); border:none; padding:0.4rem 0.7rem; border-radius:6px; font-weight:bold; cursor:pointer;">✨</button>
       </form>
     `;

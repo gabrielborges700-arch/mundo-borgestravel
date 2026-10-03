@@ -81,9 +81,9 @@ function simuladorVento(painel) {
   const wrapper = document.createElement("div");
   wrapper.innerHTML = `
     <p style="font-size:0.85rem; margin:0 0 0.75rem;">
-      Aumenta a velocidade do vento e observa como o topo da torre se desloca.
-      Desafio: se o vento dobrar, o empurrão dobra ou fica QUATRO vezes maior? Testa no slider!
-      Depois liga os amortecedores rúnicos: um pêndulo gigante lá no alto que balança ao contrário da torre e engole a energia do balanço.
+      Aumente a velocidade do vento e observe como o topo da torre se desloca.
+      Desafio: se o vento dobrar, o empurrão dobra ou fica QUATRO vezes maior? Teste no slider!
+      Depois ligue os amortecedores rúnicos: um pêndulo gigante lá no alto que balança ao contrário da torre e engole a energia do balanço.
       (A fundação segura a torre no chão; quem acalma o balanço é o amortecedor. Mas o empurrão constante do vento continua lá: compare o Desvio e o Balanço!)
     </p>
     <div style="height:180px; background:var(--pedra-ardosia); border:1px solid var(--bronze-envelhecido); border-radius:8px;
@@ -154,7 +154,7 @@ function simuladorEquilibrio(painel) {
   wrapper.innerHTML = `
     <p style="font-size:0.85rem; margin:0 0 0.75rem;">
       Pra viga ficar parada (em repouso), a soma de todas as forças precisa dar zero.
-      Ajusta o peso e as colunas até equilibrar!
+      Ajuste o peso e as colunas até equilibrar!
     </p>
     <div style="background:var(--pedra-ardosia); border:1px solid var(--bronze-envelhecido); border-radius:8px; padding:0.75rem;">
       <div style="display:flex; justify-content:space-between; font-size:0.7rem; color:var(--laranja-forja); font-family:monospace;">
@@ -231,7 +231,7 @@ function simuladorArco(painel) {
   const wrapper = document.createElement("div");
   wrapper.innerHTML = `
     <p style="font-size:0.85rem; margin:0 0 0.75rem;">
-      Clica nas pedras na ordem certa de encaixe: pilares da base primeiro, depois os ombros, e por fim a pedra-chave no topo!
+      Clique nas pedras na ordem certa de encaixe: pilares da base primeiro, depois os ombros, e por fim a pedra-chave no topo!
     </p>
     <div id="visual-arco" style="height:120px; background:var(--pedra-ardosia); border:1px solid var(--bronze-envelhecido); border-radius:8px;
                 display:flex; align-items:flex-end; justify-content:center;"></div>
@@ -292,7 +292,7 @@ function simuladorViga(painel) {
   const wrapper = document.createElement("div");
   wrapper.innerHTML = `
     <p style="font-size:0.85rem; margin:0 0 0.75rem;">
-      Aumenta a força aplicada na viga. Repara: a parte de cima (ciano) sofre compressão,
+      Aumente a força aplicada na viga. Repare: a parte de cima (ciano) sofre compressão,
       a parte de baixo (vermelha) sofre tração — são esticadas em direções opostas.
     </p>
     <div style="height:120px; background:var(--pedra-ardosia); border:1px solid var(--bronze-envelhecido); border-radius:8px;
@@ -339,12 +339,12 @@ function painelMapaInicial(painel) {
   const wrapper = document.createElement("div");
   wrapper.innerHTML = `
     <p style="font-size:0.85rem; margin:0 0 0.75rem; text-align:center;">
-      Toca em cada reino do mapa pra revelar o que te espera lá dentro.
+      Toque em cada reino do mapa pra revelar o que espera por você lá dentro.
     </p>
     <div id="mapa-reinos" style="display:grid; grid-template-columns:repeat(4, 1fr); gap:6px;"></div>
     <div id="mapa-detalhe" style="min-height:70px; margin-top:0.75rem; padding:0.6rem; background:var(--pedra-ardosia);
                 border:1px solid var(--bronze-envelhecido); border-radius:8px; font-size:0.78rem; line-height:1.4;">
-      Escolhe um reino no mapa acima pra ler sobre ele.
+      Escolha um reino no mapa acima pra ler sobre ele.
     </div>
     <div id="mapa-progresso" style="margin-top:0.6rem; font-size:0.72rem; text-align:center; color:var(--ouro-velho);">
       0 de 7 reinos explorados
@@ -370,7 +370,7 @@ function painelMapaInicial(painel) {
       btn.style.color = "#06070a";
       progresso.textContent = `${explorados.size} de 7 reinos explorados`;
       if (explorados.size === 7) {
-        progresso.textContent = "🏆 Mapa completo! Conheces todo o horizonte.";
+        progresso.textContent = "🏆 Mapa completo! Você conhece todo o horizonte.";
       }
     });
     grid.appendChild(btn);
@@ -393,7 +393,7 @@ function painelDiarioDeBordo(painel) {
   const wrapper = document.createElement("div");
   wrapper.innerHTML = `
     <p style="font-size:0.85rem; margin:0 0 0.6rem; text-align:center;">
-      Clica pra registrar eventos da obra. Sem registro, a confiabilidade do mestre desmorona!
+      Clique pra registrar eventos da obra. Sem registro, a confiabilidade do mestre desmorona!
     </p>
     <button id="botao-registrar" class="btn-gotico" style="width:100%; font-size:0.78rem;">
       ✒️ Registrar Evento no Diário
@@ -592,9 +592,9 @@ function simuladorBloco1Materiais(painel) {
   const wrapper = document.createElement("div");
   wrapper.innerHTML = `
     <p style="font-size:0.85rem; margin:0 0 0.75rem;">
-      Testa a estabilidade vertical dos principais sistemas construtivos! Neste teste do vilarejo, o concreto aguenta 120, a madeira 80 e a alvenaria 40.
-      Mas desconfia da tabela: espremida no sentido das fibras, uma madeira dura de boa qualidade aguenta tanto quanto um concreto comum, e pesando bem menos!
-      Agora aperta a mesma madeira de lado, atravessando as fibras, e ela amassa fácil. Quem decide é o material, a direção da força e a grossura da peça.
+      Teste a estabilidade vertical dos principais sistemas construtivos! Neste teste do vilarejo, o concreto aguenta 120, a madeira 80 e a alvenaria 40.
+      Mas desconfie da tabela: espremida no sentido das fibras, uma madeira dura de boa qualidade aguenta tanto quanto um concreto comum, e pesando bem menos!
+      Agora aperte a mesma madeira de lado, atravessando as fibras, e ela amassa fácil. Quem decide é o material, a direção da força e a grossura da peça.
     </p>
     <div id="botoes-material" style="display:flex; gap:0.4rem; justify-content:center; margin-bottom:0.75rem;"></div>
     <div style="background:rgba(0,0,0,0.4); border-radius:6px; padding:0.6rem; text-align:center;">
@@ -664,7 +664,7 @@ function simuladorBloco2Precisao(painel) {
   const wrapper = document.createElement("div");
   wrapper.innerHTML = `
     <p style="font-size:0.85rem; margin:0 0 0.75rem;">
-      Alinha o cursor com o alvo mecânico (${alvo} mm):
+      Alinhe o cursor com o alvo mecânico (${alvo} mm):
     </p>
     <input id="slider-medicao" type="range" min="0" max="100" value="40" style="width:100%;">
     <div style="display:flex; justify-content:space-between; background:rgba(0,0,0,0.4); border-radius:6px; padding:0.5rem; margin-top:0.5rem; font-family:monospace; font-size:0.75rem;">
@@ -707,7 +707,7 @@ function simuladorBloco3LeiDeHooke(painel) {
   const wrapper = document.createElement("div");
   wrapper.innerHTML = `
     <p style="font-size:0.85rem; margin:0 0 0.75rem;">
-      Lei de Hooke (F = k × x): altera a rigidez e a extensão do cabo tendão:
+      Lei de Hooke (F = k × x): altere a rigidez e a extensão do cabo tendão:
     </p>
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
       <div>
@@ -747,7 +747,7 @@ function simuladorBloco4Fadiga(painel) {
   const wrapper = document.createElement("div");
   wrapper.innerHTML = `
     <p style="font-size:0.85rem; margin:0 0 0.75rem;">
-      Teste de Fadiga: aplica ciclos repetidos de tensão. Acima do limite de fadiga (aqui, 25 MPa), cada ciclo faz uma trinca invisível crescer até a peça romper.
+      Teste de Fadiga: aplique ciclos repetidos de tensão. Acima do limite de fadiga (aqui, 25 MPa), cada ciclo faz uma trinca invisível crescer até a peça romper.
       Abaixo dele, o aço comum aguenta dezenas de milhões de ciclos e nos testes parece que nunca vai quebrar (∞). Mas atenção: o alumínio não tem esse limite. Com ciclos suficientes, ele sempre acaba cedendo!
       Aqui a magia acelera tudo: acima do limite, uma barra de aço de verdade levaria milhares ou milhões de vaivéns para romper. Teste abaixo de 25 MPa e veja o ∞! Então por que pontes e trens ainda quebram por fadiga?
     </p>
@@ -759,7 +759,7 @@ function simuladorBloco4Fadiga(painel) {
     <input id="slider-estresse" type="range" min="10" max="100" value="40" style="width:100%;">
     <div style="display:flex; gap:0.5rem; margin-top:0.6rem;">
       <button id="botao-ciclo" class="btn-gotico" style="flex:1; font-size:0.75rem; background:linear-gradient(90deg,#7f1d1d,#991b1b);">🔄 Aplicar Ciclo de Força</button>
-      <button id="botao-reset" class="btn-gotico" style="font-size:0.75rem;">Reset</button>
+      <button id="botao-reset" class="btn-gotico" style="font-size:0.75rem;">Reiniciar</button>
     </div>
     <div id="mensagem-colapso" style="display:none; margin-top:0.5rem; padding:0.4rem; text-align:center; background:rgba(220,38,38,0.25); color:#f87171; border-radius:6px; font-size:0.75rem; font-weight:bold;">
       💥 PEÇA COLAPSOU POR FADIGA ACUMULADA!
@@ -851,7 +851,7 @@ function simuladorBloco6OrcamentoConstrutor(painel) {
   const wrapper = document.createElement("div");
   wrapper.innerHTML = `
     <p style="font-size:0.85rem; margin:0 0 0.75rem;">
-      Orçamento do Construtor: distribui 100 pontos entre Estética e Segurança:
+      Orçamento do Construtor: distribua 100 pontos entre Estética e Segurança:
     </p>
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
       <div>
@@ -958,7 +958,7 @@ function simuladorMonteSuaPonte(painel) {
 
   const wrapper = document.createElement("div");
   wrapper.innerHTML = `
-    <p style="font-size:0.8rem; margin:0 0 0.6rem;">Escolhe <strong>uma peça de cada grupo</strong> e testa a ponte contra três julgamentos de carga:</p>
+    <p style="font-size:0.8rem; margin:0 0 0.6rem;">Escolha <strong>uma peça de cada grupo</strong> e teste a ponte contra três julgamentos de carga:</p>
     <div id="ponte-cena" style="position:relative; height:92px; background:linear-gradient(to top, rgba(28,59,140,0.25), transparent 70%); border:1px solid rgba(140,98,57,0.35); border-radius:8px; overflow:hidden; margin-bottom:0.75rem;">
       <div id="ponte-tabuleiro" style="position:absolute; left:8%; right:8%; top:36px; height:10px; background:linear-gradient(180deg,#8c6239,#5a3d22); border-radius:3px; transition: transform 0.8s ease, opacity 0.8s ease;"></div>
       <div id="ponte-pilar-1" style="position:absolute; left:24%; top:46px; bottom:6px; width:12px; background:linear-gradient(90deg,#565c63,#3a3f45); transition: transform 0.8s ease;"></div>
@@ -968,7 +968,7 @@ function simuladorMonteSuaPonte(painel) {
     <div id="ponte-paleta"></div>
     <button id="ponte-testar" class="btn-gotico" disabled
       style="display:block; width:100%; margin-top:0.75rem; padding:0.6rem; font-size:0.8rem; opacity:0.5;">
-      ⚒️ Escolhe as 3 peças pra testar
+      ⚒️ Escolha as 3 peças pra testar
     </button>
     <div id="ponte-veredito" style="margin-top:0.75rem;"></div>
   `;
@@ -1027,7 +1027,7 @@ function simuladorMonteSuaPonte(painel) {
     const completa = SLOTS.every((slot) => escolhas[slot.chave] !== null);
     botaoTestar.disabled = !completa || testando;
     botaoTestar.style.opacity = completa && !testando ? "1" : "0.5";
-    botaoTestar.textContent = completa ? "⚒️ Testar a Ponte!" : "⚒️ Escolhe as 3 peças pra testar";
+    botaoTestar.textContent = completa ? "⚒️ Testar a Ponte!" : "⚒️ Escolha as 3 peças pra testar";
   }
 
   // Se houver mais de uma peça amaldiçoada, a ponte cai no estágio da
@@ -1079,7 +1079,7 @@ function simuladorMonteSuaPonte(painel) {
     veredito.innerHTML = `
       <div style="padding:0.75rem; border-radius:8px; background:rgba(52,211,153,0.15); border:1px solid rgba(52,211,153,0.5); font-size:0.8rem;">
         <strong>🎉 A ponte resiste aos três julgamentos!</strong>
-        A Ilha começa a se redimir — construíste com a sabedoria de quem leu as quedas.
+        A Ilha começa a se redimir — você construiu com a sabedoria de quem leu as quedas.
       </div>`;
     if (typeof concederConquistaPonte === "function") concederConquistaPonte();
     testando = false;

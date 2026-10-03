@@ -812,7 +812,7 @@ function montarBotaoDiario() {
 
   const botao = document.createElement("button");
   botao.id = "botao-diario";
-  botao.title = "Diário do Aprendiz — resumo do teu progresso";
+  botao.title = "Diário do Aprendiz — resumo do seu progresso";
   botao.setAttribute("aria-label", "Abrir o Diário do Aprendiz");
   botao.textContent = "📖";
   botao.className = "widget-diario";
@@ -832,25 +832,25 @@ function sugerirProximoPasso() {
     const runaPendente = bloco.subtemas.find((st) => !lidas.includes(st.id));
     if (runaPendente) {
       return {
-        texto: `Lê a runa ${runaPendente.title}`,
+        texto: `Leia a runa ${runaPendente.title}`,
         acao: () => { fecharModalDiario(); abrirModalRuna(runaPendente.id); },
       };
     }
     if (!estado.missoesCompletas.includes(bloco.id)) {
       return {
-        texto: `Encara o Julgamento do reino "${nomeBloco}"`,
+        texto: `Encare o Julgamento do reino "${nomeBloco}"`,
         acao: () => { fecharModalDiario(); abrirModalMissao(bloco.id); },
       };
     }
     if (!estado.missoesBossCompletas.includes(bloco.id)) {
       return {
-        texto: `Desafia o Julgamento Supremo de "${nomeBloco}"`,
+        texto: `Desafie o Julgamento Supremo de "${nomeBloco}"`,
         acao: () => { fecharModalDiario(); abrirModalMissaoBoss(bloco.id); },
       };
     }
   }
 
-  return { texto: "Tudo completo! Baixa teu Certificado de Mestre Rúnico 🎓", acao: null };
+  return { texto: "Tudo completo! Baixe seu Certificado de Mestre Rúnico 🎓", acao: null };
 }
 
 function abrirModalDiario() {
@@ -891,7 +891,7 @@ function abrirModalDiario() {
           style="display:block; width:100%; text-align:left; font-size:0.75rem; padding:0.4rem 0.7rem; margin-bottom:0.35rem;">
           ⭐ ${dadosEspecificosCards[id].title}
         </button>`).join("")
-    : `<p style="font-size:0.8rem; opacity:0.7;">Nenhuma favorita ainda. Abre uma runa e clica na ☆ pra marcar pra revisão.</p>`;
+    : `<p style="font-size:0.8rem; opacity:0.7;">Nenhuma favorita ainda. Abra uma runa e clique na ☆ pra marcar pra revisão.</p>`;
 
   // Anotações do Caderno do Aprendiz — mesma mecânica das favoritas
   const idsComNota = Object.keys(estado.notasRunas || {}).filter((id) => dadosEspecificosCards[id]);
@@ -901,7 +901,7 @@ function abrirModalDiario() {
           style="display:block; width:100%; text-align:left; font-size:0.75rem; padding:0.4rem 0.7rem; margin-bottom:0.35rem;">
           📝 ${dadosEspecificosCards[id].title}
         </button>`).join("")
-    : `<p style="font-size:0.8rem; opacity:0.7;">Nenhuma anotação ainda. Abre uma runa e escreve no 📝 Caderno do Aprendiz.</p>`;
+    : `<p style="font-size:0.8rem; opacity:0.7;">Nenhuma anotação ainda. Abra uma runa e escreva no 📝 Caderno do Aprendiz.</p>`;
 
   const passo = sugerirProximoPasso();
 
@@ -910,7 +910,7 @@ function abrirModalDiario() {
       style="position:absolute; top:0.75rem; right:0.75rem; padding:0.3rem 0.7rem; font-size:0.9rem;">✕</button>
 
     <h2 class="font-display" style="margin-top:0;">📖 Diário do Aprendiz</h2>
-    <p style="font-style:italic; opacity:0.85; margin-top:-0.25rem;">O registro da tua jornada pelo Reino.</p>
+    <p style="font-style:italic; opacity:0.85; margin-top:-0.25rem;">O registro da sua jornada pelo Reino.</p>
     <div class="divisor-rune"></div>
 
     <p><strong>${ICONES_BRASAO[nivel.indice] || "🏰"} Nível ${nivel.indice + 1}: ${nivel.nome}</strong> — ${estado.xp} Poder Rúnico</p>
@@ -1019,7 +1019,7 @@ function opcoesEmbaralhadas(pergunta) {
 function abrirModalSprint() {
   const pool = montarPoolSprint();
   if (pool.length === 0) {
-    mostrarToast("Completa as runas de um reino primeiro pra liberar o Sprint!", "⚡");
+    mostrarToast("Complete as runas de um reino primeiro pra liberar o Sprint!", "⚡");
     return;
   }
 
@@ -1041,7 +1041,7 @@ function abrirModalSprint() {
     <button id="fechar-modal-sprint" aria-label="Fechar" class="btn-gotico"
       style="position:absolute; top:0.75rem; right:0.75rem; padding:0.3rem 0.7rem; font-size:0.9rem;">✕</button>
     <h2 class="font-display" style="margin-top:0;">⚡ Sprint Rúnico</h2>
-    <p style="font-style:italic; opacity:0.85;">Responde o máximo de perguntas em ${SPRINT_DURACAO_SEGUNDOS} segundos! São as perguntas dos Julgamentos que já liberaste (${pool.length} no banco), embaralhadas.</p>
+    <p style="font-style:italic; opacity:0.85;">Responda o máximo de perguntas em ${SPRINT_DURACAO_SEGUNDOS} segundos! São as perguntas dos Julgamentos que você já liberou (${pool.length} no banco), embaralhadas.</p>
     <p style="font-size:0.78rem;">Cada acerto vale <strong>+2 Poder Rúnico</strong> — mas o prêmio só é pago <strong>uma vez por dia</strong> (o recorde conta sempre).${premiaHoje ? "" : " <strong>Hoje já foi premiado — esse sprint vale só pelo recorde e pela prática!</strong>"}</p>
     <div class="divisor-rune"></div>
     <div id="area-sprint" style="min-height:220px;">
@@ -1146,7 +1146,7 @@ function encerrarSprint(area, acertos, respondidas) {
   area.innerHTML = `
     <div class="painel-pergaminho-velho" style="padding:1rem; border-radius:10px; text-align:center;">
       <strong style="font-size:1rem;">⏱️ Tempo esgotado!</strong>
-      <p style="margin:0.5rem 0;">Acertaste <strong>${acertos}</strong> de ${respondidas} pergunta(s).</p>
+      <p style="margin:0.5rem 0;">Você acertou <strong>${acertos}</strong> de ${respondidas} pergunta(s).</p>
       ${novoRecorde ? `<p style="margin:0.5rem 0;"><strong>🏆 Novo recorde pessoal!</strong></p>` : `<p style="margin:0.5rem 0; font-size:0.8rem;">Recorde atual: ${estado.sprintRecorde}</p>`}
       ${xpGanho > 0 ? `<p style="margin:0.5rem 0;"><strong>⚡ +${xpGanho} Poder Rúnico!</strong></p>` : `<p style="margin:0.5rem 0; font-size:0.8rem;">Sem XP dessa vez (prêmio diário já pago) — mas a prática forja o mestre!</p>`}
       <button id="repetir-sprint" class="btn-gotico" style="margin-top:0.5rem; font-size:0.75rem;">🔄 Correr de novo</button>
@@ -1182,7 +1182,7 @@ const TORRE_TETO_XP_DIA = 30;
 function abrirModalTorre() {
   const pool = montarPoolSprint(); // mesmas perguntas já liberadas do Sprint
   if (pool.length === 0) {
-    mostrarToast("Completa as runas de um reino primeiro pra liberar a Torre!", "🗼");
+    mostrarToast("Complete as runas de um reino primeiro pra liberar a Torre!", "🗼");
     return;
   }
 
@@ -1204,7 +1204,7 @@ function abrirModalTorre() {
     <button id="fechar-modal-torre" aria-label="Fechar" class="btn-gotico"
       style="position:absolute; top:0.75rem; right:0.75rem; padding:0.3rem 0.7rem; font-size:0.9rem;">✕</button>
     <h2 class="font-display" style="margin-top:0;">🗼 Torre do Desafio Infinito</h2>
-    <p style="font-style:italic; opacity:0.85;">Sobe um andar a cada acerto — sem tempo, mas com apenas ${TORRE_VIDAS} vidas. Erra ${TORRE_VIDAS} vezes e a escalada acaba! (${pool.length} pergunta(s) no banco${estado.torreRecorde ? ` · recorde: andar ${estado.torreRecorde}` : ""})</p>
+    <p style="font-style:italic; opacity:0.85;">Suba um andar a cada acerto — sem tempo, mas com apenas ${TORRE_VIDAS} vidas. Erre ${TORRE_VIDAS} vezes e a escalada acaba! (${pool.length} pergunta(s) no banco${estado.torreRecorde ? ` · recorde: andar ${estado.torreRecorde}` : ""})</p>
     <p style="font-size:0.78rem;">Cada andar vale <strong>+1 Poder Rúnico</strong> (máx. ${TORRE_TETO_XP_DIA} por dia, prêmio pago <strong>uma vez por dia</strong> — o recorde conta sempre).${premiaHoje ? "" : " <strong>Hoje já foi premiado — essa escalada vale pelo recorde e pela prática!</strong>"}</p>
     <div class="divisor-rune"></div>
     <div id="area-torre" style="min-height:220px;">
@@ -1305,7 +1305,7 @@ function encerrarTorre(area, andar) {
   area.innerHTML = `
     <div class="painel-pergaminho-velho" style="padding:1rem; border-radius:10px; text-align:center;">
       <strong style="font-size:1rem;">💔 As vidas acabaram!</strong>
-      <p style="margin:0.5rem 0;">Chegaste ao <strong>andar ${andar}</strong> da Torre.</p>
+      <p style="margin:0.5rem 0;">Você chegou ao <strong>andar ${andar}</strong> da Torre.</p>
       ${novoRecorde ? `<p style="margin:0.5rem 0;"><strong>🏆 Novo recorde pessoal!</strong></p>` : `<p style="margin:0.5rem 0; font-size:0.8rem;">Recorde atual: andar ${estado.torreRecorde}</p>`}
       ${xpGanho > 0 ? `<p style="margin:0.5rem 0;"><strong>🗼 +${xpGanho} Poder Rúnico!</strong></p>` : `<p style="margin:0.5rem 0; font-size:0.8rem;">Sem XP dessa vez (prêmio diário já pago) — mas cada escalada afia a lâmina!</p>`}
       <button id="repetir-torre" class="btn-gotico" style="margin-top:0.5rem; font-size:0.75rem;">🔄 Escalar de novo</button>
@@ -1455,7 +1455,7 @@ function abrirModalMissao(blocoId) {
       ✕
     </button>
     <h2 class="font-display" style="margin-top:0;">⚔️ Julgamento: ${(bloco.title.split("—")[1] || bloco.title).trim()}</h2>
-    <p style="font-style: italic; opacity: 0.85;">O Mago Aurelius testa o que aprendeste. Acerta pelo menos 2 de 3 perguntas para conquistar o selo deste reino.</p>
+    <p style="font-style: italic; opacity: 0.85;">O Mago Aurelius testa o que você aprendeu. Acerte pelo menos 2 de 3 perguntas para conquistar o selo deste reino.</p>
     <div class="divisor-rune"></div>
     <div id="lista-perguntas-missao"></div>
     <button id="confirmar-missao" class="btn-gotico" style="width:100%; margin-top:1rem;">Confirmar respostas</button>
@@ -1503,7 +1503,7 @@ function abrirModalMissao(blocoId) {
 
   painel.querySelector("#confirmar-missao").addEventListener("click", () => {
     if (respostas.includes(null)) {
-      mostrarToast("Responde todas as perguntas antes de confirmar!", "⚠️");
+      mostrarToast("Responda todas as perguntas antes de confirmar!", "⚠️");
       return;
     }
     let acertos = 0;
@@ -1531,7 +1531,7 @@ function abrirModalMissao(blocoId) {
       resultadoEl.innerHTML = `
         <div class="painel-pergaminho-velho" style="padding:1rem; border-radius:10px;">
           <strong>${acertos}/3 corretas — Julgamento superado! 🏆</strong>
-          <p style="margin-top:0.5rem; font-style:italic;">"O Reino reconhece a tua sabedoria. Que a próxima runa te espere de braços abertos." — Mago Aurelius</p>
+          <p style="margin-top:0.5rem; font-style:italic;">"O Reino reconhece a sua sabedoria. Que a próxima runa espere por você de braços abertos." — Mago Aurelius</p>
         </div>
       `;
       aposRenderizarBlocos(); // troca (sem duplicar) o botão do bloco pra "Julgamento superado"
@@ -1540,8 +1540,8 @@ function abrirModalMissao(blocoId) {
       resultadoEl.innerHTML = `
         <div class="painel-pergaminho-velho" style="padding:1rem; border-radius:10px;">
           <strong>${acertos}/3 corretas — quase lá!</strong>
-          <p style="margin-top:0.5rem;">Relê as runas deste reino e tenta de novo quando quiseres. Fecha esta janela e reabre o Julgamento quando estiver pronto.</p>
-          ${consolo ? '<p style="margin-top:0.5rem;"><strong>✨ Teu esforço não foi em vão: +5 Poder Rúnico!</strong></p>' : ""}
+          <p style="margin-top:0.5rem;">Releia as runas deste reino e tente de novo quando quiser. Feche esta janela e reabra o Julgamento quando estiver pronto.</p>
+          ${consolo ? '<p style="margin-top:0.5rem;"><strong>✨ Seu esforço não foi em vão: +5 Poder Rúnico!</strong></p>' : ""}
         </div>
       `;
     }
@@ -1591,7 +1591,7 @@ function abrirModalMissaoBoss(blocoId) {
       ✕
     </button>
     <h2 class="font-display" style="margin-top:0;">👑 Julgamento Supremo: ${(bloco.title.split("—")[1] || bloco.title).trim()}</h2>
-    <p style="font-style: italic; opacity: 0.85;">O desafio extra do Mago Aurelius. Acerta pelo menos 4 de 5 perguntas para conquistar o selo supremo deste reino.</p>
+    <p style="font-style: italic; opacity: 0.85;">O desafio extra do Mago Aurelius. Acerte pelo menos 4 de 5 perguntas para conquistar o selo supremo deste reino.</p>
     <div class="divisor-rune"></div>
     <div id="lista-perguntas-missao-boss"></div>
     <button id="confirmar-missao-boss" class="btn-gotico" style="width:100%; margin-top:1rem;">Confirmar respostas</button>
@@ -1637,7 +1637,7 @@ function abrirModalMissaoBoss(blocoId) {
 
   painel.querySelector("#confirmar-missao-boss").addEventListener("click", () => {
     if (respostas.includes(null)) {
-      mostrarToast("Responde todas as perguntas antes de confirmar!", "⚠️");
+      mostrarToast("Responda todas as perguntas antes de confirmar!", "⚠️");
       return;
     }
     let acertos = 0;
@@ -1665,7 +1665,7 @@ function abrirModalMissaoBoss(blocoId) {
       resultadoEl.innerHTML = `
         <div class="painel-pergaminho-velho" style="padding:1rem; border-radius:10px;">
           <strong>${acertos}/5 corretas — Julgamento Supremo superado! 👑</strong>
-          <p style="margin-top:0.5rem; font-style:italic;">"Poucos chegam tão longe. O Reino te reconhece como verdadeiro Mestre." — Mago Aurelius</p>
+          <p style="margin-top:0.5rem; font-style:italic;">"Poucos chegam tão longe. O Reino reconhece você como verdadeiro Mestre." — Mago Aurelius</p>
         </div>
       `;
       aposRenderizarBlocos(); // troca (sem duplicar) o botão pra "Julgamento Supremo superado"
@@ -1674,8 +1674,8 @@ function abrirModalMissaoBoss(blocoId) {
       resultadoEl.innerHTML = `
         <div class="painel-pergaminho-velho" style="padding:1rem; border-radius:10px;">
           <strong>${acertos}/5 corretas — ainda não é dessa vez</strong>
-          <p style="margin-top:0.5rem;">O Julgamento Supremo é exigente. Relê as runas deste reino e tenta de novo quando quiseres.</p>
-          ${consolo ? '<p style="margin-top:0.5rem;"><strong>✨ Teu esforço não foi em vão: +5 Poder Rúnico!</strong></p>' : ""}
+          <p style="margin-top:0.5rem;">O Julgamento Supremo é exigente. Releia as runas deste reino e tente de novo quando quiser.</p>
+          ${consolo ? '<p style="margin-top:0.5rem;"><strong>✨ Seu esforço não foi em vão: +5 Poder Rúnico!</strong></p>' : ""}
         </div>
       `;
     }
