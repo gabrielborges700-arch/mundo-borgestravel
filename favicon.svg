@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Favicon do Mundo Borgestrável: rosa dos ventos dourada num medalhão noturno
+       (estilo "Forja Real"). Formas grossas e poucas: precisa ler em 16px. -->
+  <defs>
+    <radialGradient id="fv-noite" cx="50%" cy="30%" r="75%">
+      <stop offset="0" stop-color="#2a1340"/>
+      <stop offset="1" stop-color="#06070a"/>
+    </radialGradient>
+    <linearGradient id="fv-anel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f7e08a"/>
+      <stop offset="0.5" stop-color="#d4af37"/>
+      <stop offset="1" stop-color="#8c6239"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Medalhão: disco escuro com anel de ouro -->
+  <circle cx="32" cy="32" r="29.5" fill="url(#fv-noite)" stroke="url(#fv-anel)" stroke-width="4"/>
+
+  <!-- Pontas diagonais (menores, bronze), giradas 45° -->
+  <g transform="rotate(45 32 32)" fill="#a8712f">
+    <polygon points="32,13 35.5,28.5 51,32 35.5,35.5 32,51 28.5,35.5 13,32 28.5,28.5"/>
+  </g>
+
+  <!-- Pontas principais: cada uma com metade clara e metade escura (efeito de metal) -->
+  <g>
+    <polygon points="32,6 26.5,26.5 32,32" fill="#fff2c4"/>
+    <polygon points="32,6 37.5,26.5 32,32" fill="#d4af37"/>
+    <polygon points="58,32 37.5,26.5 32,32" fill="#f7e08a"/>
+    <polygon points="58,32 37.5,37.5 32,32" fill="#b8892c"/>
+    <polygon points="32,58 37.5,37.5 32,32" fill="#d4af37"/>
+    <polygon points="32,58 26.5,37.5 32,32" fill="#f7e08a"/>
+    <polygon points="6,32 26.5,37.5 32,32" fill="#b8892c"/>
+    <polygon points="6,32 26.5,26.5 32,32" fill="#fff2c4"/>
+  </g>
+
+  <!-- Miolo: gema escura com aro dourado -->
+  <circle cx="32" cy="32" r="4" fill="#1a0b26" stroke="#f7e08a" stroke-width="2"/>
+</svg>

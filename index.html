@@ -5,10 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mundo Borgestrável — O Reino das Super Estruturas</title>
   <meta name="description" content="Aventura pedagógica pelos 7 reinos da engenharia estrutural: forças, materiais, análise e a Grande Aliança Estrutural.">
-  <!-- Ícone vazio: sem ele o navegador pede /favicon.ico e loga um 404 no GitHub Pages -->
-  <link rel="icon" href="data:,">
-  <!-- ?fr=3 força navegadores a buscarem a versão nova após cada grande atualização -->
-  <link rel="stylesheet" href="style.css?fr=3">
+  <!-- Ícone da aba (rosa dos ventos dourada) e ícone de "Adicionar à tela inicial" do iPhone.
+       Caminhos relativos: funcionam no file:// e na subpasta do GitHub Pages -->
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <!-- Cor da barra do navegador no celular (mesmo roxo do topo do céu noturno) -->
+  <meta name="theme-color" content="#1a0b26">
+
+  <!-- Prévia ao compartilhar o link (WhatsApp, Telegram, Discord, Facebook, X...).
+       og:image PRECISA de URL absoluta: os robôs das redes não resolvem caminho relativo -->
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:site_name" content="Mundo Borgestrável">
+  <meta property="og:title" content="Mundo Borgestrável — O Reino das Super Estruturas">
+  <meta property="og:description" content="Explore os 7 reinos da engenharia, conquiste runas e descubra por que pontes, torres e castelos não caem! Uma aventura medieval para jovens engenheiros.">
+  <meta property="og:url" content="https://gabrielborges700-arch.github.io/mundo-borgestravel/">
+  <meta property="og:image" content="https://gabrielborges700-arch.github.io/mundo-borgestravel/imagens/og-borgestravel.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Rosa dos ventos dourada cercada pelas gemas dos 7 reinos, ao lado do título Mundo Borgestrável — O Reino das Super Estruturas">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Mundo Borgestrável — O Reino das Super Estruturas">
+  <meta name="twitter:description" content="Explore os 7 reinos da engenharia, conquiste runas e descubra por que pontes, torres e castelos não caem!">
+  <meta name="twitter:image" content="https://gabrielborges700-arch.github.io/mundo-borgestravel/imagens/og-borgestravel.png">
+  <meta name="twitter:image:alt" content="Rosa dos ventos dourada cercada pelas gemas dos 7 reinos, ao lado do título Mundo Borgestrável">
+  <!-- ?fr=5 força navegadores a buscarem a versão nova após cada grande atualização -->
+  <link rel="stylesheet" href="style.css?fr=5">
 </head>
 <body>
 
@@ -49,6 +72,13 @@
     <p class="font-serif-body hero-subtitulo">
       Forje seu conhecimento nas forjas antigas dos Mestres Construtores
     </p>
+
+    <!-- Abre a Crônica Fundadora (cronica.js) — continua do último capítulo lido -->
+    <div class="hero-acoes">
+      <button type="button" id="botao-cronica-hero" class="btn-gotico hero-botao-cronica"
+        data-abrir-cronica="" aria-label="Abrir a Crônica do Reino, o livro de história do Império"
+        title="Ler a Crônica Fundadora do Império">📜 Crônica do Reino</button>
+    </div>
   </header>
 
   <!-- ===================== CONTEÚDO PRINCIPAL ===================== -->
@@ -75,14 +105,20 @@
   </footer>
 
   <!-- ===================== SCRIPTS ===================== -->
-  <!-- Scripts comuns (SEM type="module") — a ordem de carregamento importa -->
-  <script src="dados.js?fr=3"></script>
-  <script src="efeitos.js?fr=3"></script>
-  <script src="simuladores.js?fr=3"></script>
-  <script src="oraculo.js?fr=3"></script>
-  <script src="navegacao.js?fr=3"></script>
-  <script src="app.js?fr=3"></script>
-  <script src="jogo.js?fr=3"></script>
+  <!-- Scripts comuns (SEM type="module") — a ordem de carregamento importa:
+       brasoes.js lê o dados.js; cronica.js, som.js e portal.js usam o wrapper de
+       armazenamento do navegacao.js; app.js e jogo.js chamam todos eles (sempre com typeof) -->
+  <script src="dados.js?fr=5"></script>
+  <script src="brasoes.js?fr=5"></script>
+  <script src="efeitos.js?fr=5"></script>
+  <script src="simuladores.js?fr=5"></script>
+  <script src="oraculo.js?fr=5"></script>
+  <script src="navegacao.js?fr=5"></script>
+  <script src="cronica.js?fr=5"></script>
+  <script src="som.js?fr=5"></script>
+  <script src="portal.js?fr=5"></script>
+  <script src="app.js?fr=5"></script>
+  <script src="jogo.js?fr=5"></script>
 
 </body>
 </html>

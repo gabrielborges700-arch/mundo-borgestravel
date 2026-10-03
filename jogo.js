@@ -218,6 +218,7 @@ function marcarDesafioResolvido(runaId) {
   salvarEstadoJogo(estado);
   atualizarBarraXP();
   mostrarToast("Desafio resolvido! +5 Poder Rúnico", "🏆");
+  if (typeof somTocar === "function") somTocar("acerto");
   verificarConquistas();
 }
 
@@ -231,6 +232,7 @@ function concederXPLeitura(runaId) {
   salvarEstadoJogo(estado);
   atualizarBarraXP();
   mostrarToast(`+10 Poder Rúnico`, "✨");
+  if (typeof somTocar === "function") somTocar("xp");
   verificarConquistas();
 }
 
@@ -249,6 +251,7 @@ function concederXPRunaNegra(runaId) {
   salvarEstadoJogo(estado);
   atualizarBarraXP();
   mostrarToast("+10 Poder Rúnico", "💀");
+  if (typeof somTocar === "function") somTocar("xp");
   verificarConquistas();
 }
 
@@ -271,6 +274,7 @@ function notificarSimuladorUsado(runaId) {
   if (primeiraVez) {
     atualizarBarraXP();
     mostrarToast(`+5 Poder Rúnico`, "🛠️");
+    if (typeof somTocar === "function") somTocar("xp");
   }
   verificarConquistas();
 }
@@ -388,6 +392,7 @@ function verificarConquistas() {
   });
 
   if (novaConquista) {
+    if (typeof somTocar === "function") somTocar("conquista");
     salvarEstadoJogo(estado);
     atualizarGaleriaConquistas();
   }
@@ -398,15 +403,17 @@ function verificarConquistas() {
 // Coluna fixa no canto onde os toasts se empilham. Antes cada toast era fixed no
 // mesmo bottom/right, e os disparados juntos (ex.: conquista + "Julgamento
 // superado") nasciam um por cima do outro, cortados.
+// Posição no style.css (#pilha-toasts): a coluna começa ACIMA do avatar do
+// Oráculo, que mora no mesmo canto e no mesmo z-index (antes pintava por cima dele).
+const MAXIMO_TOASTS_VISIVEIS = 4;
+
 function obterPilhaToasts() {
   let pilha = document.getElementById("pilha-toasts");
   if (!pilha) {
     pilha = document.createElement("div");
     pilha.id = "pilha-toasts";
-    pilha.style.cssText = `
-      position: fixed; bottom: 1rem; right: 1rem; z-index: 60;
-      display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem;
-    `;
+    pilha.setAttribute("role", "status"); // leitor de tela anuncia o aviso sem roubar o foco
+    pilha.setAttribute("aria-live", "polite");
     document.body.appendChild(pilha);
   }
   return pilha;
@@ -422,7 +429,10 @@ function mostrarToast(texto, icone) {
     box-shadow: 0 4px 14px rgba(0,0,0,0.6);
     opacity: 0; transform: translateY(10px); transition: opacity 0.3s ease, transform 0.3s ease;
   `;
-  obterPilhaToasts().appendChild(toast); // o mais novo entra embaixo e empurra os outros pra cima
+  const pilha = obterPilhaToasts();
+  pilha.appendChild(toast); // o mais novo entra embaixo e empurra os outros pra cima
+  // Rajada de avisos (runa + XP + conquistas): só os 4 mais novos ficam na tela
+  while (pilha.children.length > MAXIMO_TOASTS_VISIVEIS) pilha.firstElementChild.remove();
   requestAnimationFrame(() => {
     toast.style.opacity = "1";
     toast.style.transform = "translateY(0)";
@@ -1091,6 +1101,7 @@ function iniciarSprint(painel) {
       botaoOpcao.addEventListener("click", () => {
         respondidas++;
         if (indiceOpcao === p.correta) acertos++;
+        if (typeof somTocar === "function") somTocar(indiceOpcao === p.correta ? "acerto" : "erro");
         placarEl.textContent = `✅ ${acertos} / ${respondidas}`;
         mostrarProximaPergunta();
       });
@@ -1250,6 +1261,7 @@ function iniciarTorre(painel) {
       botaoOpcao.style.cssText = "text-align:left; font-size:0.78rem; padding:0.5rem 0.75rem;";
       botaoOpcao.textContent = textoOpcao;
       botaoOpcao.addEventListener("click", () => {
+        if (typeof somTocar === "function") somTocar(indiceOpcao === p.correta ? "acerto" : "erro");
         if (indiceOpcao === p.correta) {
           andar++;
           andarEl.textContent = `🗼 Andar ${andar}`;
@@ -1321,6 +1333,7 @@ function concederConquistaPonte() {
   estado.conquistas.push("ponte-redimida");
   salvarEstadoJogo(estado);
   mostrarToast("Conquista: Ponte Redimida", "🌉");
+  if (typeof somTocar === "function") somTocar("conquista");
   atualizarGaleriaConquistas();
 }
 
@@ -1404,6 +1417,16 @@ function aposRenderizarBlocos() {
   });
 }
 
+// Deixa só uma opção marcada por pergunta (visual + aria-pressed pro leitor de tela)
+function marcarOpcaoJulgamento(opcoesContainer, botaoEscolhido, classeMarcada) {
+  opcoesContainer.querySelectorAll("button").forEach((b) => {
+    b.classList.remove(classeMarcada);
+    b.setAttribute("aria-pressed", "false");
+  });
+  botaoEscolhido.classList.add(classeMarcada);
+  botaoEscolhido.setAttribute("aria-pressed", "true");
+}
+
 function abrirModalMissao(blocoId) {
   const bloco = reinosDados.find((b) => b.id === blocoId);
   const perguntas = missoesPorBloco[blocoId];
@@ -1455,16 +1478,13 @@ function abrirModalMissao(blocoId) {
       botaoOpcao.className = "btn-gotico";
       botaoOpcao.style.cssText = "text-align:left; font-size:0.78rem; padding:0.5rem 0.75rem;";
       botaoOpcao.textContent = textoOpcao;
+      botaoOpcao.setAttribute("aria-pressed", "false");
       botaoOpcao.addEventListener("click", () => {
         respostas[indicePergunta] = indiceOpcao;
-        // marca visualmente qual opção está selecionada nessa pergunta
-        // (texto escuro no ciano: o creme do btn-gotico ficava ilegível, contraste 1,14:1)
-        opcoesContainer.querySelectorAll("button").forEach((b) => {
-          b.style.background = "";
-          b.style.color = "";
-        });
-        botaoOpcao.style.background = "var(--ciano-mistico)";
-        botaoOpcao.style.color = "var(--accent-foreground)";
+        // marca visualmente qual opção está selecionada nessa pergunta (classe
+        // .opcao-marcada do style.css: tinta escura no ciano, que vence até o
+        // creme do :hover — antes o texto creme no ciano dava contraste 1,14:1)
+        marcarOpcaoJulgamento(opcoesContainer, botaoOpcao, "opcao-marcada");
       });
       opcoesContainer.appendChild(botaoOpcao);
     });
@@ -1493,6 +1513,7 @@ function abrirModalMissao(blocoId) {
 
     const resultadoEl = painel.querySelector("#resultado-missao");
     const passou = acertos >= 2;
+    if (typeof somTocar === "function") somTocar(passou ? "acerto" : "erro");
 
     if (passou) {
       const estado = obterEstadoJogo();
@@ -1505,6 +1526,7 @@ function abrirModalMissao(blocoId) {
         atualizarBarraXP();
         atualizarGaleriaConquistas();
         mostrarToast(`Julgamento superado! +30 PR`, SELOS_MISSAO[blocoId].icone);
+        if (typeof somTocar === "function") somTocar("conquista");
       }
       resultadoEl.innerHTML = `
         <div class="painel-pergaminho-velho" style="padding:1rem; border-radius:10px;">
@@ -1592,10 +1614,11 @@ function abrirModalMissaoBoss(blocoId) {
       botaoOpcao.className = "btn-gotico";
       botaoOpcao.style.cssText = "text-align:left; font-size:0.78rem; padding:0.5rem 0.75rem;";
       botaoOpcao.textContent = textoOpcao;
+      botaoOpcao.setAttribute("aria-pressed", "false");
       botaoOpcao.addEventListener("click", () => {
         respostas[indicePergunta] = indiceOpcao;
-        opcoesContainer.querySelectorAll("button").forEach((b) => (b.style.background = ""));
-        botaoOpcao.style.background = "#c0392b";
+        // rubro do Julgamento Supremo com texto branco (o creme no rubro dava 4:1)
+        marcarOpcaoJulgamento(opcoesContainer, botaoOpcao, "opcao-marcada-suprema");
       });
       opcoesContainer.appendChild(botaoOpcao);
     });
@@ -1624,6 +1647,7 @@ function abrirModalMissaoBoss(blocoId) {
 
     const resultadoEl = painel.querySelector("#resultado-missao-boss");
     const passou = acertos >= 4;
+    if (typeof somTocar === "function") somTocar(passou ? "acerto" : "erro");
 
     if (passou) {
       const estado = obterEstadoJogo();
@@ -1636,6 +1660,7 @@ function abrirModalMissaoBoss(blocoId) {
         atualizarBarraXP();
         atualizarGaleriaConquistas();
         mostrarToast(`Julgamento Supremo superado! +50 PR`, "👑");
+        if (typeof somTocar === "function") somTocar("conquista");
       }
       resultadoEl.innerHTML = `
         <div class="painel-pergaminho-velho" style="padding:1rem; border-radius:10px;">

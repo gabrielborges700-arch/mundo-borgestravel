@@ -172,6 +172,15 @@ function reobservarSecaoAtiva() {
 
 // Rola até o bloco e garante que ele esteja aberto (função de app.js)
 function irParaBloco(blocoId) {
+  // Sino do reino (som.js): toca a cada clique na gema, mesmo com o reino já aberto
+  if (typeof somTocar === "function") somTocar("reino", blocoId);
+  // Transição de portal (portal.js) — só se o reino ainda não estava aberto.
+  // modoMapaDesktop e blocosAbertosDesktop são do app.js (só lidos no clique).
+  const jaAberto = typeof modoMapaDesktop === "function" && modoMapaDesktop()
+    ? blocosAbertosDesktop.includes(blocoId)
+    : blocoAbertoId === blocoId;
+  if (!jaAberto && typeof portalAoAbrirReino === "function") portalAoAbrirReino(blocoId);
+
   blocoAbertoId = blocoId;
   renderizarListaBlocos();
 
@@ -182,8 +191,8 @@ function irParaBloco(blocoId) {
   });
 }
 
-// Onde a página deve parar pra mostrar o bloco logo abaixo da barra (respeita o
-// scroll-margin-top do style.css). Rolando de perto do topo, o efeitos.js compacta
+// Onde a página deve parar pra mostrar o bloco logo abaixo da barra (lê o
+// scroll-margin-top do style.css como folga). Rolando de perto do topo, o efeitos.js compacta
 // o hero NO MEIO do caminho (.hero-compacto) e tudo abaixo dele sobe ~60px (~150px
 // no PC); o scrollIntoView calculava o ponto antes disso e o título do reino
 // terminava escondido embaixo da barra. Então a conta já é feita com o hero

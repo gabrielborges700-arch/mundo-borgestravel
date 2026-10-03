@@ -54,13 +54,17 @@ function renderizarAcordeaoBlocos(container) {
 
     painel.innerHTML = `
       <div class="cabecalho-bloco" style="display:flex; justify-content:space-between; align-items:center;">
-        <div>
-          <h2 class="font-display" style="color: ${bloco.hex}; margin: 0 0 0.25rem; font-size: 1.3rem;">
-            ${bloco.title}
-          </h2>
-          <p class="font-body" style="color: var(--pergaminho-escuro); margin: 0;">
-            ${bloco.subtitle}
-          </p>
+        <div class="cabecalho-identidade">
+          ${typeof medalhaoBrasaoHTML === "function" ? medalhaoBrasaoHTML(bloco.id, 40) : ""}
+          <div>
+            <h2 class="font-display" style="color: ${bloco.hex}; margin: 0 0 0.25rem; font-size: 1.3rem;">
+              ${bloco.title}
+            </h2>
+            <p class="font-body" style="color: var(--pergaminho-escuro); margin: 0;">
+              ${bloco.subtitle}
+            </p>
+            ${aberto && typeof lemaReinoHTML === "function" ? lemaReinoHTML(bloco.id) : ""}
+          </div>
         </div>
         <span style="color: var(--ouro-velho); font-size: 1.5rem; transition: transform 0.3s ease; transform: rotate(${aberto ? "180deg" : "0deg"});">
           ▾
@@ -73,6 +77,9 @@ function renderizarAcordeaoBlocos(container) {
     // Clicar no cabeçalho abre/fecha o bloco
     painel.querySelector(".cabecalho-bloco").addEventListener("click", () => {
       blocoAbertoId = aberto ? null : bloco.id;
+      // Sino do reino (som.js) e transição de portal (portal.js) — só ao ENTRAR no reino
+      if (!aberto && typeof somTocar === "function") somTocar("reino", bloco.id);
+      if (!aberto && typeof portalAoAbrirReino === "function") portalAoAbrirReino(bloco.id);
       renderizarListaBlocos();
     });
 
@@ -83,6 +90,11 @@ function renderizarAcordeaoBlocos(container) {
       const listaRunas = painel.querySelector(".lista-runas");
       const faixa = criarFaixaGuardiao(bloco.id, calcularProgressoBloco(bloco));
       if (faixa) painel.insertBefore(faixa, listaRunas);
+      // Link pro capítulo deste reino na Crônica Fundadora (cronica.js)
+      if (typeof criarLinkCronicaReino === "function") {
+        const linkCronica = criarLinkCronicaReino(bloco.id);
+        if (linkCronica) painel.insertBefore(linkCronica, listaRunas);
+      }
       bloco.subtemas.forEach((subtema) => {
         listaRunas.appendChild(criarCardRuna(subtema, bloco));
       });
@@ -108,13 +120,17 @@ function criarPainelIlhaAcordeao() {
 
   painel.innerHTML = `
     <div class="cabecalho-bloco" style="display:flex; justify-content:space-between; align-items:center;">
-      <div>
-        <h2 class="font-display" style="color: #c93030; margin: 0 0 0.25rem; font-size: 1.3rem;">
-          ${ilhaAmaldicoada.title}
-        </h2>
-        <p class="font-body" style="color: var(--pergaminho-escuro); margin: 0;">
-          ${ilhaAmaldicoada.subtitle}
-        </p>
+      <div class="cabecalho-identidade">
+        ${typeof medalhaoBrasaoHTML === "function" ? medalhaoBrasaoHTML(ilhaAmaldicoada.id, 40) : ""}
+        <div>
+          <h2 class="font-display" style="color: #c93030; margin: 0 0 0.25rem; font-size: 1.3rem;">
+            ${ilhaAmaldicoada.title}
+          </h2>
+          <p class="font-body" style="color: var(--pergaminho-escuro); margin: 0;">
+            ${ilhaAmaldicoada.subtitle}
+          </p>
+          ${aberto && typeof lemaReinoHTML === "function" ? lemaReinoHTML(ilhaAmaldicoada.id) : ""}
+        </div>
       </div>
       <span style="color: #c93030; font-size: 1.5rem; transition: transform 0.3s ease; transform: rotate(${aberto ? "180deg" : "0deg"});">
         ▾
@@ -126,6 +142,9 @@ function criarPainelIlhaAcordeao() {
 
   painel.querySelector(".cabecalho-bloco").addEventListener("click", () => {
     blocoAbertoId = aberto ? null : ilhaAmaldicoada.id;
+    // Sino (som.js) e portal (portal.js) — só ao ENTRAR na Ilha
+    if (!aberto && typeof somTocar === "function") somTocar("reino", ilhaAmaldicoada.id);
+    if (!aberto && typeof portalAoAbrirReino === "function") portalAoAbrirReino(ilhaAmaldicoada.id);
     renderizarListaBlocos();
   });
 
@@ -209,6 +228,7 @@ function criarCardRunaNegra(runa) {
 function abrirModalRunaNegra(runaId) {
   const runa = ilhaAmaldicoada.runasNegras.find((r) => r.id === runaId);
   if (!runa) return;
+  if (typeof somTocar === "function") somTocar("runa"); // som de abrir a runa (som.js)
 
   // XP próprio da Ilha — NUNCA passa por marcarRunaComoLida (contador das 45).
   // A runa E.7 (simulador) não dá XP de leitura: quem pontua lá é o simulador.
@@ -341,7 +361,9 @@ function renderizarMapaReino(container) {
     tile.innerHTML = `
       <div class="cabecalho-bloco tile-cabecalho" role="button" tabindex="0"
            aria-expanded="${aberto}" aria-label="${bloco.title} — ${rotuloEstado}">
-        <span class="tile-numero">${bloco.num}</span>
+        ${typeof medalhaoBrasaoHTML === "function"
+          ? medalhaoBrasaoHTML(bloco.id, 46)
+          : `<span class="tile-numero">${bloco.num}</span>`}
         <h2 class="font-display tile-titulo">${bloco.title}</h2>
         <p class="font-body tile-subtitulo">${bloco.subtitle}</p>
         <span class="tile-estado" title="${rotuloEstado}">
@@ -358,6 +380,9 @@ function renderizarMapaReino(container) {
       } else {
         blocosAbertosDesktop.push(bloco.id);
         blocoAbertoId = bloco.id; // mantém o modo celular apontando pro último aberto
+        // Sino do reino (som.js) e transição de portal (portal.js)
+        if (typeof somTocar === "function") somTocar("reino", bloco.id);
+        if (typeof portalAoAbrirReino === "function") portalAoAbrirReino(bloco.id);
       }
       renderizarListaBlocos();
     };
@@ -408,7 +433,9 @@ function criarTileIlha() {
   tile.innerHTML = `
     <div class="cabecalho-bloco tile-cabecalho" role="button" tabindex="0"
          aria-expanded="${aberto}" aria-label="${ilhaAmaldicoada.title} — ${rotulo}">
-      <span class="tile-numero">💀</span>
+      ${typeof medalhaoBrasaoHTML === "function"
+        ? medalhaoBrasaoHTML(ilhaAmaldicoada.id, 46)
+        : '<span class="tile-numero">💀</span>'}
       <h2 class="font-display tile-titulo" style="color:#c93030">${ilhaAmaldicoada.title}</h2>
       <p class="font-body tile-subtitulo">${ilhaAmaldicoada.subtitle}</p>
       <span class="tile-estado" title="${rotulo}">${lidas}/${total}</span>
@@ -423,6 +450,9 @@ function criarTileIlha() {
     } else {
       blocosAbertosDesktop.push(ilhaAmaldicoada.id);
       blocoAbertoId = ilhaAmaldicoada.id;
+      // Sino (som.js) e portal (portal.js)
+      if (typeof somTocar === "function") somTocar("reino", ilhaAmaldicoada.id);
+      if (typeof portalAoAbrirReino === "function") portalAoAbrirReino(ilhaAmaldicoada.id);
     }
     renderizarListaBlocos();
   };
@@ -447,10 +477,13 @@ function criarPainelRunasIlha() {
   painel.innerHTML = `
     <div class="painel-runas-cabecalho">
       <div class="painel-runas-identidade">
-        <span class="tile-numero painel-runas-medalhao">💀</span>
+        ${typeof medalhaoBrasaoHTML === "function"
+          ? medalhaoBrasaoHTML(ilhaAmaldicoada.id, 40, "painel-runas-medalhao")
+          : '<span class="tile-numero painel-runas-medalhao">💀</span>'}
         <div>
           <h3 class="font-display" style="color:#c93030; margin:0 0 0.25rem; font-size:1.2rem;">${ilhaAmaldicoada.title}</h3>
           <p class="font-body" style="color: var(--pergaminho-escuro); margin:0;">${ilhaAmaldicoada.subtitle}</p>
+          ${typeof lemaReinoHTML === "function" ? lemaReinoHTML(ilhaAmaldicoada.id) : ""}
         </div>
       </div>
       <button class="btn-gotico botao-fechar-painel" aria-label="Fechar runas da Ilha Amaldiçoada"
@@ -482,10 +515,13 @@ function criarPainelRunasAberto(bloco) {
   painel.innerHTML = `
     <div class="painel-runas-cabecalho">
       <div class="painel-runas-identidade">
-        <span class="tile-numero painel-runas-medalhao">${bloco.num}</span>
+        ${typeof medalhaoBrasaoHTML === "function"
+          ? medalhaoBrasaoHTML(bloco.id, 40, "painel-runas-medalhao")
+          : `<span class="tile-numero painel-runas-medalhao">${bloco.num}</span>`}
         <div>
           <h3 class="font-display" style="color:${bloco.hex}; margin:0 0 0.25rem; font-size:1.2rem;">${bloco.title}</h3>
           <p class="font-body" style="color: var(--pergaminho-escuro); margin:0;">${bloco.subtitle}</p>
+          ${typeof lemaReinoHTML === "function" ? lemaReinoHTML(bloco.id) : ""}
         </div>
       </div>
       <button class="btn-gotico botao-fechar-painel" aria-label="Fechar runas de ${bloco.title}"
@@ -498,6 +534,11 @@ function criarPainelRunasAberto(bloco) {
   const lista = painel.querySelector(".lista-runas");
   const faixa = criarFaixaGuardiao(bloco.id, calcularProgressoBloco(bloco));
   if (faixa) painel.insertBefore(faixa, lista);
+  // Link pro capítulo deste reino na Crônica Fundadora (cronica.js)
+  if (typeof criarLinkCronicaReino === "function") {
+    const linkCronica = criarLinkCronicaReino(bloco.id);
+    if (linkCronica) painel.insertBefore(linkCronica, lista);
+  }
   bloco.subtemas.forEach((subtema) => {
     lista.appendChild(criarCardRuna(subtema, bloco));
   });
@@ -548,6 +589,7 @@ function temaCorPorBloco(blocoId) {
 function abrirModalRuna(runaId) {
   const dadosRuna = dadosEspecificosCards[runaId];
   if (!dadosRuna) return;
+  if (typeof somTocar === "function") somTocar("runa"); // antes do XP: na fila sai "runa" e depois a faísca do +XP
 
   marcarRunaComoLida(runaId);
   renderizarListaBlocos(); // atualiza o ✓ no card por trás do modal

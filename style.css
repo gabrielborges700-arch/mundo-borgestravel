@@ -286,11 +286,13 @@ input[type="range"]:focus-visible {
   }
 }
 
-/* Painel "pergaminho" — pra ler os textos das runas */
+/* Painel "pergaminho" — pra ler os textos das runas.
+   Quase opaco (0.96–0.98): com 0.7 o texto da página aparecia por baixo do modal
+   e brigava com a leitura. O brilho no topo continua dando o ar de pergaminho. */
 .painel-leitura {
   background:
     radial-gradient(ellipse at top, rgba(255,255,255,0.22), transparent 60%),
-    linear-gradient(to bottom, rgba(241,228,195,0.7), rgba(212,196,157,0.85));
+    linear-gradient(to bottom, rgba(241,228,195,0.96), rgba(212,196,157,0.98));
   color: #3e3222; border-radius: 12px; border: 1px solid var(--bronze-envelhecido);
   box-shadow: inset 0 4px 10px rgba(0,0,0,0.25), inset 0 0 40px rgba(140,98,57,0.15), 0 12px 24px rgba(0,0,0,0.55);
   transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.35s ease, box-shadow 0.35s ease;
@@ -492,6 +494,32 @@ header:hover .anel-metalico::after { animation-duration: 2.4s; filter: blur(4px)
   box-shadow: 0 0 12px rgba(212, 175, 55, 0.5);
 }
 
+/* Pilha de toasts (jogo.js, obterPilhaToasts): mesmo canto do Oráculo, mas
+   começando ACIMA do avatar dele (56px + 8px da flutuação) — antes pintava por
+   cima do mago. Não recebe clique: um aviso nunca bloqueia o que está embaixo.
+   O jogo.js deixa no máximo 4 toasts visíveis. */
+#pilha-toasts {
+  position: fixed; bottom: calc(1rem + 56px + 0.85rem); right: 1rem; z-index: 60;
+  max-width: calc(100vw - 2rem); pointer-events: none;
+  display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem;
+}
+/* Chat do Oráculo aberto (balão de 400px no lugar do avatar): a pilha sobe junto */
+body:has(#oraculo-container .balao-fala) #pilha-toasts { bottom: calc(1rem + 400px + 0.75rem); }
+
+/* Opção marcada nos Julgamentos (jogo.js, marcarOpcaoJulgamento). 2 classes +
+   :hover pra vencer o creme do .btn-gotico:hover — o creme no ciano dava 1,14:1. */
+.btn-gotico.opcao-marcada, .btn-gotico.opcao-marcada:hover {
+  background: var(--ciano-mistico); color: var(--magia-profunda); /* ~14:1 */
+  border-color: #b8f6ff;
+  box-shadow: 0 0 0 2px rgba(6,7,10,0.85), 0 0 14px rgba(0,229,255,0.5);
+}
+/* Julgamento Supremo: rubro com texto branco (~5,4:1) — o creme no rubro dava 4:1 */
+.btn-gotico.opcao-marcada-suprema, .btn-gotico.opcao-marcada-suprema:hover {
+  background: #c0392b; color: #fff;
+  border-color: #f0a090;
+  box-shadow: 0 0 0 2px rgba(6,7,10,0.85), 0 0 14px rgba(192,57,43,0.55);
+}
+
 /* Certificado: escondido na tela normal, só aparece na hora de imprimir */
 #certificado-imprimivel { display: none; }
 
@@ -643,6 +671,223 @@ header:hover .anel-metalico::after { animation-duration: 2.4s; filter: blur(4px)
 
 @media (max-width: 768px) {
   .hero-principal { --emblema-tamanho: 80px; padding: 2.25rem 1rem 2.75rem; }
+}
+
+/* ---------- 18b. Crônica Fundadora (cronica.js) ---------- */
+/* Modal de pergaminho com o texto completo da Crônica, um capítulo por reino.
+   --cor-reino é definida pelo cronica.js no painel (cor do capítulo aberto)
+   e em cada medalhão (cor do reino daquele capítulo). */
+
+/* Botão "📜 Crônica do Reino" no hero, logo abaixo do subtítulo */
+.hero-acoes { margin-top: 1.1rem; display: flex; justify-content: center; position: relative; }
+.hero-botao-cronica { font-size: 0.78rem; letter-spacing: 0.14em; padding: 0.65rem 1.25rem; }
+.hero-principal.hero-compacto .hero-acoes { margin-top: 0.6rem; }
+.hero-principal.hero-compacto .hero-botao-cronica { font-size: 0.68rem; padding: 0.45rem 0.9rem; }
+
+/* Link "Ler a crônica deste reino" dentro do painel aberto (abaixo do guardião) */
+.link-cronica-reino {
+  display: inline-flex; align-items: center; gap: 0.45rem;
+  margin: 0.6rem 0 0.1rem; padding: 0.45rem 0.9rem; min-height: 40px;
+  font-family: var(--font-display); font-size: 0.8rem; letter-spacing: 0.06em; font-weight: 700;
+  color: #f5dc9a; cursor: pointer;
+  background: linear-gradient(180deg, rgba(58,36,16,0.85), rgba(28,19,10,0.9));
+  border: 1px solid rgba(212,175,55,0.55); border-radius: 999px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,245,204,0.12);
+  transition: color var(--transicao-suave), box-shadow var(--transicao-suave), transform var(--transicao-suave);
+}
+.link-cronica-reino:hover {
+  color: #fff5cc; transform: translateY(-1px);
+  box-shadow: 0 5px 14px rgba(0,0,0,0.6), 0 0 14px rgba(212,175,55,0.3);
+}
+
+/* Fundo escuro por cima de tudo (acima dos modais do jogo, z 70, e dos botões flutuantes) */
+.cronica-overlay {
+  position: fixed; inset: 0; z-index: 80;
+  background: rgba(6,7,10,0.88);
+  display: flex; align-items: center; justify-content: center;
+  padding: 1rem;
+  animation: cronicaSurgir 0.25s ease-out;
+}
+
+/* O pergaminho: topo (títulos + ✕), medalhões, texto que rola e rodapé fixo */
+.cronica-pergaminho {
+  --cor-reino: #d4af37;
+  position: relative;
+  width: min(720px, 100%);
+  max-height: calc(100vh - 2rem);
+  max-height: calc(100dvh - 2rem);
+  display: flex; flex-direction: column;
+  color: #3e3222;
+  background:
+    radial-gradient(ellipse at top, rgba(255,255,255,0.28), transparent 55%),
+    radial-gradient(circle at 12% 88%, rgba(140,98,57,0.14), transparent 40%),
+    radial-gradient(circle at 90% 70%, rgba(107,26,26,0.07), transparent 45%),
+    linear-gradient(to bottom, #f3e7c8, #e2d0a6);
+  border: 1px solid var(--bronze-envelhecido);
+  border-radius: 14px;
+  box-shadow:
+    inset 0 0 0 1px rgba(212,175,55,0.45),
+    inset 0 0 0 5px rgba(140,98,57,0.12),
+    inset 0 0 50px rgba(140,98,57,0.2),
+    var(--sombra-3);
+  overflow: hidden;
+  animation: cronicaAbrir 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Faixa de cima, com um traço na cor do reino do capítulo */
+.cronica-topo {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 0.75rem;
+  padding: 0.9rem 1rem 0.6rem 1.4rem;
+  background: linear-gradient(180deg, rgba(140,98,57,0.22), rgba(140,98,57,0.06));
+  border-bottom: 1px solid rgba(140,98,57,0.45);
+  box-shadow: inset 0 -2px 0 var(--cor-reino);
+}
+.cronica-topo-titulos { display: flex; flex-direction: column; gap: 0.1rem; min-width: 0; }
+.cronica-kicker { font-size: 0.85rem; font-weight: 700; letter-spacing: 0.08em; color: #6b1a1a; text-transform: uppercase; }
+.cronica-kicker-sub { font-size: 0.85rem; font-style: italic; color: #5b4a33; }
+.cronica-fechar { flex-shrink: 0; padding: 0.35rem 0.75rem; font-size: 0.9rem; letter-spacing: 0; min-width: 40px; min-height: 40px; }
+
+/* Medalhões numerados dos 7 capítulos */
+.cronica-capitulos {
+  display: flex; justify-content: center; flex-wrap: wrap; gap: 0.4rem;
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid rgba(140,98,57,0.3);
+}
+.cronica-medalhao {
+  position: relative;
+  width: 38px; height: 38px; border-radius: 50%;
+  font-family: var(--font-display); font-weight: 900; font-size: 0.95rem;
+  color: #f5dc9a; cursor: pointer;
+  background: radial-gradient(circle at 35% 30%, #3a3f47, #15171b 75%);
+  border: 3px solid var(--cor-reino);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.12);
+  transition: transform var(--transicao-suave), box-shadow var(--transicao-suave);
+}
+.cronica-medalhao:hover { transform: translateY(-2px); }
+.cronica-medalhao.atual {
+  transform: scale(1.12);
+  color: #fff5cc;
+  box-shadow: 0 0 0 2px #f3e7c8, 0 0 0 4px var(--ouro-velho), 0 4px 12px rgba(0,0,0,0.5);
+}
+/* Marquinha dourada nos capítulos já lidos */
+.cronica-medalhao.lido::after {
+  content: "✓"; position: absolute; right: -5px; bottom: -5px;
+  width: 16px; height: 16px; border-radius: 50%;
+  font-size: 0.6rem; line-height: 16px; text-align: center;
+  background: var(--ouro-velho); color: #1a1612; font-family: var(--font-body);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+
+/* Área do texto: é ela que rola, os botões de cima e de baixo ficam fixos */
+.cronica-texto {
+  flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain;
+  padding: 1.25rem 2rem 1.5rem;
+  font-family: var(--font-body); font-size: 1.15rem; line-height: 1.6;
+}
+.cronica-texto:focus-visible { outline-offset: -3px; }
+.cronica-texto.cronica-virando { animation: cronicaVirarPagina 0.35s ease-out; }
+
+.cronica-cabecalho-capitulo { display: flex; align-items: center; gap: 0.9rem; }
+.cronica-emblema {
+  flex-shrink: 0; width: 54px; height: 54px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-weight: 900; font-size: 1.4rem; color: #f5dc9a;
+  background: radial-gradient(circle at 35% 30%, #3a3f47, #15171b 75%);
+  border: 3px solid var(--cor-reino);
+  box-shadow: 0 0 0 2px rgba(212,175,55,0.6), 0 4px 10px rgba(0,0,0,0.4);
+}
+/* Com o brasão desenhado (brasoes.js) não há moldura redonda: o escudo já tem a dele */
+.cronica-emblema-brasao { background: none; border: 0; box-shadow: none; border-radius: 0; filter: drop-shadow(0 3px 5px rgba(0,0,0,0.4)); }
+.cronica-emblema-brasao svg { display: block; }
+.cronica-numero-capitulo {
+  display: block; font-family: var(--font-display); font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase; color: #6b4a2c;
+}
+.cronica-titulo {
+  margin: 0.15rem 0 0; font-size: 1.45rem; line-height: 1.2; color: #2a1f14;
+  /* sublinhado na cor do reino, escurecido pra continuar visível no pergaminho */
+  text-decoration: underline;
+  text-decoration-color: #2a1f14;
+  text-decoration-thickness: 3px; text-underline-offset: 6px;
+}
+/* Tons da cor do reino misturados ao pergaminho — só onde o navegador entende color-mix */
+@supports (color: color-mix(in srgb, red 50%, blue)) {
+  .cronica-topo { box-shadow: inset 0 -2px 0 color-mix(in srgb, var(--cor-reino) 55%, transparent); }
+  .cronica-titulo { text-decoration-color: color-mix(in srgb, var(--cor-reino) 75%, #2a1f14); }
+  .cronica-citacao { border-left-color: color-mix(in srgb, var(--cor-reino) 70%, #3e3222); }
+}
+.cronica-subtitulo { margin: 0.45rem 0 0; font-style: italic; color: #5b4a33; font-size: 1.05rem; }
+.cronica-divisor { margin: 0.9rem 0 1rem; }
+
+/* Linhas curtas do autor: cada uma é um parágrafo, com pouco espaço entre elas */
+.cronica-paragrafo { margin: 0 0 0.6rem; }
+/* Capitular iluminada só no 1º parágrafo do capítulo (mesmo estilo da runa) */
+.cronica-capitular { display: flow-root; }
+.cronica-capitular::first-letter {
+  font-family: var(--font-blackletter); font-size: 3.4em; float: left; line-height: 0.85;
+  padding: 0.05em 0.12em 0 0; margin: 0.04em 0.06em 0 0; color: #7a1414; font-weight: 700;
+  text-shadow: 0 0 1px #d4af37, 2px 2px 0 rgba(255,245,204,0.8), 3px 3px 0 rgba(212,175,55,0.5), 4px 4px 6px rgba(0,0,0,0.3);
+}
+
+/* Frases gravadas em pedra/bronze (itálico no original) */
+.cronica-citacao {
+  margin: 1rem 0 1.1rem; padding: 0.85rem 1.1rem;
+  font-style: italic; font-size: 1.12em; line-height: 1.5; color: #4a1010; text-align: center;
+  background: linear-gradient(160deg, rgba(255,250,235,0.55), rgba(212,175,55,0.12));
+  border-top: 1px solid rgba(140,98,57,0.55); border-bottom: 1px solid rgba(140,98,57,0.55);
+  border-left: 4px solid var(--cor-reino);
+  border-radius: 4px;
+}
+
+/* A última palavra da Crônica */
+.cronica-fecho {
+  margin: 1.2rem 0 0.4rem; text-align: center;
+  font-size: 1.9rem; font-weight: 900; letter-spacing: 0.14em; text-transform: uppercase;
+  color: #4a1d80;
+  text-shadow: 0 1px 0 rgba(255,245,204,0.9), 0 0 12px rgba(212,175,55,0.45);
+}
+
+/* Rodapé com ◀ página ▶ (sempre visível, mesmo com o texto rolando) */
+.cronica-rodape {
+  display: flex; align-items: center; justify-content: space-between; gap: 0.6rem;
+  padding: 0.65rem 1rem;
+  background: linear-gradient(0deg, rgba(140,98,57,0.22), rgba(140,98,57,0.06));
+  border-top: 1px solid rgba(140,98,57,0.45);
+}
+.cronica-rodape .btn-gotico { font-size: 0.72rem; letter-spacing: 0.12em; padding: 0.55rem 0.9rem; min-height: 40px; }
+.cronica-rodape .btn-gotico:disabled { opacity: 0.4; cursor: default; transform: none; box-shadow: none; }
+.cronica-paginacao { font-family: var(--font-display); font-weight: 700; font-size: 0.85rem; color: #5b4a33; letter-spacing: 0.1em; }
+
+@keyframes cronicaSurgir { from { opacity: 0; } to { opacity: 1; } }
+@keyframes cronicaAbrir { from { opacity: 0; transform: translateY(14px) scale(0.97); } to { opacity: 1; transform: none; } }
+@keyframes cronicaVirarPagina { from { opacity: 0; transform: translateX(10px); } to { opacity: 1; transform: none; } }
+
+/* Celular: pergaminho quase em tela cheia, letra um pouco menor */
+@media (max-width: 600px) {
+  .cronica-overlay { padding: 0.5rem; }
+  .cronica-pergaminho { max-height: calc(100vh - 1rem); max-height: calc(100dvh - 1rem); border-radius: 12px; }
+  .cronica-topo { padding: 0.7rem 0.7rem 0.5rem 1rem; }
+  .cronica-kicker { font-size: 0.72rem; }
+  .cronica-kicker-sub { font-size: 0.78rem; }
+  .cronica-capitulos { gap: 0.3rem; padding: 0.5rem; }
+  .cronica-medalhao { width: 34px; height: 34px; font-size: 0.85rem; border-width: 2px; }
+  .cronica-texto { padding: 1rem 1.1rem 1.25rem; font-size: 1.06rem; }
+  .cronica-emblema { width: 46px; height: 46px; font-size: 1.2rem; }
+  .cronica-titulo { font-size: 1.2rem; }
+  .cronica-subtitulo { font-size: 0.98rem; }
+  .cronica-fecho { font-size: 1.5rem; }
+  .cronica-rodape { padding: 0.55rem 0.7rem; }
+}
+/* Telas bem estreitas: os botões ◀ ▶ ficam só com a seta */
+@media (max-width: 360px) {
+  .cronica-rodape .cronica-rotulo-botao { display: none; }
+}
+
+/* Sem animação pra quem pediu menos movimento */
+@media (prefers-reduced-motion: reduce) {
+  .cronica-overlay, .cronica-pergaminho, .cronica-texto.cronica-virando { animation: none; }
+  .cronica-medalhao, .link-cronica-reino { transition: none; }
+  .cronica-medalhao:hover, .link-cronica-reino:hover { transform: none; }
 }
 
 /* ---------- 19. Fase Layout — Barra de navegação (estilos extraídos do navegacao.js) ---------- */
@@ -812,9 +1057,77 @@ header:hover .anel-metalico::after { animation-duration: 2.4s; filter: blur(4px)
   .barra-navegacao-lista { gap: 0.3rem; }
 }
 
-/* Com a barra sticky, o scrollIntoView precisa parar ANTES dela — senão o
-   título do bloco fica escondido embaixo da barra. */
+/* Com a barra sticky, a rolagem precisa parar ANTES dela — senão o título do
+   bloco fica escondido embaixo da barra. O irParaBloco (navegacao.js) rola com
+   window.scrollTo e lê esta margem em destinoRolagemComHeroCompacto(); o
+   navegador também a usa em links #âncora e no foco por teclado. */
 #lista-blocos [data-bloco-id] { scroll-margin-top: calc(var(--altura-barra-nav) + 12px); }
+
+/* ---------- 19b. Som — botões flutuantes de mudo e ambiente (classes aplicadas pelo som.js) ---------- */
+
+/* Coluna no canto inferior esquerdo, logo ACIMA do "voltar ao topo" (que mora em
+   bottom:1rem; left:1rem com 42px): assim os dois nunca se sobrepõem, apareça o
+   ↑ ou não. Do lado direito ficam os toasts e o Oráculo.
+   z-index 45: acima da barra (40), abaixo dos modais (50) — não cobre botões de modal. */
+.som-controles {
+  position: fixed; left: 1rem; bottom: calc(1rem + 50px); z-index: 45;
+  width: 42px;
+  display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+}
+
+/* Medalhão de metal escuro com aro dourado (mesma família do .widget-diario) */
+.botao-som {
+  width: 42px; height: 42px; border-radius: 50%; padding: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(145deg, #2d3238, #14161a);
+  color: var(--ouro-velho); border: 1px solid rgba(212,175,55,0.55);
+  font-size: 1.05rem; line-height: 1; cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5), 0 0 10px rgba(212,175,55,0.2);
+  opacity: 0.88;
+  transition: transform var(--transicao-suave), box-shadow var(--transicao-suave), opacity var(--transicao-suave);
+}
+.botao-som:hover, .botao-som:focus-visible {
+  opacity: 1;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.6), 0 0 14px rgba(212,175,55,0.45);
+}
+/* focus-visible ciano do site (seção 3) também aqui: o círculo precisa do anel redondo */
+.botao-som:focus-visible { border-radius: 50%; }
+
+/* Mudo ligado: aro apagado, pra "som desligado" se ler de longe */
+.botao-som-mudo.ativo { border-color: rgba(201,207,214,0.45); box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+
+/* Botão do ambiente: menor. Desligado = esmaecido; ligado = aro ciano aceso */
+.botao-som-ambiente { width: 34px; height: 34px; font-size: 0.85rem; opacity: 0.85; background: linear-gradient(145deg, #4a5058, #262a30); }
+.botao-som-ambiente.ativo {
+  opacity: 1;
+  border-color: var(--ciano-mistico);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5), 0 0 12px rgba(0,229,255,0.45);
+}
+.botao-som[hidden] { display: none; }
+
+/* Celular: um pouco menores pra cobrir menos texto na beirada da tela
+   (a coluna continua com 42px, centrada sobre o ↑) */
+@media (max-width: 700px) {
+  /* Em linha, à direita do ↑ e na mesma altura dele: a coluna ficava sobre os brasões dos cartões */
+  .som-controles {
+    bottom: 1rem; left: calc(1rem + 50px);
+    width: auto; height: 42px; flex-direction: row;
+  }
+  .botao-som { width: 38px; height: 38px; font-size: 0.95rem; }
+  .botao-som-ambiente { width: 30px; height: 30px; font-size: 0.78rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .botao-som { transition: none; }
+  .botao-som:hover, .botao-som:focus-visible { transform: none; }
+}
+
+/* Impressão do certificado: o seletor da seção de impressão já esconde filhos do body,
+   mas garante também fora do modo certificado */
+@media print {
+  .som-controles { display: none !important; }
+}
 
 /* ---------- 20. Fase Layout — Mapa do Reino (só telas largas) ---------- */
 
@@ -980,6 +1293,78 @@ header:hover .anel-metalico::after { animation-duration: 2.4s; filter: blur(4px)
   }
 }
 
+/* ---------- 20b. Brasões desenhados dos reinos (brasoes.js) ---------- */
+/* O brasão entra no lugar da gema redonda do medalhão (.tile-numero) no
+   mapa desktop e no painel aberto, e ao lado do título no acordeão do
+   celular. As regras usam .tile-brasao (2 classes) pra vencer o .tile-numero
+   da seção 20 sem !important — inclusive o box-shadow do @supports. */
+.tile-numero.tile-brasao {
+  position: relative; display: inline-flex; align-items: center; justify-content: center;
+  width: auto; height: auto; flex-shrink: 0; line-height: 0;
+  border: none; border-radius: 0; background: none; box-shadow: none; text-shadow: none;
+}
+.tile-brasao .brasao-svg {
+  display: block; overflow: visible;
+  filter: drop-shadow(0 3px 5px rgba(0,0,0,0.6));
+  transition: transform var(--transicao-suave, 0.3s ease), filter var(--transicao-suave, 0.3s ease);
+}
+
+/* Gema pequena com o número do reino, no canto de baixo do escudo */
+.brasao-numero {
+  position: absolute; right: -9px; bottom: -2px;
+  width: 18px; height: 18px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-weight: 700; font-size: 0.66rem; line-height: 1;
+  color: var(--ouro-velho);
+  background: radial-gradient(circle at 35% 30%, #2d3238, var(--magia-profunda) 70%);
+  border: 1px solid rgba(212,175,55,0.75);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.7);
+}
+
+/* Mapa desktop: o reino aberto brilha na cor dele; passar o mouse ergue o escudo */
+.tile-reino:hover .tile-brasao .brasao-svg { transform: translateY(-2px) scale(1.04); }
+.tile-reino.tile-aberto .tile-brasao .brasao-svg {
+  filter: drop-shadow(0 0 7px rgba(212,175,55,0.65)) drop-shadow(0 3px 5px rgba(0,0,0,0.6));
+}
+@supports (color: color-mix(in srgb, red 50%, blue)) {
+  .tile-reino.tile-aberto .tile-brasao .brasao-svg {
+    filter:
+      drop-shadow(0 0 7px color-mix(in srgb, var(--cor-reino, #d4af37) 75%, transparent))
+      drop-shadow(0 3px 5px rgba(0,0,0,0.6));
+  }
+}
+
+/* Painel aberto: o .painel-runas-medalhao fixa 38×38 — o brasão manda no tamanho */
+.painel-runas-medalhao.tile-brasao { width: auto; height: auto; }
+
+/* Acordeão (celular/tablet): brasão + título lado a lado */
+.cabecalho-identidade { display: flex; align-items: center; gap: 0.8rem; min-width: 0; flex: 1; }
+.cabecalho-identidade > div { min-width: 0; }
+@media (max-width: 374px) {
+  /* 320–360px: escudo um pouco menor pra sobrar linha pro título */
+  .cabecalho-identidade { gap: 0.6rem; }
+  .cabecalho-identidade .brasao-svg { width: 34px; height: 41px; }
+  .cabecalho-identidade .brasao-numero { width: 16px; height: 16px; font-size: 0.6rem; right: -7px; }
+}
+
+/* Lema do reino: legenda discreta, só no painel aberto */
+.lema-reino {
+  margin: 0.35rem 0 0; line-height: 1.35;
+  font-family: var(--font-display); font-size: 0.66rem; font-weight: 700;
+  letter-spacing: 0.14em; color: var(--ouro-velho); opacity: 0.9;
+}
+.lema-traducao {
+  font-family: var(--font-body); font-style: italic; font-weight: 400;
+  font-size: 0.8rem; letter-spacing: 0; color: var(--pergaminho-escuro);
+  white-space: nowrap;
+}
+.painel-ilha .lema-latim { color: #e8806e; } /* rubro claro: legível no vidro escuro da Ilha */
+
+@media (prefers-reduced-motion: reduce) {
+  .tile-brasao .brasao-svg { transition: none; }
+  .tile-reino:hover .tile-brasao .brasao-svg { transform: none; }
+}
+
 /* ---------- 21. Ilha Amaldiçoada (Reino dos Erros Famosos) ---------- */
 
 /* Painel/tile sombrio — vale no acordeão (celular) e no mapa (desktop).
@@ -1003,7 +1388,7 @@ header:hover .anel-metalico::after { animation-duration: 2.4s; filter: blur(4px)
   border-color: #6b1a1a;
   background:
     radial-gradient(ellipse at top, rgba(255,255,255,0.18), transparent 60%),
-    linear-gradient(to bottom, rgba(232,214,186,0.82), rgba(199,175,144,0.9));
+    linear-gradient(to bottom, rgba(232,214,186,0.96), rgba(199,175,144,0.98)); /* quase opaco, como o .painel-leitura */
   box-shadow:
     inset 0 4px 10px rgba(74,16,16,0.3),
     inset 0 0 40px rgba(107,26,26,0.18),
@@ -1085,4 +1470,106 @@ header:hover .anel-metalico::after { animation-duration: 2.4s; filter: blur(4px)
     filter: blur(7px);
     animation: derivaNevoa 24s ease-in-out infinite alternate-reverse;
   }
+}
+
+/* ---------- 24. Transição de Portal (portal.js) ---------- */
+/* Overlay curto ao entrar num reino e na abertura do site. O JS cria
+   .portal-magico com as cores do reino em --portal-cor*, e REMOVE o elemento
+   ao terminar (ou quando a criança clica/aperta tecla pra pular). */
+.portal-magico {
+  position: fixed; inset: 0; z-index: 90;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; perspective: 1400px;
+  pointer-events: none; /* o toque passa pra página; o portal.js só usa o toque pra pular a animação */
+  --portal-ease-anel: cubic-bezier(0.22, 1, 0.36, 1);
+}
+.portal-magico > * { position: absolute; pointer-events: none; will-change: transform, opacity; }
+.portal-magico.portal-saindo {
+  pointer-events: none; /* pulou: a página já volta a receber clique */
+  opacity: 0; transition: opacity 0.14s ease-out;
+}
+
+/* Véu escuro de imersão */
+.portal-veu {
+  inset: 0; background: var(--magia-profunda, #06070a); opacity: 0;
+  animation: portal-veu var(--portal-duracao, 850ms) ease-in-out forwards;
+}
+/* Flash de luz radial na cor do reino */
+.portal-flash {
+  inset: 0; opacity: 0;
+  background: radial-gradient(circle at center, var(--portal-cor-brilho), transparent 55%);
+  animation: portal-flash var(--portal-duracao, 850ms) ease-out forwards;
+}
+/* Anéis rúnicos 3D (externo gira num sentido, interno no outro) */
+.portal-anel { transform-style: preserve-3d; opacity: 0; }
+.portal-anel-externo { animation: portal-anel-externo var(--portal-duracao, 850ms) var(--portal-ease-anel) forwards; }
+.portal-anel-interno { animation: portal-anel-interno var(--portal-duracao, 850ms) var(--portal-ease-anel) forwards; }
+.portal-svg { display: block; overflow: visible; filter: drop-shadow(0 0 10px var(--portal-cor)); }
+.portal-traco-forte, .portal-traco-fraco {
+  fill: none; stroke: var(--portal-cor-clara); stroke-linecap: round; stroke-linejoin: round;
+}
+.portal-traco-forte { stroke-width: 2.2; opacity: 0.95; }
+.portal-traco-fraco { stroke-width: 1.2; opacity: 0.55; }
+.portal-glifo { stroke-width: 1.8; }
+/* Redemoinho de energia */
+.portal-redemoinho {
+  width: 14rem; height: 14rem; border-radius: 50%; opacity: 0;
+  background: conic-gradient(from 0deg, transparent, var(--portal-cor-forte), transparent,
+    var(--portal-cor-media), transparent);
+  filter: blur(6px);
+  animation: portal-redemoinho var(--portal-duracao, 850ms) ease-in-out forwards;
+}
+/* Estouro de luz no centro. Degradê num círculo grande em vez de box-shadow
+   num pontinho escalado 14x (o Chrome rasteriza a sombra pequena e ela
+   aparece em "tijolos" com emendas quando cresce) */
+.portal-estouro {
+  width: 24rem; height: 24rem; border-radius: 50%; opacity: 0;
+  background: radial-gradient(circle, #fff7d6 0 15%, var(--portal-cor-forte) 24%,
+    var(--portal-cor-brilho) 42%, transparent 68%);
+  animation: portal-estouro calc(var(--portal-duracao, 850ms) * 0.92) ease-out forwards;
+}
+
+@keyframes portal-veu {
+  0% { opacity: 0; } 45% { opacity: 0.88; } 100% { opacity: 0; }
+}
+@keyframes portal-flash {
+  0% { opacity: 0; transform: scale(0.4); }
+  45% { opacity: 0.9; transform: scale(1.3); }
+  100% { opacity: 0; transform: scale(1.6); }
+}
+@keyframes portal-anel-externo {
+  0% { opacity: 0; transform: rotateX(80deg) rotateZ(0deg) scale(0.2); }
+  50% { opacity: 1; transform: rotateX(25deg) rotateZ(180deg) scale(1.4); }
+  100% { opacity: 0; transform: rotateX(0deg) rotateZ(360deg) scale(3.4); }
+}
+@keyframes portal-anel-interno {
+  0% { opacity: 0; transform: rotateX(-40deg) rotateZ(180deg) scale(0.5); }
+  50% { opacity: 0.75; transform: rotateX(10deg) rotateZ(-180deg) scale(1.1); }
+  100% { opacity: 0; transform: rotateX(0deg) rotateZ(-540deg) scale(2.2); }
+}
+@keyframes portal-redemoinho {
+  0% { opacity: 0; transform: rotate(0deg) scale(0); }
+  50% { opacity: 0.85; transform: rotate(360deg) scale(1.2); }
+  100% { opacity: 0; transform: rotate(720deg) scale(2.4); }
+}
+@keyframes portal-estouro {
+  0% { opacity: 0; transform: scale(0); }
+  50% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.75); }
+}
+
+/* Movimento reduzido: o JS só põe o véu, que nem recebe clique.
+   O !important + seletor mais forte vence a regra geral da seção 3
+   (0.01ms) pra o fade de 150ms continuar visível. */
+.portal-magico.portal-reduzido { pointer-events: none; perspective: none; }
+@keyframes portal-veu-reduzido {
+  0% { opacity: 0; } 50% { opacity: 0.35; } 100% { opacity: 0; }
+}
+.portal-magico.portal-reduzido .portal-veu {
+  animation: portal-veu-reduzido 150ms ease-in-out forwards !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  /* Garantia extra: mesmo se um portal completo escapar, nada gira nem cresce */
+  .portal-magico .portal-flash, .portal-magico .portal-anel,
+  .portal-magico .portal-redemoinho, .portal-magico .portal-estouro { display: none; }
 }
