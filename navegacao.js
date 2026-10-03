@@ -8,18 +8,55 @@
  *   (só se perde se limpar os dados do navegador).
  * - Contador "X / 45 runas lidas" na barra de navegação.
  * - Botão flutuante "voltar ao topo".
+ * - armazenamentoLer() / armazenamentoGravar(): o ÚNICO caminho pro
+ *   localStorage no site (jogo.js também usa). Este arquivo carrega antes
+ *   de app.js e jogo.js, por isso o wrapper mora aqui.
  */
 
 const CHAVE_PROGRESSO = "borgestravel_runas_lidas";
+
+// ---------- Armazenamento seguro (localStorage com plano B em memória) ----------
+// Em alguns navegadores (file://, modo privado, webviews) o localStorage
+// não existe ou LANÇA exceção só de ser acessado. Quando a gravação falha,
+// o valor fica guardado neste objeto: o progresso funciona normal durante
+// a visita, só não sobrevive a fechar a aba.
+
+const armazenamentoMemoria = {};
+
+function armazenamentoLer(chave) {
+  // Se a última gravação dessa chave falhou, a memória tem o valor mais novo
+  if (Object.prototype.hasOwnProperty.call(armazenamentoMemoria, chave)) {
+    return armazenamentoMemoria[chave];
+  }
+  try {
+    return window.localStorage.getItem(chave);
+  } catch (erro) {
+    return null; // navegador bloqueando e nada gravado ainda nesta visita
+  }
+}
+
+function armazenamentoGravar(chave, valor) {
+  const texto = String(valor);
+  try {
+    window.localStorage.setItem(chave, texto);
+    // Gravou de verdade: o localStorage volta a ser a fonte (assim outra aba
+    // aberta do site continua enxergando o progresso mais recente)
+    delete armazenamentoMemoria[chave];
+  } catch (erro) {
+    // bloqueado (ou sem espaço): guarda só na memória desta visita
+    armazenamentoMemoria[chave] = texto;
+  }
+}
 
 // ---------- Progresso (localStorage) ----------
 
 function obterRunasLidas() {
   try {
-    const salvo = localStorage.getItem(CHAVE_PROGRESSO);
-    return salvo ? JSON.parse(salvo) : [];
+    const salvo = armazenamentoLer(CHAVE_PROGRESSO);
+    const lista = salvo ? JSON.parse(salvo) : [];
+    return Array.isArray(lista) ? lista : []; // "null" ou outro JSON válido que não é lista
   } catch (erro) {
-    return []; // se der erro (ex: navegador bloqueando), só não salva progresso
+    return []; // save corrompido (JSON inválido): começa do zero sem quebrar o site
   }
 }
 
@@ -28,12 +65,9 @@ function marcarRunaComoLida(runaId) {
   const jaEstavaLida = lidas.includes(runaId);
   if (!jaEstavaLida) {
     lidas.push(runaId);
-    try {
-      localStorage.setItem(CHAVE_PROGRESSO, JSON.stringify(lidas));
-    } catch (erro) {
-      // se o navegador bloquear localStorage, o site continua funcionando normal,
-      // só não salva o progresso entre visitas
-    }
+    // se o navegador bloquear localStorage, o wrapper guarda em memória e o
+    // site continua funcionando normal, só não salva entre visitas
+    armazenamentoGravar(CHAVE_PROGRESSO, JSON.stringify(lidas));
   }
   atualizarContadorProgresso();
   // Hook do sistema de jogo (jogo.js) — concede XP só na primeira leitura da runa
@@ -144,8 +178,31 @@ function irParaBloco(blocoId) {
   // Espera o próximo frame pra garantir que o bloco já foi desenhado antes de rolar até ele
   requestAnimationFrame(() => {
     const alvo = document.querySelector(`[data-bloco-id="${blocoId}"]`);
-    if (alvo) alvo.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (alvo) window.scrollTo({ top: destinoRolagemComHeroCompacto(alvo), behavior: "smooth" });
   });
+}
+
+// Onde a página deve parar pra mostrar o bloco logo abaixo da barra (respeita o
+// scroll-margin-top do style.css). Rolando de perto do topo, o efeitos.js compacta
+// o hero NO MEIO do caminho (.hero-compacto) e tudo abaixo dele sobe ~60px (~150px
+// no PC); o scrollIntoView calculava o ponto antes disso e o título do reino
+// terminava escondido embaixo da barra. Então a conta já é feita com o hero
+// compacto, que é como ele vai estar no fim (todo reino fica bem abaixo dos 160px
+// de rolagem em que ele compacta). A classe liga e desliga no mesmo quadro, sem
+// transição, então nada pisca na tela.
+function destinoRolagemComHeroCompacto(alvo) {
+  const margemTopo = parseFloat(getComputedStyle(alvo).scrollMarginTop) || 0;
+  const medirDestino = () => alvo.getBoundingClientRect().top + window.scrollY - margemTopo;
+
+  const hero = document.querySelector(".hero-principal");
+  if (!hero || hero.classList.contains("hero-compacto")) return medirDestino();
+
+  hero.classList.add("hero-sem-transicao", "hero-compacto");
+  const destino = medirDestino();
+  hero.classList.remove("hero-compacto");
+  void hero.offsetHeight; // aplica a volta ainda sem transição (senão o hero animaria)
+  hero.classList.remove("hero-sem-transicao");
+  return destino;
 }
 
 // ---------- Botão "voltar ao topo" ----------

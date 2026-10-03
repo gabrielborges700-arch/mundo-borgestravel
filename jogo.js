@@ -11,22 +11,33 @@
  * - Missões: ao terminar todas as runas de um bloco, libera um
  *   "Julgamento do Reino" (quiz de 3 perguntas). Acertar 2 de 3 dá um
  *   selo especial e um bônus de XP.
+ * - Quizzes (Julgamentos, Sprint, Torre): a ORDEM das opções é embaralhada
+ *   a cada vez que a pergunta aparece; a correção usa sempre o índice
+ *   original (p.correta), então dados.js não muda.
  *
- * Guarda tudo numa única chave do localStorage: "borgestravel_jogo".
- * Depende de reinosDados, missoesPorBloco (dados.js), obterRunasLidas()
- * e runaFoiLida() (navegacao.js) já estarem carregados antes.
+ * Guarda tudo numa única chave do localStorage: "borgestravel_jogo" (só o
+ * nome do certificado fica à parte, em "borgestravel_nome"). Todo acesso
+ * passa por armazenamentoLer/armazenamentoGravar (navegacao.js), que caem
+ * pra memória quando o navegador bloqueia o localStorage.
+ * Depende de reinosDados, missoesPorBloco (dados.js), obterRunasLidas(),
+ * runaFoiLida() e do wrapper de armazenamento (navegacao.js) já estarem
+ * carregados antes.
  */
 
 const CHAVE_JOGO = "borgestravel_jogo";
 
+// Mínimos de PR de cada nível. Sem atividades diárias dá pra juntar ≈1345 PR
+// (runas + simuladores ≈675, Julgamentos 210, Supremos 350, desafios, Ilha).
+// Ler tudo sozinho leva até o nível 4-5; o Mestre exige vencer os Julgamentos
+// Supremos. Só o nível EXIBIDO depende disso — o XP salvo nunca muda.
 const NIVEIS = [
   { min: 0, nome: "Aprendiz de Pedra" },
   { min: 100, nome: "Aprendiz de Argamassa" },
-  { min: 200, nome: "Andarilho dos Alicerces" },
-  { min: 300, nome: "Guardião das Vigas" },
-  { min: 400, nome: "Cavaleiro do Aço" },
-  { min: 500, nome: "Arquiteto Rúnico" },
-  { min: 600, nome: "Mestre do Reino das Super Estruturas" },
+  { min: 250, nome: "Andarilho dos Alicerces" },
+  { min: 450, nome: "Guardião das Vigas" },
+  { min: 700, nome: "Cavaleiro do Aço" },
+  { min: 950, nome: "Arquiteto Rúnico" },
+  { min: 1200, nome: "Mestre do Reino das Super Estruturas" },
 ];
 
 // Selos especiais concedidos manualmente ao vencer a missão de cada bloco
@@ -55,7 +66,7 @@ const SELOS_BOSS = {
 
 function obterEstadoJogo() {
   try {
-    const salvo = localStorage.getItem(CHAVE_JOGO);
+    const salvo = armazenamentoLer(CHAVE_JOGO);
     if (!salvo) return estadoJogoPadrao();
     const estado = JSON.parse(salvo);
     return Object.assign(estadoJogoPadrao(), estado);
@@ -91,10 +102,11 @@ function estadoJogoPadrao() {
 
 function salvarEstadoJogo(estado) {
   try {
-    localStorage.setItem(CHAVE_JOGO, JSON.stringify(estado));
+    // se o navegador bloquear localStorage, o wrapper guarda em memória e o
+    // jogo continua funcionando na sessão atual, só não salva entre visitas
+    armazenamentoGravar(CHAVE_JOGO, JSON.stringify(estado));
   } catch (erro) {
-    // se o navegador bloquear localStorage, o jogo continua funcionando
-    // na sessão atual, só não salva entre visitas
+    // estado impossível de serializar: melhor perder esse save do que travar o jogo
   }
 }
 
@@ -118,8 +130,25 @@ function calcularNivel(xp) {
 // Bônus de XP concedido ao bater certos marcos de dias seguidos
 const MARCOS_STREAK = { 3: 15, 7: 40, 14: 80, 30: 200 };
 
+// Formata como "AAAA-MM-DD" no fuso LOCAL do jogador. (toISOString usa UTC:
+// em Brasília o "dia" virava às 21h.) Streak, Sprint, Torre e constância
+// comparam essas strings, então o formato precisa ser sempre este.
+function formatarDiaLocal(data) {
+  const ano = data.getFullYear();
+  const mes = String(data.getMonth() + 1).padStart(2, "0");
+  const dia = String(data.getDate()).padStart(2, "0");
+  return `${ano}-${mes}-${dia}`;
+}
+
 function dataDeHoje() {
-  return new Date().toISOString().slice(0, 10); // formato "AAAA-MM-DD"
+  return formatarDiaLocal(new Date()); // formato "AAAA-MM-DD"
+}
+
+// Hoje deslocado em dias (−1 = ontem, +1 = amanhã), no mesmo formato
+function diaDeslocado(dias) {
+  const data = new Date();
+  data.setDate(data.getDate() + dias);
+  return formatarDiaLocal(data);
 }
 
 function atualizarStreak() {
@@ -128,9 +157,12 @@ function atualizarStreak() {
 
   if (estado.ultimaVisita === hoje) return; // já contou hoje, não faz nada
 
-  const ontem = new Date();
-  ontem.setDate(ontem.getDate() - 1);
-  const ontemStr = ontem.toISOString().slice(0, 10);
+  // Saves antigos gravavam o dia em UTC: quem visitou à noite pode ter
+  // "amanhã" salvo. Conta como hoje, senão a troca pro horário local
+  // apagaria a chama de quem volta na mesma noite.
+  if (estado.ultimaVisita === diaDeslocado(1)) return;
+
+  const ontemStr = diaDeslocado(-1);
 
   if (estado.ultimaVisita === ontemStr) {
     estado.streakDias += 1; // visitou ontem também: streak continua
@@ -363,18 +395,34 @@ function verificarConquistas() {
 
 // ---------- Toast (aviso flutuante) ----------
 
+// Coluna fixa no canto onde os toasts se empilham. Antes cada toast era fixed no
+// mesmo bottom/right, e os disparados juntos (ex.: conquista + "Julgamento
+// superado") nasciam um por cima do outro, cortados.
+function obterPilhaToasts() {
+  let pilha = document.getElementById("pilha-toasts");
+  if (!pilha) {
+    pilha = document.createElement("div");
+    pilha.id = "pilha-toasts";
+    pilha.style.cssText = `
+      position: fixed; bottom: 1rem; right: 1rem; z-index: 60;
+      display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem;
+    `;
+    document.body.appendChild(pilha);
+  }
+  return pilha;
+}
+
 function mostrarToast(texto, icone) {
   const toast = document.createElement("div");
   toast.textContent = `${icone} ${texto}`;
   toast.style.cssText = `
-    position: fixed; bottom: 1rem; right: 1rem; z-index: 60;
     background: var(--pedra-ardosia); color: var(--ouro-velho);
     border: 1px solid var(--bronze-envelhecido); border-radius: 8px;
     padding: 0.6rem 1rem; font-size: 0.8rem; font-weight: bold;
     box-shadow: 0 4px 14px rgba(0,0,0,0.6);
     opacity: 0; transform: translateY(10px); transition: opacity 0.3s ease, transform 0.3s ease;
   `;
-  document.body.appendChild(toast);
+  obterPilhaToasts().appendChild(toast); // o mais novo entra embaixo e empurra os outros pra cima
   requestAnimationFrame(() => {
     toast.style.opacity = "1";
     toast.style.transform = "translateY(0)";
@@ -516,7 +564,7 @@ function concluiuTudo(estado) {
 
 function abrirModalCertificado() {
   fecharModalRuna();
-  const nomeSalvo = localStorage.getItem("borgestravel_nome") || "";
+  const nomeSalvo = armazenamentoLer("borgestravel_nome") || "";
 
   const overlay = document.createElement("div");
   overlay.id = "modal-certificado-overlay";
@@ -527,15 +575,17 @@ function abrirModalCertificado() {
   painel.style.cssText = "max-width:520px; width:100%; max-height:90vh; overflow-y:auto; padding:1.5rem; position:relative;";
   painel.innerHTML = `
     <div id="area-nao-imprimir">
-      <button id="fechar-modal-certificado" aria-label="Fechar" class="btn-gotico" style="position:absolute; top:0.75rem; right:0.75rem;">✕</button>
+      <button id="fechar-modal-certificado" aria-label="Fechar" class="btn-gotico" style="position:absolute; top:0.75rem; right:0.75rem; padding:0.3rem 0.7rem; font-size:0.9rem;">✕</button>
       <h2 class="font-display" style="margin-top:0;">🎓 Gerar Certificado</h2>
       <p>Parabéns por completar o Reino inteiro! Digite seu nome pra aparecer no certificado:</p>
-      <input id="input-nome-certificado" type="text" value="${nomeSalvo}" placeholder="Seu nome" class="chat-input" style="width:100%; padding:0.5rem; margin:0.5rem 0; box-sizing:border-box;">
+      <input id="input-nome-certificado" type="text" placeholder="Seu nome" class="chat-input" style="width:100%; padding:0.5rem; margin:0.5rem 0; box-sizing:border-box;">
       <button id="botao-gerar-certificado" class="btn-gotico" style="width:100%; margin-top:0.5rem;">🖨️ Gerar e Imprimir / Salvar como PDF</button>
       <p style="font-size:0.75rem; opacity:0.7; margin-top:0.5rem;">Na janela de impressão que abrir, escolha "Salvar como PDF" no destino.</p>
     </div>
     <div id="certificado-imprimivel"></div>
   `;
+  // O nome entra pelo DOM, não pelo HTML: um nome com aspas ou "<" quebrava o atributo value
+  painel.querySelector("#input-nome-certificado").value = nomeSalvo;
   overlay.appendChild(painel);
   document.body.appendChild(overlay);
 
@@ -544,7 +594,7 @@ function abrirModalCertificado() {
 
   painel.querySelector("#botao-gerar-certificado").addEventListener("click", () => {
     const nome = painel.querySelector("#input-nome-certificado").value.trim() || "Aprendiz do Reino";
-    localStorage.setItem("borgestravel_nome", nome);
+    armazenamentoGravar("borgestravel_nome", nome);
 
     const estado = obterEstadoJogo();
     const nivel = calcularNivel(estado.xp);
@@ -557,13 +607,14 @@ function abrirModalCertificado() {
           <span style="font-size:3rem;">🏰</span>
           <h1 class="font-display">Certificado de Mestre Rúnico</h1>
           <p>O Mundo Borgestrável reconhece que</p>
-          <h2 class="font-display">${nome}</h2>
+          <h2 class="font-display"></h2>
           <p>concluiu todas as 45 runas e os 7 Julgamentos do Reino, alcançando o título de<br><strong>${nivel.nome}</strong></p>
           <p style="margin-top:2rem; font-style:italic;">Data: ${dataStr}</p>
           <p style="margin-top:1rem;">— Mago Aurelius, Guardião do Reino das Super Estruturas</p>
         </div>
       </div>
     `;
+    certEl.querySelector("h2").textContent = nome; // texto puro: o nome digitado nunca vira HTML
 
     document.body.classList.add("modo-impressao-certificado");
     window.print();
@@ -589,7 +640,7 @@ function abrirModalCardConquista() {
   fecharModalRuna();
   const estado = obterEstadoJogo();
   const nivel = calcularNivel(estado.xp);
-  const nomeSalvo = localStorage.getItem("borgestravel_nome") || "Aprendiz do Reino";
+  const nomeSalvo = armazenamentoLer("borgestravel_nome") || "Aprendiz do Reino";
 
   const overlay = document.createElement("div");
   overlay.id = "modal-card-overlay";
@@ -599,7 +650,7 @@ function abrirModalCardConquista() {
   painel.className = "painel-leitura";
   painel.style.cssText = "max-width:420px; width:100%; padding:1.5rem; text-align:center; position:relative;";
   painel.innerHTML = `
-    <button id="fechar-modal-card" aria-label="Fechar" class="btn-gotico" style="position:absolute; top:0.75rem; right:0.75rem;">✕</button>
+    <button id="fechar-modal-card" aria-label="Fechar" class="btn-gotico" style="position:absolute; top:0.75rem; right:0.75rem; padding:0.3rem 0.7rem; font-size:0.9rem;">✕</button>
     <h2 class="font-display" style="margin-top:0;">📤 Card de Conquistas</h2>
     <canvas id="canvas-card-conquista" width="600" height="750" style="width:100%; max-width:280px; border-radius:10px; margin:1rem auto; display:block; box-shadow:0 4px 14px rgba(0,0,0,0.5);"></canvas>
     <a id="link-baixar-card" class="btn-gotico" style="display:inline-block; text-decoration:none; padding:0.6rem 1.2rem;" download="mundo-borgestravel-conquistas.png">⬇️ Baixar imagem</a>
@@ -620,6 +671,13 @@ function fecharModalCardConquista() {
 
 function desenharCardConquista(canvas, nome, nivel, estado) {
   const ctx = canvas.getContext("2d");
+  if (!ctx) {
+    // Navegador sem canvas 2D (ou com ele bloqueado): o modal abre mesmo
+    // assim, só esconde o botão de baixar, que não teria imagem nenhuma
+    const linkSemImagem = document.getElementById("link-baixar-card");
+    if (linkSemImagem) linkSemImagem.style.display = "none";
+    return;
+  }
   const largura = canvas.width;
   const altura = canvas.height;
 
@@ -940,6 +998,14 @@ function embaralhar(lista) {
   return copia;
 }
 
+// Opções de uma pergunta na ordem de EXIBIÇÃO (embaralhada a cada chamada).
+// Quase todas as respostas certas em dados.js estão na opção do meio; sem
+// isso dava pra acertar tudo no chute. Cada item leva o índice ORIGINAL,
+// que é o que p.correta usa — a correção continua igual.
+function opcoesEmbaralhadas(pergunta) {
+  return embaralhar(pergunta.opcoes.map((texto, indiceOriginal) => ({ texto, indiceOriginal })));
+}
+
 function abrirModalSprint() {
   const pool = montarPoolSprint();
   if (pool.length === 0) {
@@ -1015,7 +1081,8 @@ function iniciarSprint(painel) {
     const opcoesContainer = document.createElement("div");
     opcoesContainer.style.cssText = "display:flex; flex-direction:column; gap:0.4rem;";
 
-    p.opcoes.forEach((textoOpcao, indiceOpcao) => {
+    // ordem embaralhada na tela; indiceOpcao é o índice ORIGINAL (o de p.correta)
+    opcoesEmbaralhadas(p).forEach(({ texto: textoOpcao, indiceOriginal: indiceOpcao }) => {
       const botaoOpcao = document.createElement("button");
       botaoOpcao.type = "button";
       botaoOpcao.className = "btn-gotico";
@@ -1175,7 +1242,8 @@ function iniciarTorre(painel) {
     const opcoesContainer = document.createElement("div");
     opcoesContainer.style.cssText = "display:flex; flex-direction:column; gap:0.4rem;";
 
-    p.opcoes.forEach((textoOpcao, indiceOpcao) => {
+    // ordem embaralhada na tela; indiceOpcao é o índice ORIGINAL (o de p.correta)
+    opcoesEmbaralhadas(p).forEach(({ texto: textoOpcao, indiceOriginal: indiceOpcao }) => {
       const botaoOpcao = document.createElement("button");
       botaoOpcao.type = "button";
       botaoOpcao.className = "btn-gotico";
@@ -1282,10 +1350,15 @@ function salvarNotaRuna(runaId, texto) {
 
 // ---------- Missões dos blocos ("Julgamento do Reino") ----------
 
-// Chamado toda vez que app.js redesenha a lista de blocos
+// Chamado toda vez que app.js redesenha a lista de blocos — e também direto
+// ao vencer um Julgamento, SEM re-render (pra não fechar os painéis abertos).
+// Por isso tira antes os botões que uma chamada anterior já tinha posto;
+// senão os reinos completos acumulavam botões repetidos.
 function aposRenderizarBlocos() {
   const estado = obterEstadoJogo();
   const lidas = obterRunasLidas();
+
+  document.querySelectorAll(".botao-julgamento-reino").forEach((botaoAntigo) => botaoAntigo.remove());
 
   document.querySelectorAll("[data-bloco-id]").forEach((painelDom) => {
     const blocoId = painelDom.dataset.blocoId;
@@ -1300,7 +1373,7 @@ function aposRenderizarBlocos() {
     if (!cabecalho) return;
 
     const botao = document.createElement("button");
-    botao.className = "btn-gotico";
+    botao.className = "btn-gotico botao-julgamento-reino"; // a 2ª classe marca o botão pra remoção acima
     botao.style.cssText = "margin-top:0.75rem; width:100%; font-size:0.75rem;";
     botao.textContent = missaoFeita ? "✅ Julgamento superado" : "🎯 Julgamento do Reino liberado!";
     if (missaoFeita) botao.style.opacity = "0.6";
@@ -1316,7 +1389,7 @@ function aposRenderizarBlocos() {
     if (missaoFeita) {
       const bossFeito = estado.missoesBossCompletas.includes(blocoId);
       const botaoBoss = document.createElement("button");
-      botaoBoss.className = "btn-gotico";
+      botaoBoss.className = "btn-gotico botao-julgamento-reino";
       botaoBoss.style.cssText = "margin-top:0.5rem; width:100%; font-size:0.75rem; border-color:#c0392b;";
       botaoBoss.textContent = bossFeito ? "👑 Julgamento Supremo superado" : "🔥 Julgamento Supremo (desafio extra)";
       if (bossFeito) botaoBoss.style.opacity = "0.6";
@@ -1348,7 +1421,7 @@ function abrirModalMissao(blocoId) {
   `;
 
   const painel = document.createElement("div");
-  painel.className = "painel-leitura capitular";
+  painel.className = "painel-leitura";
   painel.style.cssText = "max-width: 560px; width: 100%; max-height: 85vh; overflow-y: auto; padding: 2rem; position: relative;";
 
   const respostas = new Array(perguntas.length).fill(null);
@@ -1375,7 +1448,8 @@ function abrirModalMissao(blocoId) {
     const opcoesContainer = document.createElement("div");
     opcoesContainer.style.cssText = "display:flex; flex-direction:column; gap:0.4rem;";
 
-    p.opcoes.forEach((textoOpcao, indiceOpcao) => {
+    // ordem embaralhada na tela; indiceOpcao é o índice ORIGINAL (o de p.correta)
+    opcoesEmbaralhadas(p).forEach(({ texto: textoOpcao, indiceOriginal: indiceOpcao }) => {
       const botaoOpcao = document.createElement("button");
       botaoOpcao.type = "button";
       botaoOpcao.className = "btn-gotico";
@@ -1384,8 +1458,13 @@ function abrirModalMissao(blocoId) {
       botaoOpcao.addEventListener("click", () => {
         respostas[indicePergunta] = indiceOpcao;
         // marca visualmente qual opção está selecionada nessa pergunta
-        opcoesContainer.querySelectorAll("button").forEach((b) => (b.style.background = ""));
+        // (texto escuro no ciano: o creme do btn-gotico ficava ilegível, contraste 1,14:1)
+        opcoesContainer.querySelectorAll("button").forEach((b) => {
+          b.style.background = "";
+          b.style.color = "";
+        });
         botaoOpcao.style.background = "var(--ciano-mistico)";
+        botaoOpcao.style.color = "var(--accent-foreground)";
       });
       opcoesContainer.appendChild(botaoOpcao);
     });
@@ -1433,7 +1512,7 @@ function abrirModalMissao(blocoId) {
           <p style="margin-top:0.5rem; font-style:italic;">"O Reino reconhece a tua sabedoria. Que a próxima runa te espere de braços abertos." — Mago Aurelius</p>
         </div>
       `;
-      aposRenderizarBlocos(); // atualiza o botão do bloco pra "Julgamento superado"
+      aposRenderizarBlocos(); // troca (sem duplicar) o botão do bloco pra "Julgamento superado"
     } else {
       const consolo = concederXPConsolo("missao-" + blocoId);
       resultadoEl.innerHTML = `
@@ -1479,7 +1558,7 @@ function abrirModalMissaoBoss(blocoId) {
   `;
 
   const painel = document.createElement("div");
-  painel.className = "painel-leitura capitular";
+  painel.className = "painel-leitura";
   painel.style.cssText = "max-width: 560px; width: 100%; max-height: 85vh; overflow-y: auto; padding: 2rem; position: relative; border-color:#c0392b;";
 
   const respostas = new Array(perguntas.length).fill(null);
@@ -1506,7 +1585,8 @@ function abrirModalMissaoBoss(blocoId) {
     const opcoesContainer = document.createElement("div");
     opcoesContainer.style.cssText = "display:flex; flex-direction:column; gap:0.4rem;";
 
-    p.opcoes.forEach((textoOpcao, indiceOpcao) => {
+    // ordem embaralhada na tela; indiceOpcao é o índice ORIGINAL (o de p.correta)
+    opcoesEmbaralhadas(p).forEach(({ texto: textoOpcao, indiceOriginal: indiceOpcao }) => {
       const botaoOpcao = document.createElement("button");
       botaoOpcao.type = "button";
       botaoOpcao.className = "btn-gotico";
@@ -1563,7 +1643,7 @@ function abrirModalMissaoBoss(blocoId) {
           <p style="margin-top:0.5rem; font-style:italic;">"Poucos chegam tão longe. O Reino te reconhece como verdadeiro Mestre." — Mago Aurelius</p>
         </div>
       `;
-      aposRenderizarBlocos();
+      aposRenderizarBlocos(); // troca (sem duplicar) o botão pra "Julgamento Supremo superado"
     } else {
       const consolo = concederXPConsolo("boss-" + blocoId);
       resultadoEl.innerHTML = `
