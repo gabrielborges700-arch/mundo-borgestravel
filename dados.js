@@ -1,7 +1,12 @@
 /**
  * dados.js — Conteúdo unificado do Mundo Borgestrável
- * Consolidado a partir de 3 fontes: Lovable, Base44 e BORGESTR-VEL.
- * Este arquivo não tem lógica, só dados (textos, cores, estrutura dos 7 blocos e 45 runas).
+ * Nasceu da junção de 3 protótipos (Lovable, Base44 e BORGESTR-VEL) e foi
+ * ampliado depois com o sistema de jogo.
+ * Este arquivo não tem lógica, só dados (textos, cores e estrutura):
+ *  - os 7 blocos (0 a 6) com 45 runas, mais a Ilha Amaldiçoada com
+ *    7 runas negras (E.1 a E.7) — 52 runas no total;
+ *  - as missões de cada bloco, as perguntas extras do boss
+ *    ("Julgamento Supremo") e os guardiões dos reinos.
  */
 
 // Estrutura dos 7 blocos e seus subtemas (runas)

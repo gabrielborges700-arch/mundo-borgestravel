@@ -2,11 +2,13 @@
  * simuladores.js — Simuladores interativos de física estrutural (Fase 6)
  *
  * Cada função monta um "painel de simulação" que é inserido dentro do
- * modal de leitura quando a runa correspondente é aberta. Cobre os 15
- * simuladores/painéis: os 9 exclusivos do Bloco 0 e os 6 compartilhados
- * (um por bloco) dos Blocos 1 a 6. As runas 0.1 e 0.2 usam painéis
- * simples (só texto/ícone, sem interação) — os outros 13 têm
- * interatividade real (sliders, cálculos, montagem).
+ * modal de leitura quando a runa correspondente é aberta. Cobre os 16
+ * simuladores/painéis: os 9 exclusivos do Bloco 0 (0.1 a 0.9), os 6
+ * compartilhados (um por bloco) dos Blocos 1 a 6 e o "Monte Sua Ponte"
+ * da runa negra E.7 (Ilha Amaldiçoada). Todos são interativos — até os
+ * painéis introdutórios 0.1 (mapa clicável dos reinos) e 0.2 (diário de
+ * bordo com botão de registrar) respondem a cliques; os demais usam
+ * sliders, cálculos e montagem.
  *
  * Convenção: cada runa que tem simulador usa o id dela (ex: "0.3") pra
  * decidir qual função chamar. Isso é lido em app.js.

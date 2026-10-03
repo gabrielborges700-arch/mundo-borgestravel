@@ -3,3 +3,25 @@ CONTO_DO_BORGESTRÁVEL/
 *.pdf
 *.docx
 SKILLS_DO_PROJETO.txt
+
+# Documentos e arquivos compactados de trabalho (o README.md continua no repositório)
+*.md
+!README.md
+*.xlsx
+*.pptx
+*.zip
+*.rar
+*.patch
+
+# Configuração local do Claude Code
+.claude/
+
+# Ferramentas de teste do Node (o site não tem build, não precisa disso no ar)
+node_modules/
+package.json
+package-lock.json
+
+# Lixo que o Windows e o macOS criam sozinhos nas pastas
+desktop.ini
+Thumbs.db
+.DS_Store
