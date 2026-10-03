@@ -82,7 +82,9 @@ function simuladorVento(painel) {
   wrapper.innerHTML = `
     <p style="font-size:0.85rem; margin:0 0 0.75rem;">
       Aumenta a velocidade do vento e observa como o topo da torre se desloca.
-      Ativa as fundações mágicas pra amortecer a vibração!
+      Desafio: se o vento dobrar, o empurrão dobra ou fica QUATRO vezes maior? Testa no slider!
+      Depois liga os amortecedores rúnicos: um pêndulo gigante lá no alto que balança ao contrário da torre e engole a energia do balanço.
+      (A fundação segura a torre no chão; quem acalma o balanço é o amortecedor. Mas o empurrão constante do vento continua lá: compare o Desvio e o Balanço!)
     </p>
     <div style="height:180px; background:var(--pedra-ardosia); border:1px solid var(--bronze-envelhecido); border-radius:8px;
                 position:relative; overflow:hidden; display:flex; align-items:flex-end; justify-content:center; padding:8px 0;">
@@ -114,14 +116,17 @@ function simuladorVento(painel) {
   const botaoReforco = wrapper.querySelector("#botao-reforco");
 
   function atualizar() {
-    const deflexao = reinforced ? windSpeed * 0.12 : windSpeed * 0.58;
+    // Desvio médio (empurrão constante, cresce com v²): o amortecedor NÃO muda.
+    // Balanço (vai e vem): o amortecedor engole a maior parte dele.
+    const deflexao = 0.00387 * windSpeed * windSpeed;
+    const balanco = deflexao * (reinforced ? 0.08 : 0.4);
     torre.style.transform = `skewX(${deflexao}deg)`;
     torre.style.boxShadow = reinforced ? "0 0 15px rgba(0,229,255,0.4)" : "none";
-    leituraDesvio.textContent = `Desvio: ${deflexao.toFixed(1)} cm`;
+    leituraDesvio.textContent = `Desvio: ${deflexao.toFixed(1)} cm · Balanço: ±${balanco.toFixed(1)} cm`;
     labelVento.textContent = `Velocidade do Vento: ${windSpeed} km/h`;
-    alertaTempestade.textContent = windSpeed > 80 ? "TEMPESTADE!" : "Brisa";
-    alertaTempestade.style.color = windSpeed > 80 ? "#cc0000" : "inherit";
-    botaoReforco.textContent = reinforced ? "🛡️ Fundações Máximas Ligadas" : "⚡ Ligar Amortecedores Rúnicos";
+    alertaTempestade.textContent = windSpeed < 1 ? "Calmaria" : windSpeed < 39 ? "Brisa" : windSpeed < 62 ? "Vento forte" : windSpeed < 89 ? "Ventania" : windSpeed < 118 ? "TEMPESTADE!" : "FURACÃO!";
+    alertaTempestade.style.color = windSpeed >= 89 ? "#cc0000" : "inherit";
+    botaoReforco.textContent = reinforced ? "🛡️ Amortecedores Rúnicos Ligados" : "⚡ Ligar Amortecedores Rúnicos";
     botaoReforco.style.background = reinforced ? "var(--ciano-mistico)" : "";
     botaoReforco.style.color = reinforced ? "#06070a" : "";
   }
@@ -157,7 +162,7 @@ function simuladorEquilibrio(painel) {
       </div>
       <div style="height:10px; background:linear-gradient(90deg,#b45309,#78350f); border:1px solid var(--ouro-velho); border-radius:2px;
                   margin:0.5rem 0; display:flex; align-items:center; justify-content:center;">
-        <span id="soma-forcas" style="font-size:0.65rem; color:#fff; font-family:monospace;">Soma F: 1 kN</span>
+        <span id="soma-forcas" style="font-size:0.65rem; color:#fff; font-family:monospace;">Soma F: 2 kN</span>
       </div>
       <div style="display:flex; justify-content:space-between; font-size:0.7rem; color:var(--ciano-mistico); font-family:monospace;">
         <span id="col-esq">Coluna L: 4 kN ▲</span><span id="col-dir">Coluna R: 4 kN ▲</span>
@@ -516,18 +521,18 @@ function simuladorLinhaDoTempo(painel) {
       <span id="epoca-material" style="font-size:0.7rem; color:var(--ciano-mistico); font-weight:bold; display:block; margin:0.25rem 0;"></span>
       <p id="epoca-desc" style="font-size:0.75rem; margin:0; color:var(--pergaminho-escuro);"></p>
     </div>
-    <input id="slider-ano" type="range" min="0" max="2026" value="0" style="width:100%; margin-top:0.75rem;">
+    <input id="slider-ano" type="range" min="1" max="2026" value="1" style="width:100%; margin-top:0.75rem;">
     <div style="display:flex; justify-content:space-between; font-size:0.65rem; font-weight:bold; margin-top:0.25rem;">
-      <span>Ano 0</span><span>Idade Média</span><span>Ano 2026</span>
+      <span>Ano 1 d.C.</span><span>Idade Média</span><span>Ano 2026</span>
     </div>
   `;
   painel.appendChild(wrapper);
 
   const epocas = [
-    { max: 500, title: "🪵 1. Cabana Primitiva", mat: "Troncos e Lama", desc: "Sistemas simples para proteger do vento, sem bases calculadas." },
-    { max: 1200, title: "🏛️ 2. Coliseu de Roma", mat: "Betão de Cinza Vulcânica e Tijolo", desc: "Grandes arcos suportam peso imenso, descarregado para as bases." },
-    { max: 1800, title: "⛪ 3. Catedral Gótica", mat: "Pedra Talhada", desc: "Contrafortes dão equilíbrio lateral para atingir alturas sagradas." },
-    { max: Infinity, title: "🏙️ 4. Arranha-céu de Aço", mat: "Aço Estrutural e Concreto Armado", desc: "Vigas flexíveis de metal suportam terremotos e ventos colossais." },
+    { max: 500, title: "🏛️ 1. Coliseu e Panteão de Roma", mat: "Pedra Travertino, Tijolo e Concreto de Cinza Vulcânica", desc: "Grandes arcos descarregam um peso imenso até as bases. A cúpula do Panteão tem 43 m de concreto sem nenhum ferro dentro e está de pé há quase 1.900 anos! E as cabanas de galhos e barro? Ficaram milhares de anos antes, na Pré-história." },
+    { max: 1200, title: "🏰 2. Santa Sofia e Castelos Românicos", mat: "Tijolo, Pedra e Argamassa", desc: "Em 537, Constantinopla ergueu a Santa Sofia, com uma cúpula de uns 31 m que parece flutuar sobre a luz. Depois do ano 1000, a Europa se encheu de castelos e igrejas de paredes grossas e arcos redondos, herança direta de Roma." },
+    { max: 1800, title: "⛪ 3. Catedrais Góticas e Cúpulas do Renascimento", mat: "Pedra Talhada e Tijolo", desc: "Arcobotantes seguram as paredes por fora para elas subirem altíssimas e cheias de vitrais. Depois, Brunelleschi fechou a cúpula de Florença sem um cimbre (molde) gigante de madeira. Como?" },
+    { max: Infinity, title: "🏙️ 4. Da Ponte de Ferro ao Arranha-céu de Aço", mat: "Ferro, Aço Estrutural e Concreto Armado", desc: "Por quase 90 anos o ferro reinou em pontes e fábricas. Então o aço barato de Bessemer (1856) permitiu esqueletos metálicos, e em 1885 Chicago ganhou o primeiro arranha-céu. Por que o aço venceu o ferro fundido?" },
   ];
 
   function atualizar(ano) {
@@ -547,8 +552,8 @@ function simuladorLinhaDoTempo(painel) {
 function simuladorFatosDePortais(painel) {
   const fatos = {
     "Torre Eiffel": "Construída pra durar só 20 anos como atração provisória, virou o maior ícone e antena de Paris.",
-    "Golden Gate": "O arquiteto Irving Morrow rejeitou o preto e amarelo da Marinha e escolheu o laranja vibrante pra contrastar com a bruma e o oceano.",
-    "Cristo Redentor": "Suporta ventos oceânicos de até 150 km/h graças à flexibilidade do concreto armado reforçado com pedra-sabão.",
+    "Golden Gate": "A Marinha americana queria a ponte pintada com listras pretas e amarelas, para os navios a enxergarem. O arquiteto Irving Morrow defendeu outra ideia: um laranja forte, o 'Laranja Internacional', que combina com as colinas, contrasta com o céu e o mar e ainda aparece no meio da neblina. Os responsáveis pela ponte toparam! E você, qual escolheria para um navio no nevoeiro?",
+    "Cristo Redentor": "Lá no alto do Corcovado, a uns 700 m de altura, ele enfrenta ventanias e até raios sem sair do lugar. O segredo não é ser flexível: é um esqueleto rígido de concreto armado (concreto com barras de aço por dentro), bem preso ao pedestal sobre a rocha. Por fora, veste uma 'cota de malha' de milhares de plaquinhas triangulares de pedra-sabão, que não seguram nada: são só a pele. Enigma: por que os braços abertos, que pegam vento como velas de navio, são a parte mais difícil de segurar?",
     "Coliseu": "O hipogeu subterrâneo tinha dezenas de montas mecânicas operadas por roldanas manuais para erguer jaulas de leões direto pra arena!",
   };
 
@@ -587,12 +592,14 @@ function simuladorBloco1Materiais(painel) {
   const wrapper = document.createElement("div");
   wrapper.innerHTML = `
     <p style="font-size:0.85rem; margin:0 0 0.75rem;">
-      Testa a estabilidade vertical dos principais sistemas construtivos:
+      Testa a estabilidade vertical dos principais sistemas construtivos! Neste teste do vilarejo, o concreto aguenta 120, a madeira 80 e a alvenaria 40.
+      Mas desconfia da tabela: espremida no sentido das fibras, uma madeira dura de boa qualidade aguenta tanto quanto um concreto comum, e pesando bem menos!
+      Agora aperta a mesma madeira de lado, atravessando as fibras, e ela amassa fácil. Quem decide é o material, a direção da força e a grossura da peça.
     </p>
     <div id="botoes-material" style="display:flex; gap:0.4rem; justify-content:center; margin-bottom:0.75rem;"></div>
     <div style="background:rgba(0,0,0,0.4); border-radius:6px; padding:0.6rem; text-align:center;">
       <span style="display:block; font-size:0.8rem; color:var(--ciano-mistico);">Carga: <span id="valor-carga">30</span> toneladas</span>
-      <span style="display:block; font-size:0.65rem; color:rgba(255,255,255,0.5);">Resistência Máxima: <span id="valor-max">40</span> toneladas</span>
+      <span style="display:block; font-size:0.65rem; color:rgba(255,255,255,0.5);">Resistência Máxima deste pilar de teste: <span id="valor-max">40</span> toneladas (num pilar de verdade, depende do material E da grossura da peça!)</span>
       <span id="status-colapso" style="display:block; font-size:0.8rem; font-weight:bold; margin-top:0.4rem;"></span>
     </div>
     <input id="slider-carga" type="range" min="10" max="150" value="30" style="width:100%; margin-top:0.75rem;">
@@ -662,10 +669,10 @@ function simuladorBloco2Precisao(painel) {
     <input id="slider-medicao" type="range" min="0" max="100" value="40" style="width:100%;">
     <div style="display:flex; justify-content:space-between; background:rgba(0,0,0,0.4); border-radius:6px; padding:0.5rem; margin-top:0.5rem; font-family:monospace; font-size:0.75rem;">
       <span style="color:#fbbf24;">Medido: <span id="valor-medicao">40</span> mm</span>
-      <span style="color:#34d399;">Precisão Rúnica: <span id="valor-precisao">0</span>%</span>
+      <span style="color:#34d399;">Exatidão Rúnica: <span id="valor-precisao">0</span>%</span>
     </div>
     <div id="mensagem-perfeita" style="display:none; margin-top:0.5rem; padding:0.4rem; text-align:center; background:rgba(52,211,153,0.2); color:#34d399; border-radius:6px; font-size:0.75rem; font-weight:bold;">
-      🎉 MEDIÇÃO PERFEITA CONCLUÍDA!
+      🎯 DENTRO DA TOLERÂNCIA (±1 mm)! Nenhuma medida é perfeita: todo instrumento tem erro. O engenheiro vence quando o erro cabe no limite combinado.
     </div>
   `;
   painel.appendChild(wrapper);
@@ -740,11 +747,13 @@ function simuladorBloco4Fadiga(painel) {
   const wrapper = document.createElement("div");
   wrapper.innerHTML = `
     <p style="font-size:0.85rem; margin:0 0 0.75rem;">
-      Teste de Fadiga: aplica ciclos repetidos sob estresse térmico ou físico:
+      Teste de Fadiga: aplica ciclos repetidos de tensão. Acima do limite de fadiga (aqui, 25 MPa), cada ciclo faz uma trinca invisível crescer até a peça romper.
+      Abaixo dele, o aço comum aguenta dezenas de milhões de ciclos e nos testes parece que nunca vai quebrar (∞). Mas atenção: o alumínio não tem esse limite. Com ciclos suficientes, ele sempre acaba cedendo!
+      Aqui a magia acelera tudo: acima do limite, uma barra de aço de verdade levaria milhares ou milhões de vaivéns para romper. Teste abaixo de 25 MPa e veja o ∞! Então por que pontes e trens ainda quebram por fadiga?
     </p>
     <div style="display:flex; justify-content:space-between; background:rgba(0,0,0,0.4); border-radius:6px; padding:0.5rem; font-family:monospace; font-size:0.75rem;">
       <span>Ciclos: <span id="valor-ciclos">0</span></span>
-      <span style="color:#f87171;">Limite de Ruptura: <span id="valor-limite">24</span></span>
+      <span style="color:#f87171;">Limite de Ruptura (ritmo mágico do teste): <span id="valor-limite">24</span></span>
     </div>
     <label style="display:block; font-size:0.7rem; font-weight:bold; margin-top:0.6rem;">Estresse por Ciclo: <span id="valor-estresse">40</span> MPa</label>
     <input id="slider-estresse" type="range" min="10" max="100" value="40" style="width:100%;">
@@ -758,12 +767,14 @@ function simuladorBloco4Fadiga(painel) {
   `;
   painel.appendChild(wrapper);
 
-  function limite() { return Math.round(1000 / (estresse + 1)); }
+  // Abaixo do limite de fadiga (25 MPa neste teste mágico) o aço não rompe: ∞
+  const LIMITE_FADIGA = 25;
+  function limite() { return estresse <= LIMITE_FADIGA ? Infinity : Math.round(1000 / (estresse + 1)); }
   function fadigado() { return ciclos >= limite(); }
 
   function atualizar() {
     wrapper.querySelector("#valor-ciclos").textContent = ciclos;
-    wrapper.querySelector("#valor-limite").textContent = limite();
+    wrapper.querySelector("#valor-limite").textContent = limite() === Infinity ? "∞" : limite();
     wrapper.querySelector("#valor-estresse").textContent = estresse;
     wrapper.querySelector("#mensagem-colapso").style.display = fadigado() ? "block" : "none";
   }
@@ -820,7 +831,7 @@ function simuladorBloco5MomentoFletor(painel) {
     const momento = Math.round((carga * vao) / 4);
     wrapper.querySelector("#valor-vao").textContent = vao;
     wrapper.querySelector("#valor-carga-p").textContent = carga;
-    wrapper.querySelector("#valor-momento").textContent = `Momento Central Máximo: ${momento} kNm`;
+    wrapper.querySelector("#valor-momento").textContent = `Momento Central Máximo: ${((carga * vao) / 4).toLocaleString('pt-BR', { maximumFractionDigits: 2 })} kN·m`;
     wrapper.querySelector("#linha-momento").setAttribute("d", `M 20 35 L 170 ${35 + momento / 3} L 320 35`);
   }
 
@@ -908,7 +919,7 @@ function simuladorMonteSuaPonte(painel) {
       opcoes: [
         { texto: "Estacas até a rocha firme", boa: true },
         { texto: "Base rasa em solo mole", boa: false, runaErro: "E.5", estagioFalha: 1,
-          colapso: "A fundação afunda de um lado e a ponte tomba inteira — igualzinho à Torre de Pisa!" },
+          colapso: "A fundação rasa afunda mais de um lado e a ponte entorta até tombar! A Torre de Pisa começou a inclinar pelo mesmo motivo, ainda durante a obra, e chegou a correr risco de cair, até que, por volta do ano 2000, engenheiros tiraram terra de baixo do lado mais alto para endireitá-la um pouquinho." },
         { texto: "Topo pesado, base leve", boa: false, runaErro: "E.6", estagioFalha: 1,
           colapso: "O centro de gravidade lá no alto vira a ponte na primeira carga — o destino do navio Vasa!" },
       ],
@@ -918,8 +929,8 @@ function simuladorMonteSuaPonte(painel) {
       rotulo: "2️⃣ Estrutura",
       opcoes: [
         { texto: "Treliça calculada com folga de segurança", boa: true },
-        { texto: "Barras com emenda economizada", boa: false, runaErro: "E.2", estagioFalha: 2,
-          colapso: "As barras comprimidas flambam sob o peso das carroças — a queda da Ponte de Quebec outra vez!" },
+        { texto: "Barras comprimidas com travamento interno economizado", boa: false, runaErro: "E.2", estagioFalha: 2,
+          colapso: "As barras comprimidas flambam com o peso das carroças, o mesmo erro da Ponte de Quebec! Só que lá, em 1907, nem precisou de carroça: a ponte ainda estava em obra e desabou com o próprio peso, que era bem maior do que a conta dizia." },
         { texto: "Tirante duplo improvisado", boa: false, runaErro: "E.3", estagioFalha: 2,
           colapso: "A junta improvisada carrega o dobro do previsto e rompe — o erro fatal do Hyatt Regency!" },
       ],
@@ -930,9 +941,9 @@ function simuladorMonteSuaPonte(painel) {
       opcoes: [
         { texto: "Tabuleiro rígido e aerodinâmico", boa: true },
         { texto: "Lâmina fina e flexível", boa: false, runaErro: "E.1", estagioFalha: 3,
-          colapso: "O vento da tempestade faz o tabuleiro dançar em torção até romper — a Gertie Galopante renasceu!" },
+          colapso: "Um vento de uns 68 km/h, forte mas nada fora do comum, fez o tabuleiro dançar em torção até romper: a Gertie Galopante renasceu! A culpa não foi da força do vento. Foi do formato da ponte." },
         { texto: "Passarela leve sem amortecedores", boa: false, runaErro: "E.4", estagioFalha: 3,
-          colapso: "A travessia entra em ritmo com a multidão e balança sem parar — a Ponte Bamba de Londres!" },
+          colapso: "A multidão entra no ritmo do balanço, e quanto mais ela acompanha, mais a passarela balança: a Ponte Bamba de Londres! Ela fechou dois dias depois da inauguração e só reabriu quase dois anos depois, cheia de amortecedores." },
       ],
     },
   ];

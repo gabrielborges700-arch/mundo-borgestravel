@@ -41,7 +41,7 @@ const REGRAS_PALAVRA_CHAVE = [
   {
     palavras: ["vento", "deflexão", "deflexões", "torre"],
     responder: () =>
-      "Ah, o vento! Ele empurra as torres como um gigante invisível. Quanto mais alta e rígida a estrutura, maior o desafio — por isso os engenheiros usam amortecedores e fundações profundas para domar essa força. Vai até a runa 0.3 pra sentir isso na prática!",
+      "Ah, o vento! Ele empurra as torres como um gigante invisível. Quanto mais alta e esbelta (fininha para a altura que tem) a estrutura, mais ela balança e maior o desafio. Por isso os engenheiros usam núcleos rígidos, amortecedores e fundações profundas para domar essa força. Vai até a runa 0.3 pra sentir isso na prática!",
   },
   {
     palavras: ["arco", "ponte"],
