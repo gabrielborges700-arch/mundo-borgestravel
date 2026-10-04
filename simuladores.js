@@ -153,8 +153,9 @@ function simuladorEquilibrio(painel) {
   const wrapper = document.createElement("div");
   wrapper.innerHTML = `
     <p style="font-size:0.85rem; margin:0 0 0.75rem;">
-      Pra viga ficar parada (em repouso), a soma de todas as forças precisa dar zero.
-      Ajuste o peso e as colunas até equilibrar!
+      Pra viga ficar parada (em repouso), não basta a soma das forças dar zero: ela também não pode girar.
+      Por isso a soma dos momentos (força × distância até o apoio) também precisa dar zero.
+      E aí: dá pra ter forças que somam zero e a viga mesmo assim tombar? Ajuste pesos e colunas dos dois lados e descubra!
     </p>
     <div style="background:var(--pedra-ardosia); border:1px solid var(--bronze-envelhecido); border-radius:8px; padding:0.75rem;">
       <div style="display:flex; justify-content:space-between; font-size:0.7rem; color:var(--laranja-forja); font-family:monospace;">
@@ -172,15 +173,19 @@ function simuladorEquilibrio(painel) {
       <div style="background:rgba(255,106,0,0.1); border:1px solid rgba(140,98,57,0.4); border-radius:6px; padding:0.5rem;">
         <div style="font-size:0.65rem; font-weight:bold; text-transform:uppercase; color:var(--laranja-forja);">Gravidade (peso)</div>
         <div style="display:flex; gap:0.5rem; margin-top:0.4rem;">
-          <button id="peso-menos" class="btn-gotico" style="flex:1; padding:0.3rem; font-size:0.8rem;">−</button>
-          <button id="peso-mais" class="btn-gotico" style="flex:1; padding:0.3rem; font-size:0.8rem;">+</button>
+          <button id="peso-menos" class="btn-gotico" style="flex:1; padding:0.3rem; font-size:0.8rem;">L −</button>
+          <button id="peso-mais" class="btn-gotico" style="flex:1; padding:0.3rem; font-size:0.8rem;">L +</button>
+          <button id="peso-dir-menos" class="btn-gotico" style="flex:1; padding:0.3rem; font-size:0.8rem;">R −</button>
+          <button id="peso-dir-mais" class="btn-gotico" style="flex:1; padding:0.3rem; font-size:0.8rem;">R +</button>
         </div>
       </div>
       <div style="background:rgba(0,229,255,0.08); border:1px solid rgba(0,229,255,0.3); border-radius:6px; padding:0.5rem;">
         <div style="font-size:0.65rem; font-weight:bold; text-transform:uppercase; color:var(--ciano-mistico);">Colunas (reação)</div>
         <div style="display:flex; gap:0.5rem; margin-top:0.4rem;">
-          <button id="col-menos" class="btn-gotico" style="flex:1; padding:0.3rem; font-size:0.8rem;">−</button>
-          <button id="col-mais" class="btn-gotico" style="flex:1; padding:0.3rem; font-size:0.8rem;">+</button>
+          <button id="col-menos" class="btn-gotico" style="flex:1; padding:0.3rem; font-size:0.8rem;">L −</button>
+          <button id="col-mais" class="btn-gotico" style="flex:1; padding:0.3rem; font-size:0.8rem;">L +</button>
+          <button id="col-dir-menos" class="btn-gotico" style="flex:1; padding:0.3rem; font-size:0.8rem;">R −</button>
+          <button id="col-dir-mais" class="btn-gotico" style="flex:1; padding:0.3rem; font-size:0.8rem;">R +</button>
         </div>
       </div>
     </div>
@@ -200,13 +205,18 @@ function simuladorEquilibrio(painel) {
     const soma = loadWeights.reduce((a, b) => a + b, 0) - columnReactions.reduce((a, b) => a + b, 0);
     somaEl.textContent = `Soma F: ${soma} kN`;
 
-    if (soma === 0) {
+    // Cada peso fica em cima da sua coluna: sobra de força numa ponta e falta na outra fazem a viga girar.
+    const giro = (columnReactions[0] - loadWeights[0]) - (columnReactions[1] - loadWeights[1]);
+
+    if (soma === 0 && giro === 0) {
       resultadoEl.textContent = "🎉 EQUILÍBRIO PERFEITO ALCANÇADO!";
       resultadoEl.style.background = "rgba(0,229,255,0.15)";
       resultadoEl.style.color = "var(--ciano-mistico)";
       resultadoEl.style.border = "1px solid var(--ciano-mistico)";
     } else {
-      resultadoEl.textContent = `⚠️ Desequilíbrio de ${Math.abs(soma)} kN`;
+      resultadoEl.textContent = soma === 0
+        ? "⚠️ As forças somam zero, mas a viga gira: os momentos não se anulam!"
+        : `⚠️ Desequilíbrio de ${Math.abs(soma)} kN`;
       resultadoEl.style.background = "rgba(204,0,0,0.12)";
       resultadoEl.style.color = "#e05555";
       resultadoEl.style.border = "1px solid rgba(224,85,85,0.4)";
@@ -217,6 +227,10 @@ function simuladorEquilibrio(painel) {
   wrapper.querySelector("#peso-mais").addEventListener("click", () => { loadWeights[0] += 1; atualizar(); });
   wrapper.querySelector("#col-menos").addEventListener("click", () => { columnReactions[0] = Math.max(0, columnReactions[0] - 1); atualizar(); });
   wrapper.querySelector("#col-mais").addEventListener("click", () => { columnReactions[0] += 1; atualizar(); });
+  wrapper.querySelector("#peso-dir-menos").addEventListener("click", () => { loadWeights[1] = Math.max(0, loadWeights[1] - 1); atualizar(); });
+  wrapper.querySelector("#peso-dir-mais").addEventListener("click", () => { loadWeights[1] += 1; atualizar(); });
+  wrapper.querySelector("#col-dir-menos").addEventListener("click", () => { columnReactions[1] = Math.max(0, columnReactions[1] - 1); atualizar(); });
+  wrapper.querySelector("#col-dir-mais").addEventListener("click", () => { columnReactions[1] += 1; atualizar(); });
 
   atualizar();
 }
@@ -292,8 +306,9 @@ function simuladorViga(painel) {
   const wrapper = document.createElement("div");
   wrapper.innerHTML = `
     <p style="font-size:0.85rem; margin:0 0 0.75rem;">
-      Aumente a força aplicada na viga. Repare: a parte de cima (ciano) sofre compressão,
-      a parte de baixo (vermelha) sofre tração — são esticadas em direções opostas.
+      Aumente a força aplicada na viga apoiada nas pontas. Repare: a parte de cima (ciano) sofre compressão e é esmagada (encurta);
+      a parte de baixo (vermelha) sofre tração e é esticada (alonga). E no meio? Existe uma linha que nem encurta nem estica: a linha neutra!
+      Pense: e se a viga estivesse presa só numa ponta, como um trampolim? Quem seria esmagado e quem seria esticado?
     </p>
     <div style="height:120px; background:var(--pedra-ardosia); border:1px solid var(--bronze-envelhecido); border-radius:8px;
                 display:flex; flex-direction:column; align-items:center; justify-content:center; padding:0.75rem; position:relative;">
@@ -598,8 +613,9 @@ function simuladorBloco1Materiais(painel) {
     </p>
     <div id="botoes-material" style="display:flex; gap:0.4rem; justify-content:center; margin-bottom:0.75rem;"></div>
     <div style="background:rgba(0,0,0,0.4); border-radius:6px; padding:0.6rem; text-align:center;">
-      <span style="display:block; font-size:0.8rem; color:var(--ciano-mistico);">Carga: <span id="valor-carga">30</span> toneladas</span>
-      <span style="display:block; font-size:0.65rem; color:rgba(255,255,255,0.5);">Resistência Máxima deste pilar de teste: <span id="valor-max">40</span> toneladas (num pilar de verdade, depende do material E da grossura da peça!)</span>
+      <span style="display:block; font-size:0.8rem; color:var(--ciano-mistico);">Carga: <span id="valor-carga">30</span> tf (≈ <span id="valor-carga-kn">294</span> kN)</span>
+      <span style="display:block; font-size:0.65rem; color:rgba(255,255,255,0.5);">Resistência Máxima deste pilar de teste: <span id="valor-max">40</span> tf (≈ <span id="valor-max-kn">392</span> kN). Num pilar de verdade, depende do material E da grossura da peça!</span>
+      <span style="display:block; font-size:0.65rem; color:rgba(255,255,255,0.5);">tf = tonelada-força, a força com que a Terra puxa 1 tonelada. Repare: tonelada é massa, carga é força!</span>
       <span id="status-colapso" style="display:block; font-size:0.8rem; font-weight:bold; margin-top:0.4rem;"></span>
     </div>
     <input id="slider-carga" type="range" min="10" max="150" value="30" style="width:100%; margin-top:0.75rem;">
@@ -639,10 +655,18 @@ function simuladorBloco1Materiais(painel) {
   function atualizar() {
     const maxCarga = resistenciaMaxima();
     const colapsou = carga > maxCarga;
+    // Limiar ilustrativo (não é valor de norma): acima de 60% da resistência, fica sem margem de segurança.
+    const semMargem = !colapsou && carga > maxCarga * 0.6;
     valorCarga.textContent = carga;
     valorMax.textContent = maxCarga;
-    statusColapso.textContent = colapsou ? "🚨 COLAPSO ESTRUTURAL!" : "🟢 ESTRUTURA SEGURA";
-    statusColapso.style.color = colapsou ? "#e05555" : "#34d399";
+    wrapper.querySelector("#valor-carga-kn").textContent = Math.round(carga * 9.81);
+    wrapper.querySelector("#valor-max-kn").textContent = Math.round(maxCarga * 9.81);
+    statusColapso.textContent = colapsou
+      ? "🚨 COLAPSO ESTRUTURAL!"
+      : semMargem
+        ? "⚠️ AINDA DE PÉ, MAS SEM MARGEM: nenhum engenheiro assinaria esse projeto!"
+        : "🟢 ESTRUTURA SEGURA (com margem de segurança)";
+    statusColapso.style.color = colapsou ? "#e05555" : semMargem ? "#fbbf24" : "#34d399";
   }
 
   slider.addEventListener("input", (e) => {
@@ -753,7 +777,7 @@ function simuladorBloco4Fadiga(painel) {
     </p>
     <div style="display:flex; justify-content:space-between; background:rgba(0,0,0,0.4); border-radius:6px; padding:0.5rem; font-family:monospace; font-size:0.75rem;">
       <span>Ciclos: <span id="valor-ciclos">0</span></span>
-      <span style="color:#f87171;">Limite de Ruptura (ritmo mágico do teste): <span id="valor-limite">24</span></span>
+      <span style="color:#f87171;">Vida à Fadiga (ciclos até romper, no ritmo mágico do teste): <span id="valor-limite">24</span></span>
     </div>
     <label style="display:block; font-size:0.7rem; font-weight:bold; margin-top:0.6rem;">Estresse por Ciclo: <span id="valor-estresse">40</span> MPa</label>
     <input id="slider-estresse" type="range" min="10" max="100" value="40" style="width:100%;">
@@ -851,7 +875,7 @@ function simuladorBloco6OrcamentoConstrutor(painel) {
   const wrapper = document.createElement("div");
   wrapper.innerHTML = `
     <p style="font-size:0.85rem; margin:0 0 0.75rem;">
-      Orçamento do Construtor: distribua 100 pontos entre Estética e Segurança:
+      Orçamento do Construtor: distribua 100 pontos entre Estética e Segurança. Mas cuidado: na engenharia de verdade existe uma segurança mínima exigida por norma (no Brasil, a ABNT NBR 8681), e ela NÃO entra na troca. Abaixo dela, nenhuma beleza salva a obra!
     </p>
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
       <div>
