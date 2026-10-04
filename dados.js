@@ -319,7 +319,7 @@ const dadosEspecificosCards = {
     "secreta1": "Aqui Há Dragões: Cartógrafos antigos usavam ilustrações de feras e dragões para preencher terras inexploradas. Num pequeno globo de cobre feito por volta de 1510, o Globo Hunt-Lenox, está gravado perto da costa leste da Ásia, logo abaixo da linha do Equador: \"HC SVNT DRACONES\" (Aqui há dragões).",
     "secreta2": "A Ilha Que Não Existia: Por mais de 100 anos, mapas famosos espalhados pela Europa desenharam a península da Califórnia como uma ilha gigante, separada do continente. O mais curioso: navegadores espanhóis já tinham ido até o fundo do golfo em 1539 e visto que ali era terra firme! Mesmo assim, o erro foi copiado de mapa em mapa, até que, em 1747, o rei Fernando VI da Espanha decretou que a Califórnia não era uma ilha.",
     "dica": "💡 Um mapa errado copiado de mestre em mestre vira dogma, e nem quem vai lá ver com os próprios olhos consegue derrubá-lo fácil. O engenheiro confere as suas fundações e as suas medidas pessoalmente, sem confiar no boato.",
-    "desafio": "Desbloqueie os territórios arrastando o seu progresso na árvore rúnica!",
+    "desafio": "Toque nos 7 reinos do mapa até aparecer 'Mapa completo!' e leia o subtítulo de cada um. Repare na ordem: Mecânica dos Sólidos, depois Resistência dos Materiais, depois Análise Estrutural. Se você fosse o mestre, mudaria essa ordem? Qual desses três reinos não dá para pular sem que os seguintes desabem, e por quê?",
     "fechamento": "Todo grande construtor domina a visão do todo antes de esculpir a primeira pedra."
   },
   "0.2": {
@@ -330,7 +330,7 @@ const dadosEspecificosCards = {
     "secreta1": "O Diário Mais Velho do Mundo: Em 2013, arqueólogos encontraram num antigo porto do Mar Vermelho o \"Diário de Merer\", os papiros escritos mais antigos já achados, com uns 4.500 anos. Dia após dia, provavelmente pela mão de um escriba, ele registra o trabalho da equipe do inspetor egípcio Merer, que levava de barco blocos de calcário branco das pedreiras de Tura até a Grande Pirâmide de Gizé!",
     "secreta2": "A Origem do Diário (Log Book): Há uns 400 anos, os marinheiros jogavam ao mar uma tábua de madeira (o 'log', que em inglês quer dizer 'tora') presa a uma linha cheia de nós. Depois contavam quantos nós escapavam pelas mãos enquanto a areia de uma pequena ampulheta caía. É por isso que até hoje a velocidade dos navios se mede em nós! Quem media a velocidade era a tora, junto com a corda cheia de nós. O livro não media nada: só guardava os números que o 'log' revelava, e por isso ganhou o nome de 'log book'.",
     "dica": "💡 Registrar cada evento, todo o santo dia, é o escudo supremo que separa um mestre confiável de um aventureiro imprudente.",
-    "desafio": "Customize o seu diário mudando a cor rúnica do seu painel!",
+    "desafio": "Clique em Registrar Evento no Diário e conte quantos registros levam a Confiabilidade do Mestre a 100%. Continue até o Dia 7 e leia a lista com atenção: o que há de estranho nela? Se você achasse isso num diário de obra de verdade, o que desconfiaria?",
     "fechamento": "A caneta e a pedra guardam a mesma verdade quando escritas com disciplina."
   },
   "0.3": {
@@ -341,7 +341,7 @@ const dadosEspecificosCards = {
     "secreta1": "Por que ficam de pé? Toda estrutura está numa eterna queda de braço invisível: a gravidade puxa as pedras implacavelmente para baixo, enquanto a rigidez dos materiais e as fundações respondem empurrando o exato mesmo peso para cima! Se der empate perfeito (todas as forças sobre a torre somam zero e nenhuma consegue fazê-la girar), a torre fica imóvel. Os engenheiros escrevem assim: ΣF = 0 e ΣM = 0. Atenção, aprendiz: isso não é o 'ação e reação' de Newton! Esse par de forças existe sempre, até numa pedra em queda livre: a Terra puxa a pedra, a pedra puxa a Terra de volta, e mesmo assim a pedra despenca.",
     "secreta2": "Por que caem? Estruturas caem quando esse empate falha. A Torre de Pisa se inclina porque foi erguida sobre camadas moles de argila, areia fina e silte, deixadas há milhares de anos pelo rio Arno e pelo mar, apoiada numa fundação de só uns 3 metros de profundidade. Do lado sul o terreno é ainda mais mole e afundou mais do que do lado norte sob o peso da torre. Repare no truque: o chão continua empurrando para cima exatamente o peso da torre. Esse empate nunca falhou, senão ela já teria desabado! O que falhou foi o chão não ser igualmente firme dos dois lados. E aí vem a armadilha: quanto mais a torre se inclina, mais peso vai para o lado mole, que afunda ainda mais. Ela já se inclinava em 1178, quando só três andares estavam prontos, e no fim do século XX chegou perto de tombar. Para salvá-la, os engenheiros tiraram terra de baixo do lado norte, e a torre voltou um pouquinho para trás.",
     "dica": "💡 Cuidado com a armadilha: rígido não é o mesmo que frágil! O aço é quase três vezes mais rígido que o vidro e, mesmo assim, entorta e avisa antes de romper, enquanto o vidro se estilhaça sem aviso. O inimigo do engenheiro não é a rigidez, é a fragilidade. O segredo da engenharia moderna está na tolerância, na elasticidade programada e em bases sólidas.",
-    "desafio": "Use o painel à direita para testar a flexibilidade e oscilação de uma torre rúnica sob a ação do vento!",
+    "desafio": "Com o vento em 30 km/h, o Desvio é 3,5 cm. Antes de mexer, preveja o Desvio em 60 e em 120 km/h; depois confira no slider. Agora ligue os Amortecedores Rúnicos: qual número muda, o Desvio ou o Balanço? Por que o pêndulo lá no alto acalma um deles e não o outro?",
     "fechamento": "O silêncio do edifício é, na verdade, uma dança de forças que empatam a cada milésimo de segundo."
   },
   "0.4": {
@@ -352,7 +352,7 @@ const dadosEspecificosCards = {
     "secreta1": "O que é ser um Engenheiro Mágico? Ser engenheiro é usar a física e a matemática como feitiços de verdade. Em vez de conjurar relâmpagos, você usa a inteligência para canalizar forças gigantescas pelas vigas, mantendo as pessoas seguras e as cidades vivas!",
     "secreta2": "O Selo e a Cinza: no Império Romano, documentos importantes, como testamentos, eram escritos em tabuinhas de cera, amarradas com um fio e lacradas com os selos de várias testemunhas, impressos com anéis-sinete. O truque é o contrário do que parece: o selo não era indestrutível, era feito para ser quebrado! Para ler o texto de dentro era preciso rompê-lo, e qualquer fraude ficava à vista. Já a cinza vulcânica ia para outro lugar: o concreto. Misturada com cal, ela reage com a água do mar e forma cristais raros que ajudam píeres e quebra-mares romanos a resistir há cerca de 2.000 anos.",
     "dica": "💡 O brasão que você esculpe na sua bigorna é a garantia de que as suas pontes suportarão os exércitos e as tempestades.",
-    "desafio": "Use a bigorna rúnica à direita, digite o seu nome de mestre, escolha o seu símbolo e forje o seu brasão!",
+    "desafio": "Digite seu nome de mestre, escolha um dos 5 estandartes e clique em Forjar Selo na Bigorna. Agora pense: numa catedral com 100 pedreiros e só esses 5 símbolos, como saber quem talhou cada pedra? Invente no papel uma marca só sua, feita só de linhas retas. Por que linhas retas, e não curvas ou o nome inteiro?",
     "fechamento": "O selo de um construtor é a sua palavra gravada sobre a matéria."
   },
   "0.5": {
@@ -363,7 +363,7 @@ const dadosEspecificosCards = {
     "secreta1": "O Hamster Humano: os engenheiros romanos erguiam pedras enormes com o \"polyspastos\", um guindaste de madeira gigante cheio de polias! Girando um guincho, quatro homens levantavam cerca de 3 toneladas, segundo cálculos modernos. Mas o guincho podia ser trocado por uma enorme roda de madeira com trabalhadores caminhando lá dentro, como hamsters. A roda girava um eixo que enrolava a corda, e as polias multiplicavam a força deles: a carga podia dobrar para cerca de 6 toneladas, com metade da equipe! Por que será que uma roda maior dá mais força? (E quem eram esses 'hamsters'? As fontes antigas só dizem 'homens': podiam ser escravos ou trabalhadores pagos.)",
     "secreta2": "O Grande Salto do Ferro: até o século XVIII, quase todas as pontes da Europa eram de pedra ou de madeira. (Do outro lado do mundo, os chineses já penduravam pontes em correntes de ferro, como a de Luding, de 1706, e os incas teciam pontes de corda sobre os abismos dos Andes!) A Iron Bridge (Inglaterra, 1779) espantou o mundo como a primeira grande ponte de ferro fundido e abriu caminho para as pontes e os prédios de metal: primeiro veio quase um século de ferro e, só depois, a era do aço! (Mas atenção: os chineses já tinham fundido uma torre inteira de ferro em 1061...)",
     "dica": "💡 Nunca despreze os métodos antigos: a gravidade trabalha exatamente da mesma forma desde o Big Bang.",
-    "desafio": "Deslize o tempo e clique nos monumentos para revelar os avanços dos materiais!",
+    "desafio": "Arraste a linha do tempo do ano 1 até 2026 e anote em que anos o Material Dominado muda. Repare: o concreto aparece com os romanos, some da lista por mais de mil anos e só volta no fim, já com ferro dentro. Por que o concreto sozinho não bastava para erguer um arranha-céu?",
     "fechamento": "Nós nos erguemos mais alto porque subimos nos tijolos assentados pelos nossos antepassados."
   },
   "0.6": {
@@ -374,7 +374,7 @@ const dadosEspecificosCards = {
     "secreta1": "O Coliseu Inundado? Dois historiadores romanos contam que a arena foi alagada para batalhas navais de mentirinha (as naumaquias). Só que um deles escreveu mais de cem anos depois, e o hipogeu, o labirinto de túneis construído logo em seguida debaixo da arena, deixou o alagamento quase impossível. Faça a conta: uma arena de uns 83 m por 48 m, com 1,5 m de água, daria uns 4,7 milhões de litros, quase duas piscinas olímpicas. Em 2007, um engenheiro calculou que um aqueduto encheria tudo em 2 a 5 horas. Possível no papel; provado, nunca! E por que um navio de guerra de verdade encalharia ali?",
     "secreta2": "O Laranja Contra a Neblina: a Marinha dos EUA queria a Golden Gate pintada com listras pretas e amarelas, para que os navios a vissem bem. Mas venceu o arquiteto Irving Morrow, com o \"Laranja Internacional\". Ele escolheu a cor porque a achou bonita com as colinas ao redor, o mar azul e a neblina cinza, e de quebra ela ajuda a ponte a ser vista nos dias de nevoeiro. Uma única cor resolveu beleza e segurança ao mesmo tempo: engenharia também é arte!",
     "dica": "💡 A boa engenharia resolve problemas geográficos e de segurança com soluções elegantes e funcionalidade.",
-    "desafio": "Toque nos 4 portais mágicos no simulador à direita para cruzar o limiar e ler as revelações de cada colosso!",
+    "desafio": "Abra os 4 portais e leia cada fato. Para o enigma do Cristo Redentor, teste em casa: segure um livro com o braço esticado e depois junto ao peito. Qual posição cansa mais rápido? O que isso revela sobre os braços abertos do Cristo, com 28 m de ponta a ponta, num dia de ventania?",
     "fechamento": "O concreto armado do presente é herdeiro do concreto romano. Os romanos ergueram o Panteão, que ainda hoje é a maior cúpula de concreto sem armadura do mundo, mas nunca puseram ferro dentro do concreto. E o concreto puro aguenta muito bem ser esmagado, mas racha fácil quando é puxado. Só no século XIX alguém teve a ideia de esconder barras de ferro lá dentro, e aí nasceu a verdadeira pedra filosofal."
   },
   "0.7": {
@@ -418,6 +418,7 @@ const dadosEspecificosCards = {
     "secreta1": "A Argamassa de Arroz: na China imperial, os construtores misturavam sopa de arroz grudento com cal! Uma substância do arroz, a amilopectina, organiza os cristais da cal num bloco bem compacto. O resultado é uma argamassa mais forte e mais resistente à água do que a de cal pura. Algumas muralhas feitas com ela estão de pé há séculos e aguentaram até terremotos. Quem diria que o segredo estava na cozinha?",
     "secreta2": "Adobe Antigo: Se o barro não fosse cozido no forno, ele virava adobe (seco apenas ao sol). Se houvesse uma enchente muito prolongada, a casa literalmente derretia de volta para a lama!",
     "dica": "💡 A alvenaria é incrível para suportar cargas verticais, mas péssima para aguentar empurrões de lado (forças horizontais). Precisa de pilares para se travar!",
+    "desafio": "No simulador, descubra a menor carga que derruba a Alvenaria 🧱. Mas esse teste só aperta de cima! Agora monte com dominós deitados duas paredinhas: uma com as juntas alinhadas em coluna, outra com cada fileira deslocada meio bloco. Empurre com um dedo, na horizontal, o meio de cada uma. Qual se desmancha antes, e por quê?",
     "fechamento": "De tijolo em tijolo se erguem as muralhas que vencem o tempo."
   },
   "1.2": {
@@ -428,6 +429,7 @@ const dadosEspecificosCards = {
     "secreta1": "O Jardineiro Visionário: um dos grandes nomes do concreto armado não era engenheiro, mas um jardineiro francês, Joseph Monier, cansado de ver vasos de barro quebrarem e tinas de madeira apodrecerem. Em 1867, ele patenteou vasos de concreto com uma rede de ferro escondida por dentro. Outros já tinham testado a ideia antes (houve até um barco de concreto e ferro, em 1848!), mas foi Monier quem a levou dos vasos para tubos, lajes, vigas e pontes. O segredo? O ferro aguenta os puxões e o concreto aguenta os apertos.",
     "secreta2": "Cinza Vulcânica Romana: há cerca de 2.000 anos, o concreto romano resiste dentro do mar graças à pozolana, uma cinza de vulcão. A água do mar se infiltra, reage com a cal e a cinza e faz crescer cristais novos que reforçam a pedra por dentro. Ou seja, o mar, que costuma desgastar o concreto moderno, deixa o romano mais forte! E tem mais: pedrinhas de cal escondidas na mistura se dissolvem quando surge uma rachadura e a 'cicatrizam' sozinhas.",
     "dica": "💡 O concreto é a pedra artificial que suporta o esmagamento. O aço é o tendão que aguenta o puxão: quando uma viga apoiada nas pontas se dobra, a parte de baixo é esticada e o concreto ali chega a trincar, em fissuras finíssimas (a norma só tolera uns poucos décimos de milímetro). Quem segura a tração daí em diante é o aço, que impede que a viga se parta ao meio.",
+    "desafio": "No simulador, descubra quantas vezes mais carga o pilar de Concreto 🏗️ aguenta que o de Alvenaria 🧱. Depois risque linhas retas numa esponja e dobre-a apoiada nas pontas: de que lado os riscos se afastam? É ali que o aço trabalha. E numa marquise presa só numa ponta, você poria o aço em cima ou embaixo? Teste com a esponja!",
     "fechamento": "Onde o concreto cinzento cria raízes, o aço heroico segura o céu."
   },
   "1.3": {
@@ -438,6 +440,7 @@ const dadosEspecificosCards = {
     "secreta1": "A Ponte de César sobre o Reno: em apenas 10 dias, os legionários de Júlio César ergueram uma ponte de madeira enorme sobre um rio largo e caudaloso. O objetivo era castigar tribos germânicas e, acima de tudo, mostrar que Roma chegava aonde quisesse. César passou 18 dias do outro lado e, ao voltar, mandou destruir a ponte. Por que construir algo tão incrível só para derrubar depois?",
     "secreta2": "Pontes de Massa: Estudantes de engenharia competem mundialmente construindo pontes feitas de espaguete cru e cola que chegam a aguentar mais de 300 kg de carga real!",
     "dica": "💡 Muitas madeiras avisam antes de quebrar: começam a estalar e a ranger. Os mineiros antigos escutavam as escoras de madeira das minas para saber a hora de correr! Mas cuidado: madeira podre ou muito rígida pode quebrar de repente, sem aviso. O aço suporta tensões extremas mas requer tratamentos contra a ferrugem.",
+    "desafio": "Passe um barbante por dentro de canudos e monte um quadrado e um triângulo com os cantos soltos. Empurre um canto de cada. Agora trave o quadrado com o menor número de canudos extras: que tamanho esse canudo precisa ter? E para travar um hexágono, quantos canudos extras você aposta que bastam? Monte e confira!",
     "fechamento": "Estender caminhos sobre abismos é a expressão máxima da inteligência rúnica."
   },
   "1.4": {
@@ -448,6 +451,7 @@ const dadosEspecificosCards = {
     "secreta1": "Vista do Espaço (por um satélite!): a maior represa de castor do mundo fica no Canadá, no Parque Nacional Wood Buffalo, e tem cerca de 850 metros de comprimento, o mesmo que uns 8 campos de futebol enfileirados! Ninguém a tinha notado até 2007, quando um pesquisador a encontrou olhando imagens de satélite no Google Earth: ela fica num lugar tão isolado que quase ninguém chega lá a pé. Ela é 'visível do espaço' pela câmera de um satélite, não a olho nu. Quantas gerações de castores você acha que trabalharam nessa obra?",
     "secreta2": "O Pulmão de Terra: Alguns cupins africanos erguem torres de terra que, nas maiores, passam de 8 metros, mais altas que uma casa de dois andares, feitas por insetos de poucos milímetros! Dentro delas há túneis e chaminés por onde o ar circula, movido pelo vento e pelo calor do dia. Por muito tempo se contou que isso era um 'ar-condicionado', e até um prédio no Zimbábue foi projetado com essa ideia. Mas, quando cientistas mediram, viram que o ninho fica quase na temperatura do solo: a torre serve mesmo é para a colônia respirar. O ar-condicionado era lenda; o pulmão é real!",
     "dica": "💡 Olhar para a natureza e copiar as suas soluções estruturais se chama biomimética, a mais nobre escola de design.",
+    "desafio": "Numa assadeira um pouco inclinada, monte uma represa de castor só com gravetos e pedrinhas e despeje água devagar do lado mais alto. Depois tape as frestas com terra molhada e folhas, primeiro do lado seco e depois do lado da água. Qual vaza menos? De que lado você acha que o castor põe a lama, e por quê?",
     "fechamento": "Toda técnica é apenas a continuação dos segredos que a terra já sussurrava."
   },
   "1.5": {
@@ -458,6 +462,7 @@ const dadosEspecificosCards = {
     "secreta1": "Casas pelo Correio: Nos Estados Unidos dos anos 1920, dava para escolher uma casa inteira num catálogo, como quem escolhe um brinquedo! Ela chegava de trem num kit com milhares de peças de madeira já cortadas e numeradas, centenas de quilos de pregos, telhas, portas, janelas e um manual. A família, os vizinhos ou um carpinteiro contratado montavam tudo sobre uma fundação feita no próprio terreno. Não era uma casa modular, que chega em blocos prontos: era um quebra-cabeça gigante de até 30 mil peças!",
     "secreta2": "O Palácio de Cristal: Erguido em Londres entre 1850 e 1851 para a Grande Exposição, foi um dos primeiros grandes edifícios pré-fabricados da história. Milhares de peças padronizadas de ferro fundido, ferro forjado, vidro e madeira foram feitas em fábricas e só encaixadas no local, em poucos meses. E, como tinha sido montado, pôde ser desmontado e erguido de novo em outro bairro de Londres! Um prédio que muda de endereço: quem disse que construção tem que ser para sempre?",
     "dica": "💡 A precisão da fábrica evita falhas no canteiro de obras. Menos desperdício de material, maior controle de qualidade.",
+    "desafio": "Peça para alguém cronometrar: monte uma torre de 20 peças de Lego (ou outro brinquedo de encaixe) catando cada peça num monte bagunçado. Depois separe as peças antes, como numa fábrica, e cronometre só a montagem. Somando o tempo de separar, a fábrica ainda ganha? E se ela trabalhar enquanto o terreno é preparado?",
     "fechamento": "Encaixar com exatidão é poupar tempo na forja do amanhã."
   },
   "1.6": {
@@ -468,6 +473,7 @@ const dadosEspecificosCards = {
     "secreta1": "Pontes de Raízes Vivas: nas florestas úmidas de Meghalaya, na Índia, os povos Khasi e Jaintia guiam as raízes aéreas de uma figueira (Ficus elastica) de uma margem do rio até a outra. Costuma levar mais de uma década até a ponte aguentar gente. E aí acontece o contrário de uma ponte comum: em vez de se desgastar com o tempo, ela fica mais forte, porque a árvore continua viva, as raízes engrossam e se fundem umas às outras. Algumas já têm centenas de anos! Uma ponte que cresce sozinha... qual engenheiro não queria uma dessas?",
     "secreta2": "Arquitetura Esponja: cidades-esponja usam pavimentos que deixam a água passar, telhados e fachadas verdes e jardins de chuva para 'beber' a água das tempestades. A meta da China é ousada: até 2030, 80% das áreas urbanas devem conseguir segurar ou reaproveitar cerca de 70% da chuva que cai nelas ao longo do ano. Repare: 80% é a parte da CIDADE, não da chuva! E numa tempestade gigante, fora do comum, será que a esponja dá conta de tudo?",
     "dica": "💡 Integrar a vida vegetal na fachada ajuda a resfriar o edifício naturalmente, poupando energia mágica de climatização.",
+    "desafio": "Na pia, despeje meio copo de água numa bandeja inclinada e meio copo num vaso com terra fofa. Para onde vai a água em cada um? Depois jogue um copo cheio de uma vez no vaso. A terra dá conta de beber tudo? O que isso diz sobre uma cidade-esponja numa tempestade gigante?",
     "fechamento": "A estrutura perfeita não combate o ecossistema; ela vive nele."
   },
   "2.1": {
@@ -478,6 +484,7 @@ const dadosEspecificosCards = {
     "secreta1": "Mudou o Rei, Mudou a Régua? Muita gente conta que, a cada novo Faraó, todas as réguas do império eram cortadas no tamanho do braço dele. Mas os arqueólogos encontraram réguas de reinados diferentes que medem quase o mesmo, com diferença de poucos milímetros! Faz sentido: uma medida só serve se NÃO muda. Imagine erguer uma pirâmide com a régua trocando de tamanho no meio da obra! E nem todas eram de madeira: as do dia a dia eram, mas os egípcios também faziam réguas de pedra, e até de madeira coberta de ouro! Algumas foram colocadas em túmulos, junto com os tesouros dos mortos. Por que alguém levaria uma régua para a outra vida? Para um arquiteto egípcio, sua régua era motivo de orgulho!",
     "secreta2": "A Polegada de Três Grãos: um antigo estatuto inglês da Idade Média dizia que uma polegada valia três grãos de cevada, secos e redondos, postos em fila. Muitos livros dizem que foi o rei Eduardo II, em 1324, mas os historiadores não têm certeza da data nem do rei. E pense bem: será que todo grão de cevada tem exatamente o mesmo tamanho?",
     "dica": "💡 Um milímetro de desvio no topo de uma coluna pode causar toneladas de momento fletor indesejado na base. Meça três vezes, corte uma!",
+    "desafio": "No simulador, descubra quantas posições do cursor acendem a mensagem de tolerância. Agora imagine uma régua marcada só de 5 em 5 mm, ou só em palmos egípcios (uns 7,5 cm): daria para garantir esse ±1 mm com ela? O que uma régua precisa ter para medir com essa exatidão?",
     "fechamento": "A régua divide o domínio da física e o desastre do colapso."
   },
   "2.2": {
@@ -488,6 +495,7 @@ const dadosEspecificosCards = {
     "secreta1": "Os Cavalos de Magdeburgo: em 1654, na cidade de Ratisbona, Otto von Guericke mostrou ao imperador o poder do vácuo. Alguns anos depois, em Magdeburgo, cidade onde era prefeito, ele encaixou duas meias-esferas de cobre, tirou o ar de dentro com uma bomba e mandou dois grupos de 8 cavalos puxarem, um para cada lado. Os cavalos quase nunca conseguiam separá-las! Nas poucas vezes em que conseguiam, as metades se soltavam com um estrondo comparado a um tiro de canhão. Mas bastava abrir uma torneirinha e deixar o ar entrar para que elas se separassem com facilidade. Se lá dentro não havia nada, quem estava segurando as metades juntas: o metal... ou o ar?",
     "secreta2": "Pontes na Lua: Se você construísse uma ponte de pedra na Lua, ela aguentaria 6 vezes mais carga do que na Terra, pois a gravidade lá atrai as massas com muito menos força.",
     "dica": "💡 Prédios altos são como asas de avião verticais; o vento cria pressões e sucções gigantescas nas suas janelas laterais.",
+    "desafio": "Sobre a pia, encha um copo plástico até a boca, tampe com um cartão, vire de cabeça para baixo segurando o cartão e depois solte a mão. Agora, com um adulto, faça um furinho com uma tachinha no fundo do copo e repita, prevendo antes o que vai mudar. Se a água é a mesma, por que um furinho tão pequeno muda tudo?",
     "fechamento": "As forças que os olhos não veem são as que exigem maior cautela do construtor."
   },
   "2.3": {
@@ -498,6 +506,7 @@ const dadosEspecificosCards = {
     "secreta1": "A Explosão Silenciosa: painéis de vidro temperado podem estourar sozinhos, anos depois de instalados! O culpado pode ser um grãozinho microscópico de sulfeto de níquel preso no miolo do vidro. O resfriamento brusco da têmpera 'congela' esse grão numa forma de cristal instável. Com os anos, seus átomos se rearrumam devagar e o grão incha cerca de 4%. Como o vidro temperado vive esticado por dentro, ele se desfaz em milhares de pedacinhos. O calor do sol acelera essa transformação.",
     "secreta2": "Dúctil vs Frágil: Materiais como o aço dobram muito antes de quebrar (dúcteis), dando tempo de salvar vidas. Materiais como o vidro ou gesso quebram de surpresa (frágeis).",
     "dica": "💡 Nunca use materiais frágeis em elementos que sofrem flexão pura sem um reforço dúctil integrado no interior.",
+    "desafio": "Corte duas tiras iguais de papel de caderno, de uns 2 cm de largura, e faça com a tesoura um piquezinho de 2 mm na borda de uma delas. Puxe as pontas de cada tira até rasgar: onde o rasgo começou e qual foi mais fácil? Use isso para explicar por que o vidraceiro risca o vidro antes de quebrá-lo.",
     "fechamento": "Mapear a falha é desenhar o limite seguro da sobrevivência."
   },
   "2.4": {
@@ -508,6 +517,7 @@ const dadosEspecificosCards = {
     "secreta1": "Cantos Redondos Salvadores: Prédios com cantos arredondados ou recortados 'enganam' o vento. O ar contorna a torre com mais suavidade, a força de arrasto diminui e ficam mais fracos os redemoinhos que balançam o prédio de um lado para o outro. Quanto diminui? Não existe um número mágico: depende do tamanho da curva, da direção e da velocidade do vento. Por isso os engenheiros testam maquetes da torre em túneis de vento antes de construir. Você aposta em qual forma: quadrada, redonda ou com cantos recortados?",
     "secreta2": "Pontes Rotativas: Algumas pontes rodoviárias não sobem; giram lateralmente sobre um pilar central para desviar o caminho e dar passagem aos mastros dos navios.",
     "dica": "💡 Um vetor diagonal pode ser decomposto em duas forças: uma vertical (que vai para o chão) e outra horizontal (que tenta abrir a parede).",
+    "desafio": "Amarre um estojo leve no meio de um barbante e segure uma ponta em cada mão. Afaste as mãos devagar, tentando deixar o barbante perfeitamente reto na horizontal: você consegue, e o que suas mãos sentem quanto mais reto ele fica? Explique usando a ideia de que a força do barbante tem uma parte vertical e outra horizontal.",
     "fechamento": "A força sem rumo destrói; o vetor direcionado ampara."
   },
   "2.5": {
@@ -518,6 +528,7 @@ const dadosEspecificosCards = {
     "secreta1": "Argamassa Medieval: Muitas pontes de pedra antigas usavam argamassa de cal, que não endurece só secando. Ela precisa 'respirar' o gás carbônico do ar, que reage com a cal e a transforma de novo em uma espécie de pedra. No miolo de um pilar grosso, onde o ar quase não chega, esse endurecimento pode demorar muitos e muitos anos. Uma ponte que ainda está terminando de endurecer por dentro... e mesmo assim já aguenta carroças! Como isso é possível?",
     "secreta2": "Velocidade Limitada: Se uma colher cair de uma torre altíssima, será que ela fura o teto de um carro? Não! Enquanto cai, a colher bate no ar, e o ar empurra para cima cada vez mais forte, até ela parar de acelerar: é a 'velocidade terminal'. A partir daí, cair de 50 ou de 500 metros dá quase no mesmo. O ar é um freio invisível! Mas atenção: objetos pesados e compactos chegam bem mais rápido ao chão, e mesmo uma colher pode machucar alguém. Por isso, nunca se joga nada do alto de uma torre.",
     "dica": "💡 Cargas vivas que se movem rápido causam vibrações na estrutura. É preciso amortecer para evitar ressonâncias perigosas.",
+    "desafio": "Prenda a ponta de um elástico na beirada da mesa com livros por cima, pendure um estojo e meça quanto ele esticou parado. Depois segure o estojo onde o elástico fica sem esticar e solte, com uma almofada embaixo e o rosto longe, enquanto alguém marca o ponto mais baixo. Antes, preveja: quanto a mais ele estica, e por quê, se o peso é o mesmo?",
     "fechamento": "A paciência da matéria vence a impetuosidade do impacto."
   },
   "2.6": {
@@ -528,6 +539,7 @@ const dadosEspecificosCards = {
     "secreta1": "Maquete de Destruição: Como testar uma barragem gigante sem destruí-la? Os engenheiros fazem cilindros com a mesma receita de concreto da barragem e os esmagam em prensas hidráulicas enormes até eles se quebrarem. Também constroem maquetes da barragem em escala reduzida (algumas são carregadas até quebrar, de propósito!) e simulam tudo no computador. Afinal, uma barragem de verdade só pode ser testada uma vez... e ninguém quer que esse teste falhe!",
     "secreta2": "Mesas Sísmicas: Plataformas hidráulicas gigantes sacodem modelos de edifícios inteiros para garantir que os sistemas flexíveis aguentam terremotos de grau 9.",
     "dica": "💡 Um erro detectado no modelo virtual ou de madeira custa uns trocados de cobre. Um erro na obra real custa o colapso do reino.",
+    "desafio": "Seja o cientista do laboratório: no simulador, anote a Exatidão Rúnica em 70, 65 e 80 mm e descubra a regra que transforma o erro em porcentagem. Com a sua regra, preveja em que posição, descendo o cursor, a Exatidão chega a zero, e só depois teste. Por que 70 e 80 dão o mesmo resultado?",
     "fechamento": "No pequeno teste se esconde o triunfo da grande obra."
   },
   "3.1": {
@@ -538,6 +550,7 @@ const dadosEspecificosCards = {
     "secreta1": "Kigumi Japonês: os carpinteiros japoneses ergueram pagodes de cinco andares que aguentam terremotos há mais de mil anos. O esqueleto é feito de encaixes de madeira, peças que se prendem umas nas outras como um quebra-cabeça. Muita gente jura que não há nenhum prego. É lenda: os carpinteiros também usavam pregos de ferro forjados um a um, os wakugi, em partes como os beirais. E contra o tremor? Os encaixes não travam. Eles deixam cada andar balançar e escorregar um pouquinho, e o atrito entre as peças vai 'comendo' a energia do terremoto. No centro há um enorme pilar, o shinbashira, e os engenheiros ainda discutem exatamente como ele ajuda. Às vezes, ser flexível é mais forte do que ser rígido!",
     "secreta2": "Os Rebites de Eiffel: A Torre Eiffel foi montada com 2,5 milhões de rebites de ferro aplicados em brasa. Ao esfriar, o ferro se contraiu, apertando as peças com pressões brutais.",
     "dica": "💡 Pense nos cabos de aço como os tendões do corpo: eles não aguentam compressão (ficam frouxos), mas suportam trações colossais.",
+    "desafio": "Monte um quadrado com 4 tiras de papelão presas nos cantos por colchetes bailarina e empurre um canto: ele vira losango. Estique um barbante numa diagonal, amarrado nos cantos, e empurre de um lado e depois do outro: por que ele só segura num sentido? Quantos barbantes você precisa para travar o quadrado nos dois?",
     "fechamento": "O elo forte distribui a força; o nó firme une o esqueleto."
   },
   "3.2": {
@@ -548,6 +561,7 @@ const dadosEspecificosCards = {
     "secreta1": "O Coice da Catapulta: ação e reação! Toda máquina de arremesso leva um tranco de volta ao disparar. O onagro, uma catapulta romana, dava um solavanco tão violento que, segundo o escritor romano Amiano Marcelino, uma base de pedra embaixo dele se despedaçava. Por isso ele ficava sobre torrões de terra ou tijolos, que amortecem o golpe. Já os grandes trabucos medievais de contrapeso tinham armações enormes que balançavam no disparo, e alguns até ganharam rodas para que a máquina pudesse se mexer. Por que será que deixar a máquina se mover pode ser melhor do que prendê-la com força ao chão?",
     "secreta2": "Prédios de Ventosa: num furacão, o vento que passa por cima do telhado o puxa para cima, como a asa de um avião! Por isso, em zonas de furacão, o telhado é amarrado às paredes com cintas de aço, e as paredes são presas à fundação com chumbadores. Tudo forma uma corrente contínua até o chão, e o peso da casa e da fundação segura o telhado. Mas uma corrente é tão forte quanto o seu elo mais fraco: se um só elo falhar, o telhado sai voando.",
     "dica": "💡 O equilíbrio estático exige que a soma de todas as forças verticais e reações das fundações resulte em zero absoluto.",
+    "desafio": "De pé numa balança de banheiro, ao lado de uma mesa firme e pesada, anote o número e preveja: ele sobe ou desce se você apertar o tampo para baixo com as mãos, e se empurrar a borda de leve para cima, por baixo? Teste e explique: quem passou a empurrar você, e para que lado?",
     "fechamento": "Empurre a terra com sabedoria, e ela amparará os seus pés."
   },
   "3.3": {
@@ -558,6 +572,7 @@ const dadosEspecificosCards = {
     "secreta1": "Barcos de Concreto: Durante as guerras mundiais, devido à escassez de aço, foram construídos cargueiros inteiros feitos de concreto armado que flutuavam graças ao volume de água deslocado.",
     "secreta2": "A Fumaça Sólida: o aerogel de grafeno criado na China em 2013 é tão absurdamente leve que um bloco dele fica em pé sobre uma flor de cerejeira, ou na pontinha de uma espiga de capim, sem dobrá-la! O esqueleto de carbono pesa menos do que o ar que caberia no mesmo espaço... então por que ele não sai voando como um balão?",
     "dica": "💡 Num prédio de concreto, a maior parte do esforço de uma coluna (muitas vezes três quartos ou mais) serve só para aguentar o peso do próprio prédio acima dela: lajes, vigas, paredes e pisos. Pessoas e móveis pesam bem menos do que você imagina. O maior peso que um prédio carrega é ele mesmo! Leveza com resistência é o Santo Graal.",
+    "desafio": "Com uma balança de cozinha, pese o mesmo copo cheio de água, depois de sal, depois de pipoca, descontando o copo vazio (200 mL de água devem dar uns 200 g: confira!). Se uma coluna tivesse de sustentar um bloco de cada, todos do mesmo tamanho, qual pediria a coluna mais forte, e quantas vezes mais que a da pipoca?",
     "fechamento": "A balança justa equilibra a matéria densa e a geometria leve."
   },
   "3.4": {
@@ -568,6 +583,7 @@ const dadosEspecificosCards = {
     "secreta1": "Relógio de Fita: os primeiros relógios portáteis apareceram no início dos anos 1500, logo depois da Idade Média, e eram pendurados no pescoço, não guardados no bolso! Eles funcionavam com uma fita de aço enrolada em espiral, a mola real. Mas a mola tinha um defeito: dava muita força quando estava bem enrolada e pouca quando estava quase solta, e o relógio adiantava ou atrasava. Nada de força constante! Para igualar a força, os relojoeiros usavam o fuso, um cone com um cordão enrolado, que dá mais alavanca justamente quando a mola está mais fraca. Consegue imaginar como um cone resolve isso?",
     "secreta2": "A Mola que Não Voltou: Se você esticar demais uma mola de metal, você ultrapassa o seu 'limite de escoamento' e ela nunca mais volta ao formato original. O mesmo acontece com as vigas metálicas sobrecarregadas: ficam deformadas para sempre. E o elástico de borracha? Ele é um bicho estranho: estica várias vezes o próprio tamanho e quase sempre volta, só fica um pouco mais mole depois do primeiro grande esticão. Ah, e atenção: nada disso é fadiga! Fadiga é o cansaço causado por esforços pequenos repetidos milhões de vezes (você vai enfrentá-la na runa 4.4).",
     "dica": "💡 Garanta sempre que as tensões de serviço do seu projeto fiquem bem abaixo do limite de proporcionalidade elástica do material.",
+    "desafio": "No simulador, deixe a rigidez em 4 e ponha a extensão em 2, depois 4, depois 8: o que acontece com a força? Agora pendure num elástico um saquinho e vá pondo 1, 2, 3, 4, 5 punhados iguais de feijão, medindo com a régua quanto ele estica a cada punhado. O elástico segue a mesma regra do cabo do começo ao fim?",
     "fechamento": "Dobrar-se com honra para recuperar a postura é a dança da estabilidade."
   },
   "3.5": {
@@ -578,6 +594,7 @@ const dadosEspecificosCards = {
     "secreta1": "O Desafio Assimétrico: o Museu Guggenheim de Bilbao, de Frank Gehry, tem curvas tão malucas que foi projetado com o CATIA, um programa criado para desenhar aviões de caça! O computador transformou as maquetes em números, calculou a posição de cada barra da estrutura de aço e o formato exato de cada uma das 33 mil chapas de titânio, e ainda guiou as máquinas que as cortaram. Pense bem: como você explicaria a um ferreiro o formato de uma parede que nunca é reta?",
     "secreta2": "O Peso da Lança: Se uma estátua medieval segurar uma alabarda comprida esticada para um lado, o centro de gravidade do conjunto escorrega para esse lado. Resultado: o pé desse lado passa a carregar mais peso do que o outro. E se o centro de gravidade sair da área entre os pés, a estátua tomba! Por isso os escultores costumam apoiar a ponta da alabarda no chão: ela vira um terceiro apoio e devolve o equilíbrio.",
     "dica": "💡 Se o projeto exigir assimetria, compense adicionando contrapesos ou fundações mais largas do lado mais carregado.",
+    "desafio": "Uma viga leve, pendurada em dois cabos iguais, leva 60 kN bem no meio. No simulador, com rigidez 5, descubra quanto cada cabo estica. Agora a carga escorrega para perto do cabo esquerdo, que passa a segurar 40 kN: quanto estica cada cabo, e para que lado a viga se inclina?",
     "fechamento": "Na divisão igual de deveres estruturais reside a estabilidade do reino."
   },
   "3.6": {
@@ -588,6 +605,7 @@ const dadosEspecificosCards = {
     "secreta1": "O Guindaste dos Imperadores: os romanos erguiam blocos de várias toneladas com o polyspastos, um guindaste de madeira cheio de polias que multiplicavam a força. O motor? Homens caminhando dentro de uma enorme roda de madeira, como hamsters numa rodinha! Estudiosos de hoje estimam que, com essa roda, o guindaste levantasse cerca de 6 toneladas. E quem eram esses caminhantes? Vitrúvio, o engenheiro romano que descreveu a máquina, escreveu só 'homens'. Podiam ser escravos, trabalhadores livres pagos por dia, ou os dois. A fonte não conta. E você, como descobriria?",
     "secreta2": "O Segredo da Chave de Rodas: É muito mais fácil afrouxar o parafuso enferrujado de um carro se você alongar o braço da chave, pois você gera um momento de rotação muito maior com o mesmo esforço.",
     "dica": "💡 Momento é igual a Força multiplicada pela Distância. Vigas longas sem apoios intermediários geram momentos massivos nas paredes de fixação.",
+    "desafio": "Equilibre uma régua de 30 cm sobre um lápis, na marca de 15 cm, e empilhe 2 moedas iguais a 5 cm do lápis: preveja e teste onde 1 moeda sozinha equilibra do outro lado. E se fossem 4 moedas empilhadas no mesmo lugar, onde teria de ficar a moeda solitária, e o que Arquimedes pediria para resolver?",
     "fechamento": "A distância multiplica a força; o mestre domina o braço da alavanca."
   },
   "4.1": {
@@ -598,6 +616,7 @@ const dadosEspecificosCards = {
     "secreta1": "Estresse Rúnico Programado: Vidros de carros são temperados de forma a terem tensões internas constantes. Se você bater neles, eles se fragmentam em pequenos cubos inofensivos em vez de lançar lâminas afiadas.",
     "secreta2": "O Ponto Fraco do Couro: quando uma corrente é puxada com força, os elos costumam se romper nas curvas das pontas. Mas espere: o arame tem a mesma grossura no elo inteiro! Então por que ali? Porque na curva o elo não é só esticado: ele também é dobrado e ainda é espremido pelo elo vizinho. E, com o uso, o atrito entre os elos vai gastando justamente essa curva. Esforço extra num lugar que vai ficando mais fino: é por ali que as rachaduras costumam começar.",
     "dica": "💡 Para acalmar o estresse molecular do seu material, aumente a área útil da viga ou engrosse a coluna.",
+    "desafio": "Segure uma lapiseira entre as palmas das mãos (pouco grafite para fora, a ponta numa palma e a borracha na outra) e aperte de leve por 3 segundos, sem forçar. A lapiseira empurra as duas palmas com a mesma força: então por que uma delas reclama muito mais? Explique com a ideia de tensão desta runa.",
     "fechamento": "A tensão é o clamor microscópico da matéria sob pressão."
   },
   "4.2": {
@@ -608,6 +627,7 @@ const dadosEspecificosCards = {
     "secreta1": "O Prédio que Encolhe: arranha-céus de concreto encolhem! Enquanto os andares de cima ainda estão subindo, os pilares de baixo já vão sendo espremidos pelo peso. Depois, o concreto continua perdendo água e se contraindo (retração) e vai se deformando bem devagar sob a carga (fluência). Nas torres mais altas isso passa de 10 centímetros: no Burj Khalifa, o prédio mais alto do mundo, os engenheiros calcularam uns 30 centímetros! A maior parte acontece nos primeiros anos, mas o encolhimento continua, cada vez mais lento, por décadas. Por isso os engenheiros constroem cada andar um tiquinho mais alto do que o desenho manda. Quanto mais alto você acha que o 100º andar precisa nascer?",
     "secreta2": "A Cedência Plástica: Se você ultrapassar a zona de deformação elástica, o aço se deforma plasticamente de forma irreversível, esticando como massinha de modelar até romper.",
     "dica": "💡 Projete as estruturas para terem deformações dentro de limites controláveis para evitar rachaduras em tetos e vidros de janelas.",
+    "desafio": "Pendure um estojo leve num elástico e meça com a régua quanto ele esticou; depois repita com dois elásticos iguais emendados em fila. Preveja antes: o esticão muda? Meça e divida cada esticão pelo comprimento do elástico (ou da fila) antes de pendurar: o que você descobre?",
     "fechamento": "Ceder com elegância é o truque de mágica que afasta a ruptura fria."
   },
   "4.3": {
@@ -618,6 +638,7 @@ const dadosEspecificosCards = {
     "secreta1": "A Tragédia de Tacoma Narrows: em 1940, um vento de quase 70 km/h (forte, mas nada de furacão) fez o tabuleiro de uma ponte pênsil começar a torcer. Cada torção mudava o jeito como o ar passava pela ponte, e o ar empurrava ainda mais: um ciclo que se alimentava sozinho, chamado drapejamento (flutter, em inglês). Não foi uma simples ressonância, como muita gente pensa! A ponte se retorceu como uma fita ao vento até o tabuleiro do vão central se partir e despencar na água, enquanto as torres continuaram de pé. Enigma: como um vento que sopra quase sempre igual pode criar um balanço que só aumenta?",
     "secreta2": "Cisalhamento de Cisne: O cisalhamento é a força que tenta rasgar uma seção paralela à outra, como o corte limpo de uma guilhotina.",
     "dica": "💡 Identifique qual vilão está ativo em cada seção da viga para escolher a armadura de aço correta para o seu concreto.",
+    "desafio": "Desenhe uma grade de quadradinhos numa esponja de cozinha e então estique, aperte, dobre, torça e, segurando a base, empurre o topo para o lado. Em quais vilões os quadradinhos viram paralelogramos (será que é só um)? E quando você dobra a esponja, que lado espreme e qual estica?",
     "fechamento": "Os cinco demônios do colapso vigiam as fraquezas da sua fundação."
   },
   "4.4": {
@@ -628,6 +649,7 @@ const dadosEspecificosCards = {
     "secreta1": "O Cansaço dos Eixos: em 1842, na ferrovia entre Versalhes e Paris, o eixo de ferro de uma locomotiva se partiu. O trem descarrilou, os vagões se amontoaram e pegaram fogo, e dezenas de passageiros morreram. O eixo tinha 'cansado': a cada volta da roda, o metal era dobrado para um lado e para o outro. Uma trinca minúscula foi crescendo, escondida, volta após volta. Na época, nem existia o conceito de fadiga: muitos achavam que o ferro 'cristalizava' com o tempo. Pouco depois, o engenheiro Rankine mostrou que essas trincas nascem em cantos vivos da peça. Como pode um metal forte se quebrar com uma força que ele sempre aguentou?",
     "secreta2": "Vento Vibratório: os cabos das pontes estaiadas podem começar a balançar com um vento apenas moderado. O caso mais curioso acontece com vento e chuva juntos: a água que escorre forma um 'trilho' no cabo e muda o jeito como o ar passa por ele, e o cabo começa a dançar. Milhões de oscilações repetidas podem cansar o aço com o tempo. Por isso muitos cabos ganham amortecedores e uma espiral em relevo na capa. Da próxima vez que cruzar uma ponte estaiada, procure essa espiral: para que ela serve?",
     "dica": "💡 Evite cantos retos em peças metálicas sujeitas a vibrações; os cantos arredondados suavizam o fluxo de estresse e evitam o início de trincas.",
+    "desafio": "No simulador, ponha o Estresse por Ciclo em 40, depois em 60 e em 80 MPa, clicando em Aplicar Ciclo de Força até a peça romper e anotando os ciclos. Depois desça até aparecer o ∞. Esse ∞ garante que a peça nunca vai quebrar? Pense numa peça de alumínio, ou num caminhão pesado demais passando de vez em quando.",
     "fechamento": "Até as pedras mais duras se cansam se o combate se repetir sem tréguas."
   },
   "4.5": {
@@ -638,6 +660,7 @@ const dadosEspecificosCards = {
     "secreta1": "Olho por Olho na Babilônia: No famoso Código de Hamurabi, se um edifício desabasse e matasse o filho do proprietário, o próprio filho do construtor era executado!",
     "secreta2": "Segurança Aeroespacial: Ao contrário dos prédios, os foguetes usam fatores de segurança baixos, de cerca de 1,25 a 1,4, porque cada quilo de estrutura a mais é um quilo a menos de carga levada ao espaço. O preço disso? Os engenheiros precisam conhecer as cargas e os materiais com enorme precisão, seguir processos de fabricação rigorosamente controlados e testar tudo antes do voo. Quanto menos folga, mais conhecimento é preciso!",
     "dica": "💡 Em obras civis, as normas usam dois escudos: no cálculo, as cargas são 'infladas' e os materiais são 'enfraquecidos'. Num prédio de concreto no Brasil, tanto o peso próprio quanto as cargas variáveis (vento, multidões) são multiplicados por 1,4, enquanto a resistência do concreto é dividida por 1,4 e a do aço por 1,15. Na Europa, as cargas imprevisíveis levam um fator maior (1,5) do que o peso próprio, que é mais conhecido (1,35). Junte os dois escudos do concreto: qual é a folga total?",
+    "desafio": "Sua ponte de aço trabalha a 20 MPa no dia a dia, mas num temporal o esforço sobe 50%: teste 20 e depois 30 MPa no simulador com Aplicar Ciclo de Força. Ela aguenta temporais repetidos? Qual o maior esforço do dia a dia que deixaria até o temporal sem passar de 25 MPa? Calcule e confira.",
     "fechamento": "A margem do sábio protege o repouso do inocente."
   },
   "4.6": {
@@ -648,6 +671,7 @@ const dadosEspecificosCards = {
     "secreta1": "Fios de Seda Estruturais: o fio de segurança da aranha (o mesmo da moldura e dos raios da teia) é, pelo mesmo peso, cerca de 5 vezes mais forte do que o aço. E ele tem outro truque: estica cerca de um quarto do próprio comprimento antes de arrebentar, e por isso absorve cerca de 3 vezes mais energia do que o Kevlar, a fibra dos coletes à prova de bala. Por que esticar seria tão útil para parar uma mosca em pleno voo?",
     "secreta2": "Fibra de Carbono Arcana: tecidos de fibra de carbono, colados com resina como um curativo gigante, reforçam vigas e pontes de concreto quase sem acrescentar peso. Em pontes de pedra antigas, o feitiço já foi testado em laboratório (alguns arcos aguentaram duas, três vezes mais carga!) e em algumas obras, mas os guardiões do patrimônio discutem: depois de colado, ele é muito difícil de tirar sem estragar a pedra. E tem limite: se o tecido descolar, o reforço some, então as regras exigem que a estrutura original ainda aguente sozinha boa parte da carga. Por que será que os engenheiros não confiam tudo ao feitiço?",
     "dica": "💡 Conhecer a fobia de cada material evita desastres: nunca use pedra ou concreto puro para segurar forças de tração diagonal.",
+    "desafio": "Puxe uma tira de papel pelas pontas e depois empurre uma ponta contra a outra; faça o mesmo com um giz de lousa: aperte pelas pontas e depois tente dobrá-lo. Qual material é bom de puxão e qual é bom de aperto? Como você juntaria os dois numa viga que não quebra?",
     "fechamento": "Cada material guarda uma runa de força; o mestre combina as suas naturezas."
   },
   "5.1": {
@@ -658,6 +682,7 @@ const dadosEspecificosCards = {
     "secreta1": "O Centro de Massa Sagrado: A Torre de Pisa se inclina assustadoramente, mas não cai porque o seu vetor de peso total ainda chega ao chão dentro do perímetro de suporte da sua base.",
     "secreta2": "Boneco Teimoso: Brinquedos que se levantam sozinhos usam uma base semiesférica superpesada que coloca o centro de gravidade no ponto mais baixo possível, forçando o equilíbrio.",
     "dica": "💡 Para equilibrar momentos, lembre-se de que a força rotacional de um lado do apoio deve ser anulada pela força do lado contrário.",
+    "desafio": "Equilibre uma régua de 30 cm pelo meio, sobre um lápis. Ponha 2 moedas empilhadas a 5 cm do centro e ache onde 1 moeda igual, do outro lado, deixa tudo parado; depois leve as 2 moedas para 10 cm e tente de novo. O que aconteceu, e o que isso revela sobre a tabela de carga de um guindaste?",
     "fechamento": "A imobilidade é o estado de paz mecânica que anula o peso do mundo."
   },
   "5.2": {
@@ -668,6 +693,7 @@ const dadosEspecificosCards = {
     "secreta1": "O Peso da Neve Alquímica: Em climas frios, os mestres-construtores calculam quanto pesa a neve que pode se juntar no telhado. Quanto mais inclinado ele é, mais fácil a neve escorrega, e menos peso as vigas precisam aguentar. Acima de uns 60°, os livros de regras nem contam mais a neve! Mas nem todo telhado de montanha é pontudo: muitos chalés dos Alpes têm telhados largos e pouco inclinados, de propósito, para a neve ficar em cima como um cobertor que guarda o calor da casa. Aí as vigas precisam ser bem mais fortes. E cuidado: neve que escorrega toda de uma vez cai como uma avalanche em miniatura em cima de quem passa embaixo!",
     "secreta2": "Liquefação do Solo: Durante terremotos fortes, um chão de areia encharcada pode perder a firmeza de repente e passar a se comportar como um líquido grosso. Em Niigata, no Japão, em 1964, prédios de apartamentos de 4 andares afundaram e tombaram de lado. Um deles ficou quase deitado, inclinado uns 80°! E mesmo assim, em alguns prédios, nem as janelas quebraram. O prédio aguentou firme. Quem traiu foi o chão.",
     "dica": "💡 Cargas permanentes (as 'cargas mortas') ficam lá para sempre: o peso próprio da estrutura, das paredes e dos pisos. Cargas variáveis vêm e vão: as cargas de uso, ou 'cargas vivas' (pessoas, móveis), e as forças da natureza, como o vento, que têm regras de cálculo próprias. Mapeie todas com rigor e descubra qual combinação delas é a mais traiçoeira!",
+    "desafio": "Com o vão do painel em 6 m, preveja antes de testar: que carga P, parada bem no meio da ponte, leva o momento a 60 kN·m? Depois pense nos outros inimigos: o vento, que empurra a ponte de lado, e a neve, espalhada por ela toda, caberiam nesse controle? Por quê?",
     "fechamento": "Enxergar o inimigo invisível é a primeira virtude do bom construtor."
   },
   "5.3": {
@@ -678,6 +704,7 @@ const dadosEspecificosCards = {
     "secreta1": "Pontes sobre Patins: Grandes viadutos de rodovia se apoiam em blocos de borracha grossa (neoprene) para permitir que a ponte se dilate com o sol do verão sem rachar os pilares.",
     "secreta2": "Isolamento Sísmico: Muitos prédios modernos no Japão, até alguns bem altos, não ficam presos direto ao chão. Eles se apoiam em grandes almofadas feitas de camadas de borracha e aço, algumas com um miolo de chumbo, e em amortecedores a óleo. Quando a terra treme, o chão se mexe rápido embaixo, e o prédio balança devagar em cima, como um barco numa onda lenta.",
     "dica": "💡 Apoios articulados deixam a viga girar ligeiramente, reduzindo as tensões internas nos pilares de sustentação.",
+    "desafio": "Apoie uma régua de plástico entre duas pilhas de livros, só encostada, e aperte o meio com o dedo, de olho nas pontas. Depois prenda as pontas com livros pesados por cima e aperte com a mesma força. Em qual caso ela verga menos, e o que exatamente os livros de cima impediram as pontas de fazer?",
     "fechamento": "A flexibilidade do pé garante a estabilidade do topo."
   },
   "5.4": {
@@ -688,6 +715,7 @@ const dadosEspecificosCards = {
     "secreta1": "O Recorde do Vão Suspenso: A ponte de Çanakkale na Turquia possui o maior vão livre central do planeta, sustentando mais de 2 quilômetros de estrada sem pilares de apoio na água!",
     "secreta2": "O Perfil em I: Vigas de metal têm o formato da letra I porque o estresse de dobrar se concentra todo no topo (compressão) e na base (tração), permitindo esvaziar o miolo para economizar aço.",
     "dica": "💡 Se você dobrar a distância entre os pilares de suporte, a deflexão (barriga) no centro da viga aumenta 16 vezes!",
+    "desafio": "No painel, ponha L = 4 m e P = 20 kN e anote o momento. Uma viga duas vezes mais comprida também pesa o dobro: leve L para 8 e P para 40 e compare. Quantas vezes o momento cresceu, quantas cresceria dobrando só o vão, e por que vigas compridas sofrem mais do que parece?",
     "fechamento": "Estender caminhos sobre o vazio é triunfar sobre a gravidade."
   },
   "5.5": {
@@ -698,6 +726,7 @@ const dadosEspecificosCards = {
     "secreta1": "O Peso da Sabedoria: Engenheiros de bibliotecas públicas usam fatores de carga viva especiais porque o papel prensado de milhares de livros guardados pesa muito mais do que mobiliário comum.",
     "secreta2": "A Ressonância de Multidões: Quando milhares de pessoas pulam no mesmo ritmo num show, criam impactos repetidos que podem fazer uma bancada de estádio balançar de um jeito assustador. E, se a estrutura tiver um ponto fraco, ela pode até ceder: em 2021, no estádio Goffert, na Holanda, um pedaço de arquibancada desabou enquanto torcedores pulavam comemorando um gol. Por sorte, ninguém se feriu, e a investigação achou um erro de cálculo no projeto. Por isso os engenheiros calculam o 'ritmo natural' de cada bancada, para que ele fique bem longe do ritmo dos pulos.",
     "dica": "💡 Para aliviar o esqueleto, tente usar divisórias de parede leves (como gesso acartonado) no interior do seu edifício.",
+    "desafio": "Duas passarelas de faz de conta, com vão de 10 m no painel: uma pesada de concreto (P = 35) e uma leve de aço (P = 15). Ponha 10 kN de gente em cada uma (45 e 25) e compare com o momento sem ninguém. Em qual a multidão pesa mais na conta, em proporção, e qual você acha que vai sentir mais os pulos de um show?",
     "fechamento": "O esqueleto ergue a matéria própria para poder acolher com segurança o sopro da vida."
   },
   "5.6": {
@@ -708,6 +737,7 @@ const dadosEspecificosCards = {
     "secreta1": "O Exemplo das Torres Gêmeas: No terrível ataque de 2001, as torres não caíram na hora porque sua estrutura era hiperestática, cheia de caminhos alternativos para a carga. As colunas da fachada eram unidas por chapas de aço e, junto com os pisos e uma grande treliça no topo, essa trama desviou o peso das colunas destruídas para as que continuaram inteiras. A Torre Sul resistiu 56 minutos e a Torre Norte, 102. Foi o fogo, amolecendo o aço, que acabou derrubando as duas.",
     "secreta2": "O Perigo Isostático: Uma viga simplesmente apoiada não tem nenhum apoio sobrando: cada um é indispensável. Se você quebrar uma única coluna de apoio, as forças não têm outro caminho, e a viga despenca sem aviso. Quanto tempo ela leva? Para cair só 1 metro, um objeto leva quase meio segundo. Parece pouco, mas é tempo de sobra para a física agir e curto demais para alguém sair correndo de baixo dela!",
     "dica": "💡 Crie sempre ligações hiperestáticas em vigas contínuas; isso dá segurança e margem de tempo crucial em caso de acidente.",
+    "desafio": "Faça uma ponte com uma régua sobre três pilhas de livros, com uma borracha no meio de cada vão, e puxe devagar a pilha do meio: a ponte caiu ou só vergou? Repita com só duas pilhas e tire uma. Qual ponte tinha um osso extra, e o que a régua precisou ter de sobra para vencer, de repente, o dobro do vão?",
     "fechamento": "Vários caminhos para as forças garantem o repouso do esqueleto rúnico."
   },
   "6.1": {
@@ -718,6 +748,7 @@ const dadosEspecificosCards = {
     "secreta1": "A Queda das Catedrais: Numa noite de novembro de 1284, parte da abóbada da catedral de Beauvais desabou. Era a abóbada gótica mais alta já construída, com cerca de 48 m. Até hoje os engenheiros discutem o porquê. Uns culpam uma tempestade que torceu e quebrou os arcobotantes. Outros culpam pilares finos demais, que foram se entortando devagar sob o peso. Uma pista para você investigar: na reconstrução, os mestres dobraram o número de pilares do coro para encurtar os vãos. O que isso sugere sobre a causa?",
     "secreta2": "O Pêndulo de Taipé: Bem no alto da torre Taipei 101, mas não na ponta, entre os andares 87 e 92, fica pendurada uma esfera dourada de aço de 660 toneladas. Quando o vento de um tufão empurra o prédio para um lado, ela balança para o lado contrário e corta o balanço da torre em até cerca de 40%. Em 2015, no tufão Soudelor, ela chegou a se deslocar 1 metro! Nos terremotos ela também ajuda um pouco, mas o grande escudo contra os tremores é outro: o esqueleto gigante de megapilares e treliças da própria torre.",
     "dica": "💡 Na fusão dos dois reinos, lembre-se: a forma do esqueleto deve amparar o limite elástico do seu músculo molecular.",
+    "desafio": "Apoie um caderno leve sobre 4 tubos de papel enrolado, um em cada canto, e tire um deles: o que acontece? Agora arrume tubos extras para poder tirar QUALQUER tubo sem o caderno tombar, usando o menor número de tubos que conseguir. Quantos você usou e onde ficaram, e por que um pilar que parece sobrando pode salvar a estrutura?",
     "fechamento": "Na aliança das partes ergue-se o colosso que nenhuma força vergará."
   },
   "6.2": {
@@ -728,6 +759,7 @@ const dadosEspecificosCards = {
     "secreta1": "A Lenda do Construtor Romano: Conta uma lenda famosa que, na Roma Antiga, o construtor precisava ficar debaixo do arco quando tiravam o cimbre, a armação de madeira que segura o arco enquanto ele é construído. Mas os historiadores nunca acharam essa regra em nenhum texto antigo: a versão escrita mais antiga que se conhece é de um fórum da internet de 2004! Já esta lei existiu de verdade: há mais de 3.700 anos, o Código de Hamurabi, da Babilônia, mandava executar o construtor cuja casa desabasse e matasse o dono.",
     "secreta2": "Chancelas de Chumbo: No Império Bizantino, cartas e documentos oficiais eram fechados com selos de chumbo (às vezes de cera, ou até de ouro) para provar quem os tinha enviado. Muito antes, os romanos já gravavam nos próprios canos de chumbo o nome do imperador, do dono ou do fabricante. Assim dava para saber de quem era cada cano e flagrar quem fazia ligações clandestinas para roubar água!",
     "dica": "💡 Antes de o concreto engolir o aço para sempre, o engenheiro responsável pela obra confere cada barra da armadura com o projeto: a bitola, a quantidade, o espaçamento e a posição. Depois da concretagem, nenhum olho consegue enxergar um erro escondido lá dentro!",
+    "desafio": "Antes de assinar a ART, teste o limite: arraste o controle Segurança para a esquerda até aparecer o aviso de perigo. Qual é o menor valor que ainda passa sem aviso? Você assinaria a obra exatamente nesse número, sabendo que responde pelas vidas lá dentro, e por quê?",
     "fechamento": "A palavra gravada do mestre dá estabilidade ao reino dos homens."
   },
   "6.3": {
@@ -738,6 +770,7 @@ const dadosEspecificosCards = {
     "secreta1": "O Anel de Ferro de Ritual: No Canadá, quem termina engenharia pode receber, num ritual, um anel simples (os primeiros eram de ferro; hoje a maioria é de aço inoxidável) para lembrar a responsabilidade. Diz a lenda que os anéis foram forjados com o metal da Ponte de Quebec, que desabou em 1907 por erros de projeto e de cálculo. Mas é só lenda: os primeiros foram martelados à mão por veteranos da Primeira Guerra num hospital militar de Toronto!",
     "secreta2": "A Academia Real: Muito antes de D. Pedro II, em 1792, o Rio de Janeiro já tinha a Real Academia de Artilharia, Fortificação e Desenho. Ali se formavam engenheiros militares e também civis, com aulas de pontes, canais, estradas e hidráulica, e dela descendem o IME e a Escola Politécnica da UFRJ! Por aqui ela é chamada de primeira escola de engenharia das Américas, mas o México abriu seu Real Seminário de Mineração em janeiro daquele mesmo ano. Quem chegou primeiro? Depende do que você conta como 'escola de engenharia'...",
     "dica": "💡 O diploma abre as portas do reino, mas é a sua humildade e atenção no canteiro de obras diário que transformará você num verdadeiro mestre.",
+    "desafio": "Prenda um elástico de cabelo, sem apertar, no dedo mínimo da mão com que você escreve e desenhe uma ponte: onde ele encosta? Engenheiros canadenses usam o Anel de Ferro nesse mesmo dedo. Por que um lembrete que raspa no papel a cada traço pode funcionar melhor do que um diploma pendurado na parede?",
     "fechamento": "A fundação do saber é o diploma; a sua catedral se ergue todos os dias."
   },
   "6.4": {
@@ -748,6 +781,7 @@ const dadosEspecificosCards = {
     "secreta1": "A Higiene de Pompeia: A cidade romana de Pompeia tinha pedras elevadas no meio das ruas, como faixas de pedestre, para que as pessoas atravessassem sem tocar na água suja, e canos de chumbo sob as calçadas.",
     "secreta2": "Metrópoles Flutuantes: Existem planos contemporâneos para criar bairros modulares flutuantes ancorados que sobem e descem conforme a maré dos oceanos, adaptando-se às mudanças do clima.",
     "dica": "💡 Projete as estruturas pensando sempre em como as redes de energia, água e tráfego vão se conectar sem danificar as vigas de suporte.",
+    "desafio": "Arraste Estética até 90 e leia o aviso. Em 2007, leitores de uma revista médica britânica elegeram a água limpa e a coleta de esgoto o maior avanço da medicina desde 1840. Se o simulador ganhasse um 3º controle, Saneamento, dentro dos mesmos 100 pontos, de onde você tiraria pontos para ele, e por quê?",
     "fechamento": "A grande cidade é o mosaico harmonioso onde as pedras individuais se amparam mutuamente."
   },
   "6.5": {
@@ -758,6 +792,7 @@ const dadosEspecificosCards = {
     "secreta1": "Desencalhar com a Lua: Em março de 2021, o gigantesco porta-contêineres Ever Given, com 400 metros de comprimento, ficou atravessado no Canal de Suez, com a proa cravada no barranco. Durante seis dias, os engenheiros dragaram cerca de 30 mil metros cúbicos de areia e argila e puxaram o navio com mais de uma dezena de rebocadores. E tinham um aliado no céu: a lua cheia trouxe uma maré de sizígia, capaz de subir a água do canal até uns 45 centímetros a mais. Com tudo isso junto, no dia 29 de março o gigante finalmente flutuou. Pense: como a Lua, a 384 mil km daqui, consegue ajudar a mover um navio de mais de 200 mil toneladas?",
     "secreta2": "Congelar a Terra: Escavar um túnel em areia encharcada é pedir para tudo desmoronar. Para abrir passagens entre túneis debaixo de Londres (até sob o rio Tâmisa!), os engenheiros cravam canos no solo e fazem circular por eles salmoura a mais de 30 graus abaixo de zero. Em obras pequenas ou de emergência, às vezes usam nitrogênio líquido, a 196 graus abaixo de zero, que também corre dentro dos canos e depois escapa para o ar como gás: ele nunca é injetado direto na terra. A água entre os grãos vira gelo e 'cola' a areia como se fosse rocha, e o solo precisa continuar congelado até o revestimento de concreto do túnel endurecer e aguentar sozinho. Já para cavar a estação de metrô de Westminster, colada ao Big Ben, o truque foi outro: injetar argamassa no solo, aos poucos, para compensar a terra escavada e não deixar a torre entortar perigosamente. E repare: o concreto não 'seca'. Ele endurece numa reação química com a água!",
     "dica": "💡 Se o solo ceder de surpresa na sua obra, suspenda as cargas secundárias e reforce a base com estacas de injeção de concreto sob pressão.",
+    "desafio": "Imprevisto: o solo cedeu e a cidade agora exige Segurança 75, sem nenhum ponto a mais no orçamento; ponha o controle em 75 e leia o aviso. Segurança e beleza precisam mesmo disputar os mesmos pontos? Invente ou descubra uma peça de construção que proteja e embeleze ao mesmo tempo e explique como ela dribla a regra do simulador.",
     "fechamento": "O obstáculo inesperado é a bigorna onde se forja a verdadeira perícia."
   },
   "6.6": {
@@ -768,6 +803,7 @@ const dadosEspecificosCards = {
     "secreta1": "A Mulher que Ergueu o Brooklyn: Quando o engenheiro-chefe Washington Roebling, seu marido, ficou de cama por causa da 'doença dos caixões', Emily Roebling virou os olhos, os ouvidos e a voz dele na obra da Ponte do Brooklyn por cerca de 11 anos (1872–1883). Ela nunca teve título oficial, mas levava as ordens dele aos engenheiros, negociava com fornecedores e políticos e estudou a fundo resistência dos materiais e a matemática dos cabos de suspensão, até as curvas catenárias! Ela entendia tanto do assunto que correu o boato de que a verdadeira engenheira-chefe era ela. E, quando a ponte foi inaugurada, foi a primeira pessoa a atravessá-la.",
     "secreta2": "Fornalha de Pedra Artificial: O nome 'cimento Portland' nasceu em 1824, na patente do pedreiro inglês Joseph Aspdin, que queimava calcário e argila em fornos para fabricar uma 'pedra artificial'. Mas o cimento Portland moderno só surgiu por volta de 1842, quando o filho dele, William Aspdin, passou a queimar a mistura num fogo muito mais quente (acima de 1.300 °C), até ela virar o 'clínquer'. Já a história de que Joseph cozinhava tudo no fogão de casa é lenda: nenhum documento da época confirma isso, e um fogão de cozinha nem chegaria perto desse calor!",
     "dica": "💡 Estude as pontes do engenheiro suíço Robert Maillart. Na Salginatobel (1930), o arco de concreto armado é mais fino no topo e nas bases e só engrossa onde os esforços são maiores. Na Schwandbach (1933), o arco tem apenas 20 cm de espessura, e quem impede que ele se dobre é o tabuleiro rígido apoiado sobre ele! Descubra como seguir o caminho das forças economiza material e transforma uma ponte em arte.",
+    "desafio": "Pendure um colar pelas pontas na frente de uma folha presa à parede, copie a curva e vire a folha de cabeça para baixo. Em 1675, Robert Hooke escondeu numa charada de letras embaralhadas, em latim, que essa é a forma ideal de um arco. Por que uma curva que só puxa, quando invertida, vira um arco que só empurra?",
     "fechamento": "Caminhamos sobre a terra com segurança porque subimos nos ombros dos colossos do passado."
   }
 };
