@@ -13,6 +13,20 @@
 let blocoAbertoId = null; // qual bloco está expandido (modo lista/celular)
 let blocosAbertosDesktop = []; // ids abertos no Mapa do Reino (telas largas), em ordem de abertura
 
+// Mistura a cor do reino com outra (branco pra clarear, preto pra escurecer),
+// canal a canal no sRGB — a mesma conta do color-mix(in srgb, ...) do CSS.
+// Misturar só com branco ou só com preto não mexe no matiz. Serve de cor
+// pronta pra navegador sem color-mix (iPads antigos). fracaoCor: 0 a 1.
+function misturarCorReino(hex, alvoHex, fracaoCor) {
+  const rgb = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+  const cor = rgb(hex);
+  const alvo = rgb(alvoHex);
+  return "#" + cor.map((c, i) => {
+    const v = Math.round(c * fracaoCor + alvo[i] * (1 - fracaoCor));
+    return v.toString(16).padStart(2, "0");
+  }).join("");
+}
+
 // O Mapa do Reino só existe em telas largas; abaixo disso vale o acordeão vertical de sempre
 function modoMapaDesktop() {
   return window.matchMedia("(min-width: 1024px)").matches;
@@ -48,6 +62,8 @@ function renderizarAcordeaoBlocos(container) {
     painel.style.marginBottom = "1.5rem";
     painel.style.cursor = "pointer";
     painel.style.setProperty("--cor-reino", bloco.hex); // tinte e brilho do reino via CSS
+    // Título clareado (60% + branco) já calculado: vale mesmo sem color-mix
+    painel.style.setProperty("--cor-reino-titulo", misturarCorReino(bloco.hex, "#ffffff", 0.6));
     painel.dataset.blocoId = bloco.id;
 
     const aberto = blocoAbertoId === bloco.id;
@@ -57,7 +73,7 @@ function renderizarAcordeaoBlocos(container) {
         <div class="cabecalho-identidade">
           ${typeof medalhaoBrasaoHTML === "function" ? medalhaoBrasaoHTML(bloco.id, 40) : ""}
           <div>
-            <h2 class="font-display" style="color: ${bloco.hex}; margin: 0 0 0.25rem; font-size: 1.3rem;">
+            <h2 class="font-display titulo-reino" style="margin: 0 0 0.25rem; font-size: 1.3rem;">
               ${bloco.title}
             </h2>
             <p class="font-body" style="color: var(--pergaminho-escuro); margin: 0;">
@@ -118,12 +134,14 @@ function criarPainelIlhaAcordeao() {
   painel.style.cursor = "pointer";
   painel.dataset.blocoId = ilhaAmaldicoada.id;
 
+  // Título (classe .titulo-reino) e ▾ no rubro da Ilha clareado (#df8383):
+  // o #c93030 puro dava ~2,8:1 sobre o vidro escuro
   painel.innerHTML = `
     <div class="cabecalho-bloco" style="display:flex; justify-content:space-between; align-items:center;">
       <div class="cabecalho-identidade">
         ${typeof medalhaoBrasaoHTML === "function" ? medalhaoBrasaoHTML(ilhaAmaldicoada.id, 40) : ""}
         <div>
-          <h2 class="font-display" style="color: #c93030; margin: 0 0 0.25rem; font-size: 1.3rem;">
+          <h2 class="font-display titulo-reino" style="margin: 0 0 0.25rem; font-size: 1.3rem;">
             ${ilhaAmaldicoada.title}
           </h2>
           <p class="font-body" style="color: var(--pergaminho-escuro); margin: 0;">
@@ -132,7 +150,7 @@ function criarPainelIlhaAcordeao() {
           ${aberto && typeof lemaReinoHTML === "function" ? lemaReinoHTML(ilhaAmaldicoada.id) : ""}
         </div>
       </div>
-      <span style="color: #c93030; font-size: 1.5rem; transition: transform 0.3s ease; transform: rotate(${aberto ? "180deg" : "0deg"});">
+      <span style="color: #df8383; font-size: 1.5rem; transition: transform 0.3s ease; transform: rotate(${aberto ? "180deg" : "0deg"});">
         ▾
       </span>
     </div>
@@ -436,7 +454,7 @@ function criarTileIlha() {
       ${typeof medalhaoBrasaoHTML === "function"
         ? medalhaoBrasaoHTML(ilhaAmaldicoada.id, 46)
         : '<span class="tile-numero">💀</span>'}
-      <h2 class="font-display tile-titulo" style="color:#c93030">${ilhaAmaldicoada.title}</h2>
+      <h2 class="font-display tile-titulo titulo-reino">${ilhaAmaldicoada.title}</h2>
       <p class="font-body tile-subtitulo">${ilhaAmaldicoada.subtitle}</p>
       <span class="tile-estado" title="${rotulo}">${lidas}/${total}</span>
     </div>
@@ -481,7 +499,7 @@ function criarPainelRunasIlha() {
           ? medalhaoBrasaoHTML(ilhaAmaldicoada.id, 40, "painel-runas-medalhao")
           : '<span class="tile-numero painel-runas-medalhao">💀</span>'}
         <div>
-          <h3 class="font-display" style="color:#c93030; margin:0 0 0.25rem; font-size:1.2rem;">${ilhaAmaldicoada.title}</h3>
+          <h3 class="font-display titulo-reino" style="margin:0 0 0.25rem; font-size:1.2rem;">${ilhaAmaldicoada.title}</h3>
           <p class="font-body" style="color: var(--pergaminho-escuro); margin:0;">${ilhaAmaldicoada.subtitle}</p>
           ${typeof lemaReinoHTML === "function" ? lemaReinoHTML(ilhaAmaldicoada.id) : ""}
         </div>
@@ -511,6 +529,7 @@ function criarPainelRunasAberto(bloco) {
   const painel = document.createElement("div");
   painel.className = "painel-reino-premium painel-runas-aberto animate-fadeIn";
   painel.style.setProperty("--cor-reino", bloco.hex);
+  painel.style.setProperty("--cor-reino-titulo", misturarCorReino(bloco.hex, "#ffffff", 0.6));
 
   painel.innerHTML = `
     <div class="painel-runas-cabecalho">
@@ -519,7 +538,7 @@ function criarPainelRunasAberto(bloco) {
           ? medalhaoBrasaoHTML(bloco.id, 40, "painel-runas-medalhao")
           : `<span class="tile-numero painel-runas-medalhao">${bloco.num}</span>`}
         <div>
-          <h3 class="font-display" style="color:${bloco.hex}; margin:0 0 0.25rem; font-size:1.2rem;">${bloco.title}</h3>
+          <h3 class="font-display titulo-reino" style="margin:0 0 0.25rem; font-size:1.2rem;">${bloco.title}</h3>
           <p class="font-body" style="color: var(--pergaminho-escuro); margin:0;">${bloco.subtitle}</p>
           ${typeof lemaReinoHTML === "function" ? lemaReinoHTML(bloco.id) : ""}
         </div>

@@ -34,7 +34,7 @@ const CHAVE_HORIZONTE = "borgestravel_horizonte";
 
 // Cores da Forja Real (o original usava #3D2B56/#4a3568)
 const HORIZONTE_COR_CASTELO = "#0e1014";
-const HORIZONTE_FILETE = "rgba(212,175,55,.22)";   // luz dourada no contorno do topo
+const HORIZONTE_FILETE = "rgba(212,175,55,.42)";   // luz dourada no contorno do topo (era .22: some no celular)
 const HORIZONTE_VIDRO_APAGADO = "#07080a";
 const HORIZONTE_CAIXILHO = "rgba(140,98,57,.55)";  // bronze envelhecido
 const HORIZONTE_OURO = "#d4af37";
@@ -104,6 +104,25 @@ function horizonteTituloVitral(bloco, aceso) {
   return `${horizonteNomeReino(bloco)}: ${aceso ? "reino concluído!" : "leia todas as runas para acender"}`;
 }
 
+// ["A", "B", "C"] → "A, B e C"
+function horizonteListar(itens) {
+  return itens.length < 2 ? itens.join("") : `${itens.slice(0, -1).join(", ")} e ${itens[itens.length - 1]}`;
+}
+
+// Nome acessível do castelo (aria-label do <svg role="img">). Os <title> de
+// cada vitral nunca chegavam ao leitor de tela (filhos de role="img" são
+// apresentacionais e a seção não recebe o mouse), então a frase diz QUAIS
+// reinos acenderam e quais faltam.
+function horizonteDescricao(concluidos) {
+  const acesos = reinosDados.filter((bloco) => concluidos.includes(bloco.id)).map(horizonteNomeReino);
+  const apagados = reinosDados.filter((bloco) => !concluidos.includes(bloco.id)).map(horizonteNomeReino);
+  const total = reinosDados.length;
+  if (apagados.length === 0) return `Castelo do Reino: os ${total} vitrais estão acesos e o estandarte dourado tremula no torreão!`;
+  if (acesos.length === 0) return `Castelo do Reino: nenhum dos ${total} vitrais aceso ainda. Cada reino com todas as runas lidas acende um vitral.`;
+  return `Castelo do Reino: ${acesos.length} de ${total} vitrais acesos. Acesos: ${horizonteListar(acesos)}. ` +
+    `Ainda apagados: ${horizonteListar(apagados)}.`;
+}
+
 // Monta o markup da seção (≤ 6 KB): montanhas, castelo, chão e legenda
 function horizonteMarkup() {
   const total = reinosDados.length;
@@ -128,7 +147,7 @@ function horizonteMarkup() {
       `<path d="M0,130 L0,80 L150,25 L300,75 L430,15 L600,80 L760,30 L900,85 L1050,20 L1200,70 L1200,130 Z" fill="#1a1d24" opacity=".85"/>` +
       `<path d="M0,130 L0,100 L180,50 L360,95 L520,45 L700,100 L880,55 L1050,100 L1200,60 L1200,130 Z" fill="#121418"/>` +
     `</svg>` +
-    `<svg class="horizonte-castelo" viewBox="0 0 600 170" preserveAspectRatio="xMidYMax meet" role="img" aria-labelledby="horizonte-legenda" stroke-width="1.2">` +
+    `<svg class="horizonte-castelo" viewBox="0 0 600 170" preserveAspectRatio="xMidYMax meet" role="img" aria-label="Castelo do Reino" stroke-width="1.2">` +
       `<path d="${horizonteSilhueta()}" fill="${HORIZONTE_COR_CASTELO}" stroke="${HORIZONTE_FILETE}" stroke-linejoin="round"/>` +
       // Estandarte (mastro + flâmula de rabo de andorinha) no topo do torreão
       `<g class="horizonte-estandarte" display="none">` +
@@ -209,9 +228,16 @@ function atualizarHorizonte() {
   if (completo) estandarte.removeAttribute("display");
   else estandarte.setAttribute("display", "none");
 
+  // Legenda visível: quantos e QUAIS (pelo número do bloco, pra caber no celular);
+  // o aria-label do castelo leva os nomes completos, acesos e apagados
+  const numeros = reinosDados.filter((bloco) => concluidos.includes(bloco.id)).map((bloco) => bloco.num);
+  const quais = numeros.length === 0 || completo
+    ? ""
+    : ` (${numeros.length === 1 ? "Bloco" : "Blocos"} ${horizonteListar(numeros.map(String))})`;
   horizonteSecao.querySelector(".horizonte-legenda").textContent = completo
     ? `🏰 ${concluidos.length} de ${total} vitrais acesos — o estandarte dourado tremula no torreão!`
-    : `🏰 ${concluidos.length} de ${total} vitrais acesos — cada reino concluído acende um vitral do castelo.`;
+    : `🏰 ${concluidos.length} de ${total} vitrais acesos${quais} — cada reino concluído acende um vitral do castelo.`;
+  horizonteSecao.querySelector(".horizonte-castelo").setAttribute("aria-label", horizonteDescricao(concluidos));
 
   if (horizonteNaTela) horizonteRevelarRecemAcesos();
 }

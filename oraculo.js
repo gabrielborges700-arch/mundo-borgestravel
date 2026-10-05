@@ -126,7 +126,10 @@ let historicoChat = [{ autor: "mago", texto: SAUDACAO_INICIAL }];
 function montarOraculo() {
   const container = document.createElement("div");
   container.id = "oraculo-container";
-  container.style.cssText = "position: fixed; bottom: 1rem; right: 1rem; z-index: 60; display:flex; flex-direction:column; align-items:flex-end; gap:0.5rem;";
+  // z-index 48: acima da barra (40) e dos botões de som/↑ (45), mas ABAIXO do
+  // véu dos modais (50/70/80) — antes (60) o mago ficava por cima do véu e
+  // cobria o canto de baixo do painel do modal. Os toasts (60) seguem por cima.
+  container.style.cssText = "position: fixed; bottom: 1rem; right: 1rem; z-index: 48; display:flex; flex-direction:column; align-items:flex-end; gap:0.5rem;";
   document.body.appendChild(container);
 
   renderizarOraculo();
@@ -141,12 +144,15 @@ function renderizarOraculo() {
     balao.className = "balao-fala";
     balao.style.cssText = "width: min(90vw, 300px); height: 400px; display:flex; flex-direction:column; overflow:hidden;";
 
+    // A área das mensagens não tem fundo próprio (antes #f4e8cc opaco): aparece o
+    // pergaminho com textura do .balao-fala (style.css, seção 25). As bolhas
+    // continuam opacas, então o texto mantém o contraste de antes (~8,6:1)
     balao.innerHTML = `
       <div style="background:#1c1e22; color:var(--ouro-velho); padding:0.6rem; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--bronze-envelhecido);">
         <span class="font-display" style="font-size:0.8rem; font-weight:bold;">🔮 Aurelius Arcano</span>
         <button id="fechar-oraculo" style="background:none; border:none; color:var(--pergaminho); cursor:pointer; font-size:0.9rem;">✖</button>
       </div>
-      <div id="mensagens-oraculo" style="flex:1; overflow-y:auto; padding:0.6rem; display:flex; flex-direction:column; gap:0.5rem; background:#f4e8cc;"></div>
+      <div id="mensagens-oraculo" style="flex:1; overflow-y:auto; padding:0.6rem; display:flex; flex-direction:column; gap:0.5rem;"></div>
       <form id="form-oraculo" style="padding:0.5rem; background:#e3d5b5; border-top:1px solid var(--bronze-envelhecido); display:flex; gap:0.4rem;">
         <input id="input-oraculo" type="text" placeholder="Pergunte ao Mago..." class="chat-input" style="flex:1; padding:0.4rem 0.6rem; border-radius:6px; font-size:0.75rem;">
         <button type="submit" style="background:#1c1e22; color:var(--ouro-velho); border:none; padding:0.4rem 0.7rem; border-radius:6px; font-weight:bold; cursor:pointer;">✨</button>

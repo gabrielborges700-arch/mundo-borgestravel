@@ -69,6 +69,9 @@ const SIM_POLIR_VEREDITOS = [
   "#mensagem-orcamento", "#mensagem-forjado",
 ];
 
+// Cor inline do alerta de vento forte do 0.3 (#cc0000), como o navegador devolve em style.color
+const SIM_POLIR_VERMELHO_ALERTA = "rgb(204, 0, 0)";
+
 // Desenhos que não carregam informação própria (o número está ao lado)
 const SIM_POLIR_DECORATIVOS = ["#torre", "#seta-carga", "#viga", "#visual-arco", "#ponte-cena"];
 
@@ -199,6 +202,11 @@ function polirAplicarDinamico(painel) {
       polirAtributo(botao, "aria-pressed", regra.ativo(botao) ? "true" : "false");
     });
   });
+  // 0.3: "TEMPESTADE!"/"FURACÃO!" o simulador pinta inline de #cc0000, que no
+  // pergaminho dava 4,4:1. Só LÊ a cor que ele escreveu (os limiares e os textos
+  // continuam dele); a classe troca o tom no CSS da seção 26
+  const alerta = painel.querySelector("#alerta-tempestade");
+  if (alerta) alerta.classList.toggle("sim-alerta-forte", alerta.style.color === SIM_POLIR_VERMELHO_ALERTA);
 }
 
 // =====================================================================
@@ -241,6 +249,13 @@ function polirAplicarEstatico(painel, runaId) {
     const caixa = botao && botao.parentElement && botao.parentElement.parentElement;
     if (caixa && caixa !== painel) caixa.classList.add("sim-mostrador");
   });
+
+  // Bloco 4: o mostrador "Ciclos | Vida à Fadiga" lado a lado partia "Ciclos:"
+  // em 2 linhas e a frase vermelha em 3 a 5 no celular. A classe deixa os dois
+  // empilharem (o texto e os números continuam os mesmos)
+  const valorCiclos = painel.querySelector("#valor-ciclos");
+  const mostradorCiclos = valorCiclos && valorCiclos.parentElement && valorCiclos.parentElement.parentElement;
+  if (mostradorCiclos && mostradorCiclos !== painel) mostradorCiclos.classList.add("sim-mostrador-empilhavel");
 
   // Fileiras de botões que transbordavam o painel em 320px (0.7 e Bloco 4):
   // a classe só deixa a fileira quebrar linha, os botões continuam os mesmos

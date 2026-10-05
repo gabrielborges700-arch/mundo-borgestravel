@@ -404,7 +404,7 @@ function verificarConquistas() {
 // mesmo bottom/right, e os disparados juntos (ex.: conquista + "Julgamento
 // superado") nasciam um por cima do outro, cortados.
 // Posição no style.css (#pilha-toasts): a coluna começa ACIMA do avatar do
-// Oráculo, que mora no mesmo canto e no mesmo z-index (antes pintava por cima dele).
+// Oráculo, que mora no mesmo canto, abaixo dos toasts (Oráculo z 48, toasts z 60).
 const MAXIMO_TOASTS_VISIVEIS = 4;
 
 function obterPilhaToasts() {
@@ -877,9 +877,12 @@ function abrirModalDiario() {
     const completo = lidasNoBloco === totalNoBloco;
     const missao = estado.missoesCompletas.includes(bloco.id) ? " ⚔️" : "";
     const boss = estado.missoesBossCompletas.includes(bloco.id) ? " 👑" : "";
+    // Nome no matiz do reino escurecido (30% da cor + preto) — ver .diario-reino no CSS
+    const corTexto = typeof misturarCorReino === "function"
+      ? misturarCorReino(bloco.hex, "#000000", 0.3) : "#2a1f14";
     return `<li style="margin-bottom:0.3rem; ${completo ? "opacity:0.85;" : ""}">
-      <span style="color:${bloco.hex}; font-weight:bold;">${bloco.title}</span>
-      — ${lidasNoBloco}/${totalNoBloco} runas${completo ? " ✓" : ""}${missao}${boss}
+      <span class="diario-reino" style="--cor-reino:${bloco.hex}; --cor-reino-texto:${corTexto};">${bloco.title}</span>
+      <span style="white-space:nowrap;">— ${lidasNoBloco}/${totalNoBloco} runas${completo ? " ✓" : ""}${missao}${boss}</span>
     </li>`;
   }).join("");
 

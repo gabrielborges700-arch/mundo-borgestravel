@@ -216,13 +216,16 @@ function destinoRolagemComHeroCompacto(alvo) {
 
 // ---------- Botão "voltar ao topo" ----------
 
+// z-index 45 (o mesmo dos botões de som): acima da barra (40) e ABAIXO do véu
+// dos modais (50/70/80) — com um modal aberto o ↑ fica sob o véu e não cobre
+// o fim do painel do modal
 function montarBotaoVoltarTopo() {
   const botao = document.createElement("button");
   botao.id = "botao-topo";
   botao.setAttribute("aria-label", "Voltar ao topo");
   botao.textContent = "↑";
   botao.style.cssText = `
-    position: fixed; bottom: 1rem; left: 1rem; z-index: 55;
+    position: fixed; bottom: 1rem; left: 1rem; z-index: 45;
     width: 42px; height: 42px; border-radius: 50%;
     background: var(--pedra-ardosia); color: var(--ouro-velho);
     border: 1px solid var(--bronze-envelhecido); font-size: 1.1rem; cursor: pointer;

@@ -522,6 +522,22 @@ body:has(#oraculo-container .balao-fala) #pilha-toasts { bottom: calc(1rem + 400
   box-shadow: 0 0 0 2px rgba(6,7,10,0.85), 0 0 14px rgba(192,57,43,0.55);
 }
 
+/* Diário, "Progresso por reino" (jogo.js): o nome na cor pura do reino sobre o
+   pergaminho dava 1,1 a 3,8:1 (ciano e dourado ~1,1–1,5:1). Como o fundo é
+   claro, o TEXTO é escurecido mantendo o matiz: 30% da cor do reino + preto
+   (só preto, pra não desviar o matiz), calculado pelo jogo.js (misturarCorReino)
+   e posto inline em --cor-reino-texto. Sobre o pergaminho mais escuro (#e0d2af)
+   dá 7,2 a 11:1 e, na linha de reino completo (opacidade 0,85), 5,2 a 7,9:1 —
+   o pior é o ciano. O marcador redondo leva o hex puro (--cor-reino; o aro
+   escuro o mantém visível até no dourado e no ciano). Sem a variável: tinta escura */
+.diario-reino { font-weight: bold; color: var(--cor-reino-texto, #2a1f14); }
+.diario-reino::before {
+  content: ""; display: inline-block;
+  width: 0.75em; height: 0.75em; margin-right: 0.35em; vertical-align: -0.05em;
+  border-radius: 50%; background: var(--cor-reino, var(--bronze-envelhecido));
+  box-shadow: 0 0 0 1.5px rgba(42,31,20,0.7);
+}
+
 /* Certificado: escondido na tela normal, só aparece na hora de imprimir */
 #certificado-imprimivel { display: none; }
 
@@ -1120,6 +1136,15 @@ body:has(#oraculo-container .balao-fala) #pilha-toasts { bottom: calc(1rem + 400
   .botao-som-ambiente { width: 30px; height: 30px; font-size: 0.78rem; }
 }
 
+/* Rodapé (o padding saiu do inline do index.html). No celular o texto ocupa a
+   largura toda e, rolado até o fim, a última linha ficava embaixo do ↑, do som
+   e do Oráculo: reserva a faixa deles (1rem da borda + 56px do mago + 8px da
+   flutuação). Com um modal aberto os três ficam sob o véu (z 45/48 < 50) */
+body > footer { padding: 2rem 1rem; }
+@media (max-width: 700px) {
+  body > footer { padding-bottom: calc(2rem + 64px); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .botao-som { transition: none; }
   .botao-som:hover, .botao-som:focus-visible { transform: none; }
@@ -1236,7 +1261,15 @@ body:has(#oraculo-container .balao-fala) #pilha-toasts { bottom: calc(1rem + 400
         inset 0 1px 2px rgba(255,255,255,0.4),
         inset 0 -4px 8px rgba(0,0,0,0.45);
     }
-    .tile-titulo { color: color-mix(in srgb, var(--cor-reino, var(--pergaminho)) 72%, #fff); }
+    /* 40% + branco (era 72%): letra menor que a do acordeão (texto normal, pede
+       4,5:1) e o tile não iniciado tem opacidade 0,88 — com 72% os Blocos 0, 4 e 6
+       ficavam entre 3,1 e 3,5:1; com 45% o pior ponto da pedra (veio claro) ainda
+       dava 4,1:1 no Bloco 4. Com 40% o pior fica em ~4,5:1 e a sombra mais
+       fechada (0,9) segura o resto */
+    .tile-titulo {
+      color: color-mix(in srgb, var(--cor-reino, var(--pergaminho)) 40%, #fff);
+      text-shadow: 0 1px 3px rgba(0,0,0,0.9);
+    }
     .tile-reino.tile-aberto {
       box-shadow:
         var(--sombra-3),
@@ -1361,6 +1394,21 @@ body:has(#oraculo-container .balao-fala) #pilha-toasts { bottom: calc(1rem + 400
   white-space: nowrap;
 }
 .painel-ilha .lema-latim { color: #e8806e; } /* rubro claro: legível no vidro escuro da Ilha */
+
+/* Título do reino no acordeão e no painel aberto (classe posta pelo app.js; no
+   mapa desktop o .tile-titulo da seção 20 faz o mesmo). A cor pura do reino
+   sobre o vidro escuro dava 2,2 a 2,8:1 nos Blocos 0, 4 e 6 e na Ilha (medido
+   no Chrome): só o TEXTO é clareado com branco, mantendo o matiz. O brasão, a
+   gema e as bordas continuam com o hex puro do dados.js (--cor-reino).
+   Sem color-mix: a mesma mistura (60% + branco) já calculada pelo app.js
+   (misturarCorReino) em --cor-reino-titulo; se faltar, pergaminho. */
+.titulo-reino { color: var(--cor-reino-titulo, var(--pergaminho)); }
+@supports (color: color-mix(in srgb, red 50%, blue)) {
+  .titulo-reino { color: color-mix(in srgb, var(--cor-reino, var(--pergaminho)) 60%, #fff); }
+}
+/* Ilha: o rubro #c93030 de sempre, clareado na mesma proporção (60% + branco).
+   Valor fixo: o painel da Ilha no acordeão não tem --cor-reino e assim vale sem color-mix */
+.painel-ilha .titulo-reino { color: #df8383; }
 
 @media (prefers-reduced-motion: reduce) {
   .tile-brasao .brasao-svg { transition: none; }
@@ -1591,9 +1639,11 @@ body:has(#oraculo-container .balao-fala) #pilha-toasts { bottom: calc(1rem + 400
    - url() escrito direto em cada regra, nunca guardado numa custom property (url()
      relativo dentro de var() é pegadinha de resolução de caminho). Caminho relativo
      ao style.css (raiz): funciona em file:// e na subpasta do GitHub Pages.
-   Sem .jpg de fallback pra pedra: WebP funciona desde Safari 14, Chrome 32 e Firefox 65.
-   Navegador sem WebP só não pinta essa camada (camada de imagem que falha não afeta
-   as outras) e o painel fica igual ao de antes.
+   Fallback da pedra: textura-pedra-veios.png (a mesma imagem em paleta de 64 cores
+   com alfa, 13,5 KB; sobre a ardósia fica a 48 dB do WebP e nunca mais clara que
+   ele). Vai pra quem NÃO entende image-set(... type()), o que inclui todo navegador
+   sem WebP (Safari ≤ 13, iPads presos no iOS 12): ver o @supports not logo abaixo
+   da Ilha. Cada navegador baixa uma imagem só (a regra que vence).
    Nos veios, o miolo dos nós de brasa teve a luminância limitada (0,22) na geração da
    imagem: assim nenhum ponto do painel fica mais claro do que já era sob o vidro e
    o contraste do texto (#d4c49d e os títulos na cor do reino) não cai. */
@@ -1638,6 +1688,35 @@ body:has(#oraculo-container .balao-fala) #pilha-toasts { bottom: calc(1rem + 400
     linear-gradient(135deg, rgba(160,32,32,0.75), rgba(74,16,16,0.4) 38%, rgba(255,160,160,0.4) 52%, rgba(74,16,16,0.4) 68%, rgba(160,32,32,0.65)) border-box;
 }
 
+/* Fallback PNG da pedra (mesmas 3 regras de cima, só troca .webp por .png).
+   Não dá pra empilhar 2 declarações (a do image-set falharia só no valor
+   computado por causa do var(), e o painel ficaria sem fundo — seção 8): por
+   isso o @supports. Ordem igual à de cima: reino, reino com tinte, Ilha. */
+@supports not (background-image: image-set(url("imagens/textura-pedra-veios.webp") type("image/webp"))) {
+  .painel-reino-premium {
+    background:
+      var(--vidro-fundo) padding-box,
+      url("imagens/textura-pedra-veios.png") var(--veios-pos, 0 0) / 320px 320px repeat padding-box,
+      var(--borda-metal) border-box;
+  }
+  @supports (color: color-mix(in srgb, red 50%, blue)) {
+    .painel-reino-premium {
+      background:
+        linear-gradient(160deg, color-mix(in srgb, var(--cor-reino, transparent) 13%, transparent), transparent 58%) padding-box,
+        var(--vidro-fundo) padding-box,
+        url("imagens/textura-pedra-veios.png") var(--veios-pos, 0 0) / 320px 320px repeat padding-box,
+        var(--borda-metal) border-box;
+    }
+  }
+  .painel-ilha {
+    background: linear-gradient(145deg, rgba(46,26,26,0.88), rgba(22,12,12,0.94));
+    background:
+      linear-gradient(145deg, rgba(46,26,26,0.88), rgba(22,12,12,0.94)) padding-box,
+      url("imagens/textura-pedra-veios.png") var(--veios-pos, 0 0) / 320px 320px repeat padding-box,
+      linear-gradient(135deg, rgba(160,32,32,0.75), rgba(74,16,16,0.4) 38%, rgba(255,160,160,0.4) 52%, rgba(74,16,16,0.4) 68%, rgba(160,32,32,0.65)) border-box;
+  }
+}
+
 /* Pergaminhos: gradientes de sempre + o papel por baixo. A textura é opaca, então o
    painel continua 100% opaco (o texto da página não aparece por baixo do modal). */
 .painel-leitura {
@@ -1668,8 +1747,8 @@ body:has(#oraculo-container .balao-fala) #pilha-toasts { bottom: calc(1rem + 400
     linear-gradient(to bottom, rgba(232,214,186,0.86), rgba(199,175,144,0.90)),
     url("imagens/textura-pergaminho.jpg") center / cover no-repeat;
 }
-/* Balão do Oráculo e dos guardiões (no chat aberto do Oráculo o miolo tem fundo
-   próprio inline, então ali o papel só aparece nas beiradas) */
+/* Balão do Oráculo e dos guardiões (no chat aberto do Oráculo a área das
+   mensagens é transparente: o papel aparece atrás das bolhas, que são opacas) */
 .balao-fala {
   background:
     linear-gradient(to bottom, rgba(241,228,195,0.86), rgba(212,196,157,0.90)),
@@ -1715,6 +1794,23 @@ body:has(#oraculo-container .balao-fala) #pilha-toasts { bottom: calc(1rem + 400
 }
 /* 0.9: seta ▼ vermelho-escuro sobre a ardósia dava 2,8:1 → vermelho vivo 5,5:1 */
 .sim-painel #seta-carga { color: #ff5c5c !important; }
+/* 0.3: "TEMPESTADE!"/"FURACÃO!" em #cc0000 inline sobre o pergaminho (#eadfbf)
+   dava 4,4:1 → vermelho-sangue 6,1:1. A classe vem do JS, que só lê a cor que o
+   simulador escreveu (abaixo de 89 km/h a cor volta a ser a herdada) */
+.sim-painel #alerta-tempestade.sim-alerta-forte { color: #a30000 !important; }
+/* 0.3 a 320px: "Velocidade do Vento: 120 km/h" quebrava em 2 linhas com o
+   alerta no meio ("120 FURACÃO!" e o "km/h" sozinho embaixo). Agora o rótulo
+   nunca quebra e o alerta desce inteiro pra linha de baixo quando não cabe.
+   Só com :has (sem ele fica como era, sem risco de estourar a largura) */
+.sim-painel label:has(> #alerta-tempestade) { flex-wrap: wrap; column-gap: 0.5rem; }
+.sim-painel label:has(> #alerta-tempestade) > #label-vento { white-space: nowrap; }
+/* Bloco 4: "Ciclos: N" e "Vida à Fadiga (...): N" lado a lado não cabiam no
+   celular ("Ciclos:" partido em 2 linhas, a frase vermelha em 3 a 5). Agora,
+   quando a frase inteira não cabe ao lado, ela desce pra linha de baixo com a
+   largura toda; "Ciclos: N" nunca quebra */
+.sim-painel .sim-mostrador-empilhavel { flex-wrap: wrap; gap: 0.2rem 0.75rem; }
+.sim-painel .sim-mostrador-empilhavel > :first-child { white-space: nowrap; }
+.sim-painel .sim-mostrador-empilhavel > :last-child { flex: 1 1 auto; }
 /* 0.4: o creme do botão sobre o laranja puro do degradê dava 2,2:1 → forja escura (≥ 4,8:1) */
 .sim-painel #botao-forjar { background: linear-gradient(90deg, #7f1d1d, #a33f00) !important; }
 /* E.7: "Escolha as 3 peças pra testar" é instrução, mas a opacidade 0,5 inline deixava
@@ -1883,8 +1979,10 @@ body:has(#oraculo-container .balao-fala) #pilha-toasts { bottom: calc(1rem + 400
 }
 
 /* Selos ainda não conquistados: legíveis (sem a opacidade 0,35), com
-   borda tracejada e cadeado no canto. Nome em #a89c80 ≈ 6,1:1 sobre #1c1e22. */
-.selo-trancado { position: relative; border-style: dashed; }
+   borda tracejada e cadeado no canto. Nome em #a89c80 ≈ 6,1:1 sobre #1c1e22.
+   O !important vence o "border: 1px solid" inline do jogo.js sem mexer nele
+   (largura e cor bronze continuam as do inline) */
+.selo-trancado { position: relative; border-style: dashed !important; }
 .selo-trancado .selo-icone { filter: grayscale(1); opacity: 0.45; }
 .selo-trancado .selo-nome { color: #a89c80; }
 .selo-cadeado {
@@ -2008,6 +2106,25 @@ body:has(#oraculo-container .balao-fala) #pilha-toasts { bottom: calc(1rem + 400
 }
 /* Altura da cena = altura do castelo; montanhas e chão ficam presos embaixo */
 .horizonte-cena { position: relative; height: clamp(96px, 18vw, 150px); }
+/* Contraluz: um brilho baixo e parado atrás do castelo. Com os 7 vitrais
+   apagados o castelo (#0e1014) sumia no céu escuro; com o brilho por trás a
+   silhueta aparece, discreta (as montanhas e o castelo pintam por cima dele) */
+.horizonte-cena::before {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 120%;
+  background: radial-gradient(ellipse 50% 92% at 50% 100%, rgba(212,175,55,0.2), rgba(140,98,57,0.09) 55%, transparent 80%);
+  pointer-events: none;
+}
+/* Celular/tablet: a margem de cima somava com o padding de baixo do <main>
+   (4rem) e sobrava um vão de ~115px de céu vazio entre o Certificado e o
+   castelo. A cena sobe pra dentro desse padding (que é só espaço vazio) */
+@media (max-width: 1023px) {
+  .horizonte-reino { margin-top: -2rem; }
+}
+/* Telas largas: o mesmo vão (~122px); sobe um pouco menos que no celular,
+   porque ali o castelo é mais alto e o céu acima dele já conta como respiro */
+@media (min-width: 1024px) {
+  .horizonte-reino { margin-top: -1rem; }
+}
 .horizonte-montanhas {
   position: absolute; left: 0; bottom: 0;
   display: block; width: 100%; height: 70px;

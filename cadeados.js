@@ -154,11 +154,12 @@ function criarProvaTrancada(bloco, tipo, lidas, total, compacta) {
   texto.className = "prova-trancada-texto";
 
   if (compacta) {
-    // No tile do mapa: uma linha só; a frase completa fica no title (e no leitor de tela)
+    // No tile do mapa: uma linha só; a frase completa fica no title (e no leitor de tela).
+    // Sem o 🔒 no texto: o cadeado já está desenhado sobre o brasão, logo ao lado
     const linha = document.createElement("span");
     linha.textContent = tipo === "julgamento"
-      ? `🔒 Julgamento: faltam ${faltam}`
-      : "🔒 Supremo: vença o Julgamento";
+      ? `Julgamento: faltam ${faltam}`
+      : "Supremo: vença o Julgamento";
     const leitor = document.createElement("span");
     leitor.className = "sr-only";
     leitor.textContent = ` (${titulo}: ${acao.charAt(0).toLowerCase()}${acao.slice(1)})`;
@@ -291,7 +292,8 @@ function decorarGaleriaComCadeados() {
     if (!item || conquistas.includes(def.id) || item.classList.contains("selo-trancado")) return;
     item.classList.add("selo-trancado");
     item.style.opacity = "";      // tira o 0,35 inline: a diferença agora é tracejado + cadeado
-    item.style.borderStyle = "";  // deixa o tracejado do CSS vencer o border inline
+    // O tracejado vem só do CSS (.selo-trancado, seção 27). Zerar borderStyle aqui
+    // partia o "border: 1px solid var(...)" inline em longhands vazios
     const [icone, nome] = item.querySelectorAll(":scope > span");
     if (icone) icone.classList.add("selo-icone");
     if (nome) {

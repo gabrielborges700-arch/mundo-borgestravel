@@ -28,7 +28,8 @@ const ANEL_SVG_NS = "http://www.w3.org/2000/svg";
 const ANEL_REINO_RAIO = 15;
 const ANEL_REINO_TRACO = 3.5;
 // Cor do arco no cabeçalho fica no CSS (seção 28): var(--cor-reino), que o app.js
-// já põe no painel; a Ilha não tem essa variável e usa o rubro #c93030 do título.
+// já põe no painel; a Ilha não tem essa variável e usa o rubro #c93030 (o mesmo
+// do .painel-ilha .anel-reino; o título da Ilha agora é o clareado #df8383).
 
 // Anéis grandes do Diário: viewBox 80, raio 32, traço 7 (72px na tela)
 const ANEL_GRANDE_RAIO = 32;
