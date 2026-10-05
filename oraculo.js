@@ -126,10 +126,11 @@ let historicoChat = [{ autor: "mago", texto: SAUDACAO_INICIAL }];
 function montarOraculo() {
   const container = document.createElement("div");
   container.id = "oraculo-container";
-  // z-index 48: acima da barra (40) e dos botões de som/↑ (45), mas ABAIXO do
-  // véu dos modais (50/70/80) — antes (60) o mago ficava por cima do véu e
-  // cobria o canto de baixo do painel do modal. Os toasts (60) seguem por cima.
-  container.style.cssText = "position: fixed; bottom: 1rem; right: 1rem; z-index: 48; display:flex; flex-direction:column; align-items:flex-end; gap:0.5rem;";
+  // z-index 60: o Mago fica disponível enquanto a criança lê uma runa, o Diário
+  // ou uma missão (véus z 50) — no celular esses modais reservam espaço embaixo
+  // pra ele não cobrir o texto (style.css, seção 30). Fica ABAIXO das provas
+  // cronometradas e do certificado (70), da Crônica (80) e do portal (90).
+  container.style.cssText = "position: fixed; bottom: 1rem; right: 1rem; z-index: 60; display:flex; flex-direction:column; align-items:flex-end; gap:0.5rem;";
   document.body.appendChild(container);
 
   renderizarOraculo();

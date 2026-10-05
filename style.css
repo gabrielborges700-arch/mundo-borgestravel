@@ -2181,3 +2181,20 @@ body > footer { padding: 2rem 1rem; }
   .horizonte-vitral.vitral-recem-aceso .vitral-halo,
   .horizonte-estandarte.estandarte-recem-hasteado { animation: none; }
 }
+
+/* ---------- 30. Espaço do Mago nos modais de leitura (celular) ---------- */
+/* O Oráculo (z 60) fica por cima dos modais de leitura (z 50) pra criança poder
+   perguntar enquanto lê. No celular o painel ocupa a largura toda, então os
+   modais reservam embaixo a altura do avatar (~64px + margem): o fim do texto
+   e os botões nunca ficam atrás do Mago. No tablet e no desktop o painel
+   (máx. 600px, centralizado) não chega no canto do avatar. */
+@media (max-width: 700px) {
+  #modal-overlay, #modal-diario-overlay, #modal-missao-overlay, #modal-missao-boss-overlay {
+    padding-bottom: 6rem !important;
+  }
+  #modal-overlay > .painel-leitura, #modal-diario-overlay > .painel-leitura,
+  #modal-missao-overlay > .painel-leitura, #modal-missao-boss-overlay > .painel-leitura {
+    max-height: calc(100vh - 7rem) !important;
+    max-height: calc(100dvh - 7rem) !important;
+  }
+}
