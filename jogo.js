@@ -606,8 +606,9 @@ function abrirModalCertificado() {
     const nome = painel.querySelector("#input-nome-certificado").value.trim() || "Aprendiz do Reino";
     armazenamentoGravar("borgestravel_nome", nome);
 
-    const estado = obterEstadoJogo();
-    const nivel = calcularNivel(estado.xp);
+    // Título fixo: o certificado só aparece pra quem concluiu tudo, e esse feito é
+    // de Mestre Rúnico qualquer que seja o nível de XP (a curva de níveis vai até
+    // 1200 PR, que exige os Supremos — antes o certificado podia dizer "Guardião das Vigas")
     const dataStr = new Date().toLocaleDateString("pt-BR");
 
     const certEl = painel.querySelector("#certificado-imprimivel");
@@ -618,7 +619,7 @@ function abrirModalCertificado() {
           <h1 class="font-display">Certificado de Mestre Rúnico</h1>
           <p>O Mundo Borgestrável reconhece que</p>
           <h2 class="font-display"></h2>
-          <p>concluiu todas as 45 runas e os 7 Julgamentos do Reino, alcançando o título de<br><strong>${nivel.nome}</strong></p>
+          <p>concluiu todas as 45 runas e os 7 Julgamentos do Reino, alcançando o título de<br><strong>Mestre Rúnico</strong></p>
           <p style="margin-top:2rem; font-style:italic;">Data: ${dataStr}</p>
           <p style="margin-top:1rem;">— Mago Aurelius, Guardião do Reino das Super Estruturas</p>
         </div>
