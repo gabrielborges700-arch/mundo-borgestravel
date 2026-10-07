@@ -149,14 +149,14 @@ function renderizarOraculo() {
     // pergaminho com textura do .balao-fala (style.css, seção 25). As bolhas
     // continuam opacas, então o texto mantém o contraste de antes (~8,6:1)
     balao.innerHTML = `
-      <div style="background:#1c1e22; color:var(--ouro-velho); padding:0.6rem; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--bronze-envelhecido);">
+      <div style="background:var(--pedra-ardosia, #1c1e22); color:var(--ouro-velho); padding:0.6rem; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--bronze-envelhecido);">
         <span class="font-display" style="font-size:0.8rem; font-weight:bold;">🔮 Aurelius Arcano</span>
         <button id="fechar-oraculo" style="background:none; border:none; color:var(--pergaminho); cursor:pointer; font-size:0.9rem;">✖</button>
       </div>
       <div id="mensagens-oraculo" style="flex:1; overflow-y:auto; padding:0.6rem; display:flex; flex-direction:column; gap:0.5rem;"></div>
       <form id="form-oraculo" style="padding:0.5rem; background:#e3d5b5; border-top:1px solid var(--bronze-envelhecido); display:flex; gap:0.4rem;">
         <input id="input-oraculo" type="text" placeholder="Pergunte ao Mago..." class="chat-input" style="flex:1; padding:0.4rem 0.6rem; border-radius:6px; font-size:0.75rem;">
-        <button type="submit" style="background:#1c1e22; color:var(--ouro-velho); border:none; padding:0.4rem 0.7rem; border-radius:6px; font-weight:bold; cursor:pointer;">✨</button>
+        <button type="submit" style="background:var(--pedra-ardosia, #1c1e22); color:var(--ouro-velho); border:none; padding:0.4rem 0.7rem; border-radius:6px; font-weight:bold; cursor:pointer;">✨</button>
       </form>
     `;
     container.appendChild(balao);
@@ -192,7 +192,7 @@ function renderizarOraculo() {
   } else {
     const botao = document.createElement("button");
     botao.className = "avatar-mago flutuando";
-    botao.style.cssText = "width:56px; height:56px; border-radius:50%; background:#1c1e22; border:none; font-size:1.5rem; cursor:pointer;";
+    botao.style.cssText = "width:56px; height:56px; border-radius:50%; background:var(--pedra-ardosia, #1c1e22); border:none; font-size:1.5rem; cursor:pointer;";
     botao.textContent = "🧙‍♂️";
     botao.setAttribute("aria-label", "Abrir o Oráculo do Mago Aurelius");
     botao.addEventListener("click", () => {
@@ -209,7 +209,7 @@ function criarBolhaMensagem(msg) {
   bolha.style.cssText = `
     padding:0.6rem; border-radius:8px; font-size:0.75rem; line-height:1.4; max-width:85%;
     align-self:${doUsuario ? "flex-end" : "flex-start"};
-    background:${doUsuario ? "#1c1e22" : "#e3d5b5"};
+    background:${doUsuario ? "var(--pedra-ardosia, #1c1e22)" : "#e3d5b5"};
     color:${doUsuario ? "var(--pergaminho)" : "#3e3222"};
     border:1px solid ${doUsuario ? "var(--ciano-mistico)" : "var(--bronze-envelhecido)"};
   `;

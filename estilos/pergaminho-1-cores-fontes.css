@@ -1,0 +1,944 @@
+/* ==========================================================================
+   pergaminho-1-cores-fontes.css — REDESIGN, ETAPA 1 de 3: CORES E LETRAS
+   --------------------------------------------------------------------------
+   O QUE É ESTE ARQUIVO
+   É uma "roupa nova" vestida POR CIMA do style.css. O style.css continua
+   inteiro e intocado: este arquivo é carregado logo DEPOIS dele no index.html
+   e, como vem depois, as regras daqui ganham das de lá.
+
+   O QUE ELE MUDA
+   Troca o tema noturno "Forja Real" (céu roxo, estrelas, vidro escuro,
+   brilho ciano) pelo tema "mapa antigo / taverna":
+     - o fundo vira um pergaminho de mapa (papel com manchas e borda queimada);
+     - os textos viram tinta marrom-escura;
+     - os reinos viram quadros de madeira escura;
+     - as runas viram cartinhas claras de papel;
+     - as letras passam de 7 famílias para 3:
+         MedievalSharp  → títulos grandes (cara de RPG)
+         Cinzel         → botões, números e rótulos pequenos
+         Alegreya       → textos longos (letra de livro, fácil de ler)
+
+   O QUE ELE NÃO MUDA
+   Posições, medidas que o JavaScript usa (barra 56/100 px, gemas, ✕ dos
+   modais, Mago, ↑, botões de som) e a lógica do jogo. As cores dos
+   7 reinos e da Ilha ficam exatamente iguais. Nada é apagado: estrelas,
+   névoa e lua só ficam escondidas.
+
+   MUDANÇAS DE TAMANHO FEITAS DE PROPÓSITO (aprovadas no plano)
+   - letreiro do topo: "Crônica de Engenharia" menor, "Mundo Borgestrável"
+     maior e em caixa mista (a letra nova é fina e precisava de mais tamanho
+     para mandar) e "O REINO DAS SUPER ESTRUTURAS" menor, em 1 linha;
+   - opções dos quizzes e da ponte (runa E.7) um pouco maiores (frase
+     longa, letra de livro);
+   - título da Crônica e conversa com o Mago um pouco maiores;
+   - moldura de madeira na galeria (a página fica ~80 px mais alta);
+   - borda de 2 px no "Pular para o conteúdo";
+   - letras dos botões um pouco menos espaçadas.
+
+   COMO DESFAZER
+   Para desfazer a etapa INTEIRA: restaurar index.html, jogo.js e oraculo.js
+   do git (ou da pasta backup_antes_do_redesign) e tirar a linha
+   <link ... pergaminho-1-cores-fontes.css> do index.html.
+   Tirar SÓ essa linha volta as cores, mas não volta as letras antigas
+   (o endereço do Google Fonts no index.html também mudou), nem o título
+   em maiúsculas, nem o card de conquistas (cores escritas no jogo.js).
+
+   TRUQUE USADO EM VÁRIOS LUGARES ("escopo de variável")
+   Muitos textos do site têm a cor escrita dentro do JavaScript como
+   "var(--pergaminho)" (creme). Em vez de mexer no JavaScript, redefinimos a
+   variável SÓ dentro de um componente. Ex.: dentro da carta da runa,
+   --pergaminho passa a valer a tinta escura — e o título fica escuro
+   sem tocar no app.js.
+   ========================================================================== */
+
+
+/* ---------- 1. Tokens: a caixa de tintas do mapa ----------
+   Aqui ficam as cores e letras novas, com nomes em português.
+   Nenhum nome antigo foi renomeado; alguns só ganharam um VALOR novo
+   (por exemplo --pedra-ardosia, que era cinza-grafite e virou madeira
+   escura — continua sendo "fundo escuro com letra clara" onde é usado). */
+:root {
+  /* Papel e tinta */
+  --papel: #f2e6c9;            /* pergaminho do mapa (fundo da página) */
+  --papel-claro: #faf3e0;      /* carta de missão (runas) e halo do foco */
+  --papel-borda: #e6d3a8;      /* borda queimada do mapa */
+  --papel-queimado: #e2cfa6;   /* carta da runa negra (Ilha) */
+  --tinta: #2b1d10;            /* texto principal: 13:1 no papel */
+  --tinta-suave: #5a4228;      /* texto secundário: 7,5:1 no papel */
+  --vinho: #7a1f1f;            /* títulos de modal, kicker, foco: 8,3:1 */
+  --cera: #8b1a1a;             /* lacre de cera */
+  --musgo: #3e5a2b;            /* ✓ de lida, placar do Sprint */
+  --ouro-tinta: #5c430c;       /* "dourado" que pode ser TEXTO no papel */
+  --ouro-envelhecido: #b8892c; /* só enfeite (filetes, poeira) — nunca texto no papel */
+  --latao: #c9a14a;            /* aros, pregos, molduras sobre madeira */
+  --madeira: #3a2412;          /* quadros, barra, botões */
+  --madeira-noite: #24160a;    /* madeira mais escura (fundos de selo, toasts) */
+  --madeira-clara: #5a3a1c;    /* veio claro da madeira */
+  --couro: #4a2e16;            /* couro/madeira média dos botões */
+  --veu-sepia: rgba(28, 17, 8, 0.86);   /* véu marrom atrás dos modais */
+  --sprint-relogio: #7a2e0e;            /* relógio do Sprint (7,6:1) */
+  --sprint-relogio-fim: #8b1a1a;        /* relógio nos 10 s finais (5,4:1) */
+
+  /* Letras */
+  --font-titulo: "MedievalSharp", "Cinzel", Georgia, serif;
+
+  /* Valores ANTIGOS com tom novo (mesmo papel de antes) */
+  --bg-ceu-noturno: linear-gradient(90deg, #e6d3a8, #f2e6c9 18%, #f2e6c9 82%, #e6d3a8);
+  --pedra-ardosia: #24160a;
+  --font-body: "Alegreya", Georgia, "Times New Roman", serif;
+  --font-blackletter: "MedievalSharp", "Cinzel", Georgia, serif;
+  --font-unicase: "Cinzel", Georgia, serif;
+  --font-gotico: "MedievalSharp", "Cinzel", Georgia, serif;
+  --vidro-fundo: linear-gradient(180deg, #3a2412, #24160a);
+  --borda-metal: linear-gradient(135deg, #e8c977, #8a6a2a 30%, #c9a14a 50%, #6b4f16 72%, #e0bd6a);
+  /* Sombras marrons (as pretas viravam manchas cinzentas no papel) */
+  --sombra-1: 0 2px 8px rgba(43,29,16,0.30), inset 0 1px 0 rgba(255,235,200,0.06);
+  --sombra-2: 0 10px 24px rgba(43,29,16,0.38), 0 2px 6px rgba(43,29,16,0.30), inset 0 1px 0 rgba(255,235,200,0.07);
+  --sombra-3: 0 20px 44px rgba(43,29,16,0.45), 0 6px 14px rgba(43,29,16,0.32), inset 0 1px 0 rgba(255,235,200,0.09);
+
+  /* Texturas desenhadas pelo próprio navegador (sem imagem para baixar).
+     data-URI em variável é seguro: não tem caminho relativo. */
+  --ruido-papel: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .22 0 0 0 0 .08 0 0 0 .13 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --manchas-papel: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%271200%27 height=%27900%27 viewBox=%270 0 1200 900%27 preserveAspectRatio=%27none%27%3E%3Cfilter id=%27m%27 x=%270%27 y=%270%27 width=%27100%25%27 height=%27100%25%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.0035 .005%27 numOctaves=%273%27 seed=%277%27/%3E%3CfeColorMatrix values=%270 0 0 0 .45 0 0 0 0 .28 0 0 0 0 .1 .9 0 0 0 -.38%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23m)%27/%3E%3C/svg%3E");
+  --veios-madeira: repeating-linear-gradient(92deg, rgba(255,255,255,0.035) 0 2px, transparent 2px 9px, rgba(0,0,0,0.08) 9px 11px, transparent 11px 23px);
+}
+
+
+/* ---------- 2. Letras (fontes) ----------
+   As 4 famílias que saíram do download (Cinzel Decorative, Cormorant
+   Unicase, EB Garamond, Nunito, UnifrakturCook, UnifrakturMaguntia) caem
+   aqui, de propósito, numa das 3 novas. O peso 900 da Cinzel também saiu:
+   onde ele era pedido, agora é 700 (o negrito que foi baixado).
+   A MedievalSharp só existe no peso normal (400): se pedir negrito o
+   navegador "engorda" a letra e ela fica borrada — por isso todo título
+   nela leva font-weight: 400. */
+.font-serif-body { font-family: var(--font-body); }          /* era EB Garamond escrito à mão */
+.font-gotico { font-family: var(--font-gotico); }            /* classe usada no index.html e que não existia */
+.font-blackletter { font-family: var(--font-blackletter); font-weight: 400; }
+.letra-capital { font-family: var(--font-titulo); font-weight: 400; } /* era Cinzel Decorative 900 */
+.skip-link { font-weight: 700; }                             /* era 800 */
+.hero-titulo { font-weight: 700; }                           /* era 900 */
+.cronica-medalhao, .cronica-emblema, .cronica-fecho { font-weight: 700; } /* eram 900 */
+
+/* Números com algarismos "alinhados": por padrão a Alegreya desenha o zero
+   do tamanho de uma letra minúscula, e "0 / 45" parecia "o / 45".
+   button, input, textarea e select entram por nome porque o navegador dá a
+   eles uma letra própria que não herda isso do body. A Cinzel já só tem
+   algarismos alinhados (não muda nada nela). */
+body, button, input, textarea, select { font-variant-numeric: lining-nums; }
+
+/* Títulos grandes em MedievalSharp */
+.titulo-reino,
+.tile-titulo,
+.painel-leitura > h2,
+#area-nao-imprimir > h2,
+.cronica-titulo,
+#galeria-conquistas > h2 {
+  font-family: var(--font-titulo);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+/* Capitulares (letra grande no começo do texto da runa e da Crônica):
+   eram UnifrakturCook em #7a1414 — que é a cor da Ilha. Cor de reino
+   não vira texto no papel, então a capitular passa para o vinho. */
+.capitular > h2 + p + p::first-letter,
+.cronica-capitular::first-letter {
+  font-family: var(--font-titulo);
+  font-weight: 400;
+  color: var(--vinho);
+  text-shadow: 1px 1px 0 rgba(255,245,215,0.85), 2px 2px 0 rgba(184,137,44,0.45);
+}
+
+/* Opções dos quizzes (Julgamentos, Sprint, Torre): saem da Cinzel em
+   CAIXA-ALTA e vão para a letra de livro, em caixa normal — frase longa
+   em maiúsculas cansa a leitura. O tamanho .78rem vem escrito no jogo.js;
+   só aqui, e só nestes botões, o !important passa por cima dele. */
+#lista-perguntas-missao button,
+#lista-perguntas-missao-boss button,
+#sprint-pergunta button,
+#torre-pergunta button {
+  font-family: var(--font-body);
+  text-transform: none;
+  letter-spacing: 0.01em;
+  font-weight: 400;
+  font-size: 0.95rem !important;
+  line-height: 1.35;
+}
+
+
+/* ---------- 3. Página e fundo de pergaminho ----------
+   O céu noturno vira um mapa antigo:
+   - fundo: papel com granulado fino + manchas grandes de envelhecimento;
+   - ::before: linhas finas de rumo (as "teias" dos mapas de navegação);
+   - ::after: vinheta de borda queimada.
+   Estrelas, névoa e lua NÃO são apagadas: continuam no HTML (o efeitos.js
+   segue criando as 60 estrelas), só ficam invisíveis. A lua vira
+   rosa-dos-ventos na etapa 2. As partículas douradas viram poeira de
+   ouro velho. */
+html { background-color: var(--papel); }
+/* Cor da barra de rolagem SÓ no navegador que não entende ::-webkit-scrollbar
+   (Firefox). No Chrome/Edge, "scrollbar-color" desligaria a barra fina de
+   8 px do style.css e todas as barras engordariam para 15 px — mudando a
+   largura útil dos painéis. Lá quem pinta é a seção 15. */
+@supports not selector(::-webkit-scrollbar) {
+  html { scrollbar-color: var(--bronze-envelhecido) var(--papel-borda); }
+}
+body {
+  background-color: var(--papel);
+  background-image: var(--bg-ceu-noturno);
+  color: var(--tinta);
+}
+.fundo-magico-fixo {
+  background-color: var(--papel);
+  background-image:
+    var(--ruido-papel),
+    var(--manchas-papel),
+    var(--bg-ceu-noturno);
+  background-size: 220px 220px, 100% 100%, auto;
+  background-repeat: repeat, no-repeat, no-repeat;
+}
+.fundo-magico-fixo::before {
+  background-image:
+    repeating-conic-gradient(from 3deg at 84% 16%, rgba(92,67,40,0.12) 0deg 0.12deg, transparent 0.12deg 22.5deg),
+    repeating-conic-gradient(from 8deg at 10% 82%, rgba(122,31,31,0.07) 0deg 0.12deg, transparent 0.12deg 22.5deg);
+  background-size: auto, auto;
+}
+.fundo-magico-fixo::after {
+  background:
+    radial-gradient(ellipse at 50% 45%, transparent 58%, rgba(139,90,43,0.16) 82%, rgba(92,52,18,0.30) 100%);
+}
+.estrela, .nevoa, .lua { display: none; }
+/* Poeira de ouro: tom mais claro, meio transparente e com brilho, para
+   parecer reflexo de ouro e não respingo de tinta parado no papel.
+   (A transparência vai na própria cor: a "opacity" do elemento é animada
+   pelo style.css e não pode ser usada aqui.) */
+.particula-dourada {
+  background: rgba(217,180,90,0.6);
+  box-shadow: 0 0 4px rgba(217,180,90,0.6);
+}
+@media (prefers-reduced-motion: reduce) {
+  .particula-dourada { display: none; }
+}
+
+/* Texto "Carregando o mapa do reino..." e rodapé: estavam em creme
+   (feito para o céu escuro). Dentro deles o creme passa a ser tinta suave. */
+body > footer, #lista-blocos > p { --pergaminho-escuro: var(--tinta-suave); }
+
+/* Linhas divisórias sobre o papel: de ouro translúcido (some no papel)
+   para bronze; o losango ❖ fica em vinho. */
+.divisor-rune { background: linear-gradient(90deg, transparent, rgba(140,98,57,0.65), transparent); }
+.divisor-losango::before, .divisor-losango::after { background: linear-gradient(90deg, transparent, rgba(140,98,57,0.7), transparent); }
+.divisor-losango > span { color: var(--vinho); }
+
+/* Seleção de texto com o mouse: marca-texto de ouro velho */
+::selection { background: rgba(184,137,44,0.38); }
+
+
+/* ---------- 4. Herói (o topo do site) ----------
+   O título deixa de ser dourado brilhante no céu e vira tinta de mapa:
+   - "Crônica de Engenharia" em vinho, Cinzel negrito;
+   - "Mundo Borgestrável" em MedievalSharp com degradê vinho → ouro de tinta
+     e um relevo claro (no lugar das sombras pretas). Em caixa mista, como
+     no esboço aprovado: em maiúsculas a MedievalSharp perdia os desenhos
+     do g, do á e do l, que são o que dá cara de RPG;
+   - "O REINO DAS SUPER ESTRUTURAS" e o subtítulo em tinta suave.
+   ATENÇÃO (técnico): o título usa o truque "texto pintado pelo fundo"
+   (background-clip: text + text-fill transparente). Por isso as 5 coisas
+   (fundo, os 2 clips, a cor de preenchimento e o filtro) são trocadas
+   JUNTAS — trocar só a "color" não teria efeito nenhum.
+   O acento do Á continua protegido pelo padding-top .3em do style.css. */
+.hero-kicker {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--vinho);
+  text-shadow: 0 1px 0 rgba(255,250,235,0.6);
+}
+/* No celular o "Crônica de Engenharia" fica menor, para não ter a mesma
+   largura do título (o título é quem manda no topo). */
+@media (max-width: 480px) {
+  .hero-kicker { font-size: 0.74rem; letter-spacing: 0.12em; }
+}
+/* A MedievalSharp é fina: no mesmo tamanho do tema antigo o título perdia
+   força. Ele cresce (de 5,2vw para 8,6vw, teto 4,2rem — a caixa mista é
+   mais estreita que as maiúsculas, então cabe maior) e continua em 1 linha
+   de 320 a 1366 px, sem rolagem para o lado. O padding-top de 0,3em que
+   protege o acento do á cresce junto. */
+.hero-titulo-linha1 {
+  font-family: var(--font-titulo);
+  font-weight: 400;
+  font-size: clamp(1.75rem, 8.6vw, 4.2rem);
+  letter-spacing: 0.01em;
+  background: linear-gradient(180deg, #8e2424 0%, var(--vinho) 45%, #4a2008 75%, var(--ouro-tinta) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 1px 0 rgba(255,250,235,0.75)) drop-shadow(0 2px 3px rgba(58,36,18,0.28));
+}
+/* "O REINO DAS SUPER ESTRUTURAS": menor e menos espaçado que no tema antigo,
+   para caber em 1 linha no celular (antes quebrava em "…SUPER / ESTRUTURAS",
+   com as linhas quase coladas) e não disputar atenção com o título no
+   computador. O line-height 1,3 dá respiro se a letra de reserva (Georgia)
+   aparecer enquanto as fontes carregam e a linha quebrar. */
+.hero-titulo-linha2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(0.78rem, 2.1vw, 1.15rem);
+  letter-spacing: 0.12em;
+  line-height: 1.3;
+  margin-top: 0.55rem;
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  -webkit-text-fill-color: currentColor;
+  color: var(--tinta-suave);
+  filter: none;
+  text-shadow: 0 1px 0 rgba(255,250,235,0.55);
+}
+.hero-subtitulo { color: var(--tinta-suave); }
+
+/* Vitral do fundo do herói: de luz colorida de igreja (que "acendia" o céu)
+   para manchas de aquarela terrosa translúcidas sobre o papel.
+   (O "mix-blend-mode: screen" do style.css não fazia efeito nenhum: o topo
+   é um grupo isolado, sem nada pintado atrás do vitral. Aqui fica a mistura
+   normal, escrita para anular aquela; o visual é o mesmo.) */
+.vitral-hero-fundo {
+  background:
+    radial-gradient(ellipse at 20% 22%, rgba(122,31,31,0.12), transparent 46%),
+    radial-gradient(ellipse at 80% 26%, rgba(62,90,43,0.14), transparent 46%),
+    radial-gradient(ellipse at 30% 82%, rgba(184,137,44,0.16), transparent 46%),
+    radial-gradient(ellipse at 76% 78%, rgba(140,98,57,0.14), transparent 46%);
+  mix-blend-mode: normal;
+  /* some suavemente embaixo: sem isso aparecia uma "emenda" reta onde o topo termina */
+  -webkit-mask-image: linear-gradient(to bottom, #000 62%, transparent 98%);
+  mask-image: linear-gradient(to bottom, #000 62%, transparent 98%);
+}
+.vitral-hero-fundo::after {
+  background:
+    radial-gradient(ellipse at 50% 8%, rgba(184,137,44,0.12), transparent 50%),
+    radial-gradient(ellipse at 12% 70%, rgba(62,90,43,0.10), transparent 42%),
+    radial-gradient(ellipse at 88% 62%, rgba(122,31,31,0.08), transparent 45%);
+}
+
+/* Brasão do herói: o núcleo de pedra-grafite vira um lacre de cera
+   vermelha com aro de ouro; o anel de latão continua girando. */
+.hero-emblema-container::before {
+  background: radial-gradient(circle, rgba(184,137,44,0.22), rgba(184,137,44,0.08) 45%, transparent 72%);
+}
+.hero-emblema-nucleo {
+  background: radial-gradient(circle at 35% 30%, #b83434, var(--cera) 55%, #5c1010);
+  border-color: var(--ouro-envelhecido);
+  box-shadow: 0 6px 16px rgba(58,36,18,0.45), inset 0 2px 4px rgba(255,170,170,0.3), inset 0 -3px 6px rgba(0,0,0,0.35);
+}
+.anel-metalico { box-shadow: 0 0 14px rgba(184,137,44,0.35), inset 0 0 6px rgba(43,29,16,0.5); }
+.anel-metalico::after { mix-blend-mode: soft-light; }
+/* O reflexo que gira (um cone claro maior que o anel) virava uma mancha
+   esbranquiçada no papel em volta do brasão. Recortado pelo círculo do
+   anel, ele corre só sobre o aro, como reflexo de metal. A sombra do anel
+   continua aparecendo (sombra não é recortada). */
+.hero-anel { overflow: hidden; }
+header:hover .anel-metalico { box-shadow: 0 0 22px rgba(184,137,44,0.5), inset 0 0 8px rgba(43,29,16,0.55); }
+
+/* Divisores do herói em bronze, com o ❖ em vinho */
+.hero-divisor > span { text-shadow: 0 1px 0 rgba(255,250,235,0.6); }
+.hero-divisor::before, .hero-divisor::after {
+  background: linear-gradient(90deg, transparent, rgba(140,98,57,0.8), transparent);
+  box-shadow: 0 1px 0 rgba(255,250,235,0.5);
+}
+
+
+/* ---------- 5. Barra de navegação (o topo grudado) ----------
+   Vira uma tábua de madeira opaca com um fio de latão embaixo.
+   Sai o "vidro embaçado" (backdrop-filter), o que também deixa o celular
+   mais leve. A altura da barra (--altura-barra-nav, 56/100 px) NÃO muda:
+   o JavaScript usa essa medida para rolar até os reinos.
+   Gemas, contador, XP e chama ficam iguais (letra clara sobre madeira). */
+.barra-navegacao {
+  background:
+    var(--veios-madeira),
+    linear-gradient(180deg, var(--couro), var(--madeira) 55%, #2a190b);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: 0 6px 18px rgba(43,29,16,0.38);
+  color: var(--pergaminho);
+}
+.barra-navegacao::after {
+  height: 2px;
+  background: linear-gradient(90deg, rgba(201,161,74,0.5), #e8c977 30%, var(--latao) 50%, #e8c977 70%, rgba(201,161,74,0.5));
+}
+/* Número branco das gemas: ganha um contorno escuro (sombra justa), para
+   ser lido também nas gemas claras (âmbar, ciano, cinza, coral). A cor
+   da gema NÃO muda — só a sombra do número. */
+.botao-bloco-nav { text-shadow: 0 0 2px #1c1108, 0 1px 2px #1c1108, 0 0 1px #1c1108; }
+.contador-progresso { border-color: rgba(201,161,74,0.55); background: rgba(201,161,74,0.10); }
+.widget-xp-trilho { border-color: rgba(201,161,74,0.4); }
+/* Botão 📖 (Diário): medalhão de madeira com aro de latão */
+.widget-diario {
+  background: radial-gradient(circle at 35% 30%, #6b4423, var(--madeira-noite) 78%);
+  border-color: var(--latao);
+}
+.widget-diario:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.45), 0 0 12px rgba(201,161,74,0.45); }
+
+
+/* ---------- 6. Quadros dos reinos (madeira) ----------
+   Cada reino vira um quadro de madeira escura, com um leve toque (7%) da
+   cor do reino só na beirada de cima (some até os 56 px), e moldura de
+   latão. Com mais tinta o ciano e o índigo deixavam a madeira
+   cinza-esverdeada, com cara de outro material (o quadro fechado no
+   celular tem ~160 px: um tinte até 140 px cobria quase tudo). O ponto
+   em 140 px fica para o fundo do quadro continuar com o mesmo tom de
+   madeira. A cor pura do reino continua no brasão, nas gemas e no título.
+   Mesmo esquema do style.css: primeiro a versão simples (para navegador
+   antigo, sem mistura de cores) e, dentro do @supports, a versão com o
+   tinte do reino.
+   "color: var(--pergaminho)" garante que nenhum texto sem cor própria
+   fique escuro sobre a madeira escura.
+   A textura de brasa (pedra) sai dos reinos comuns e fica só na Ilha. */
+.painel-reino-premium {
+  background:
+    var(--veios-madeira) padding-box,
+    linear-gradient(180deg, var(--madeira), var(--madeira-noite)) padding-box,
+    var(--borda-metal) border-box;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: 0 0 0 1px #1c1108, var(--sombra-2);
+  color: var(--pergaminho);
+}
+@supports (color: color-mix(in srgb, red 50%, blue)) {
+  .painel-reino-premium {
+    background:
+      var(--veios-madeira) padding-box,
+      linear-gradient(180deg, color-mix(in srgb, var(--cor-reino, var(--madeira)) 7%, var(--madeira)) 0, var(--madeira) 56px, var(--madeira) 140px, var(--madeira-noite)) padding-box,
+      var(--borda-metal) border-box;
+  }
+}
+/* Filete interno (moldura dupla) em latão */
+.painel-reino-premium::before { border-color: rgba(201,161,74,0.26); }
+.painel-reino-premium:hover { box-shadow: 0 0 0 1px #1c1108, var(--sombra-3), 0 0 26px rgba(201,161,74,0.28); }
+@supports (color: color-mix(in srgb, red 50%, blue)) {
+  .painel-reino-premium:hover {
+    box-shadow: 0 0 0 1px #1c1108, var(--sombra-3), 0 0 26px color-mix(in srgb, var(--cor-reino, #c9a14a) 30%, transparent);
+  }
+}
+/* Título do reino sobre a madeira: o style.css clareava a cor do reino com
+   BRANCO, o que dava pastéis frios (cinza puro, ciano neon, rosa, lavanda).
+   Aqui ela é clareada com o CREME do pergaminho: o matiz de cada reino fica
+   (o código da cor do reino não muda) e o tom esquenta. Contraste na
+   madeira: acordeão ≥ 4,5:1 (título grande, pede 3:1); mapa do computador
+   entre 6:1 e 10:1. A Ilha mantém o #df8383 (regra mais forte do style.css).
+   Sem color-mix, vale a versão do style.css. */
+@supports (color: color-mix(in srgb, red 50%, blue)) {
+  .titulo-reino { color: color-mix(in srgb, var(--cor-reino, var(--pergaminho)) 60%, #f1e4c3); }
+  @media (min-width: 1024px) {
+    .tile-titulo { color: color-mix(in srgb, var(--cor-reino, var(--pergaminho)) 40%, #f1e4c3); }
+  }
+}
+
+/* Linha divisória dentro da madeira: latão (o bronze sumiria aqui) */
+.painel-reino-premium .divisor-rune { background: linear-gradient(90deg, transparent, rgba(201,161,74,0.6), transparent); }
+
+/* Ilha Amaldiçoada: madeira queimada OPACA com a textura de brasa e a
+   moldura rubra. (O vidro translúcido antigo clareava sobre o papel e o
+   título rosado caía para 4,4:1; opaco, ele fica em 6:1.) Vem DEPOIS do
+   quadro comum de propósito: as duas regras têm o mesmo peso e ganha a
+   última. */
+.painel-ilha {
+  background: linear-gradient(145deg, #2e1a1a, #160c0c);
+  background:
+    linear-gradient(145deg, rgba(46,26,26,0.94), rgba(22,12,12,0.97)) padding-box,
+    url("../imagens/textura-pedra-veios.webp") var(--veios-pos, 0 0) / 320px 320px repeat padding-box,
+    linear-gradient(145deg, #2e1a1a, #160c0c) padding-box,
+    linear-gradient(135deg, rgba(160,32,32,0.85), #4a1010 38%, rgba(255,160,160,0.55) 52%, #4a1010 68%, rgba(160,32,32,0.8)) border-box;
+}
+@supports not (background-image: image-set(url("../imagens/textura-pedra-veios.webp") type("image/webp"))) {
+  .painel-ilha {
+    background: linear-gradient(145deg, #2e1a1a, #160c0c);
+    background:
+      linear-gradient(145deg, rgba(46,26,26,0.94), rgba(22,12,12,0.97)) padding-box,
+      url("../imagens/textura-pedra-veios.png") var(--veios-pos, 0 0) / 320px 320px repeat padding-box,
+      linear-gradient(145deg, #2e1a1a, #160c0c) padding-box,
+      linear-gradient(135deg, rgba(160,32,32,0.85), #4a1010 38%, rgba(255,160,160,0.55) 52%, #4a1010 68%, rgba(160,32,32,0.8)) border-box;
+  }
+}
+.painel-ilha::before { border-color: rgba(160,32,32,0.22); }
+.painel-ilha:hover { box-shadow: 0 0 0 1px #1c1108, var(--sombra-3), 0 0 30px rgba(160,32,32,0.3); }
+
+/* Brasõezinhos e número pequeno do escudo: de grafite para madeira/latão */
+.brasao-numero {
+  background: radial-gradient(circle at 35% 30%, #5a3a1c, var(--madeira-noite) 70%);
+  border-color: rgba(201,161,74,0.85);
+}
+.tile-brasao .brasao-svg { filter: drop-shadow(0 3px 4px rgba(0,0,0,0.55)); }
+
+/* Link "Ler a crônica deste reino": era uma pílula de madeira que sumia
+   dentro do quadro de madeira. Agora é madeira mais clara com aro de latão. */
+.link-cronica-reino {
+  background: linear-gradient(180deg, #6b4423, #4a2e16);
+  border: 1px solid var(--latao);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,235,190,0.18);
+}
+.link-cronica-reino:hover { box-shadow: 0 5px 12px rgba(0,0,0,0.45), 0 0 12px rgba(201,161,74,0.4); }
+
+/* Avatar dos guardiões: de metal frio para medalhão de madeira com aro de latão
+   (o Cronista Caído, da Ilha, mantém o aro rubro do style.css) */
+.guardiao-avatar {
+  background: radial-gradient(circle at 35% 30%, #6b4423, var(--madeira-noite) 78%);
+  border-color: var(--latao);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.45);
+}
+.balao-fala { box-shadow: 0 8px 20px rgba(43,29,16,0.45); }
+
+/* Mapa do computador (telas largas): a trilha entre os reinos vira um
+   tracejado de tinta vinho, como rota desenhada num mapa do tesouro. */
+@media (min-width: 1024px) {
+  .mapa-reino-grid { --trilha-cor: rgba(122,31,31,0.72); }
+  .tile-pos-1::after, .tile-pos-2::after, .tile-pos-3::after,
+  .tile-pos-5::after, .tile-pos-6::after {
+    background: repeating-linear-gradient(90deg, var(--trilha-cor) 0 10px, transparent 10px 18px);
+    filter: none;
+  }
+  .tile-pos-4::after {
+    background: repeating-linear-gradient(180deg, var(--trilha-cor) 0 10px, transparent 10px 18px);
+    filter: none;
+  }
+  .tile-titulo { text-shadow: 0 1px 2px rgba(0,0,0,0.85); }
+
+  /* Reino ainda não iniciado: o style.css apagava as cores do quadro
+     INTEIRO (saturate 0,6) e passava uma névoa cinza por cima — a madeira e
+     o latão viravam pedra cinzenta, e na 1ª visita 7 dos 8 quadros pareciam
+     cinza. Agora só o cabeçalho (brasão + título, que já fica a 0,88 de
+     opacidade) perde cor; a madeira continua quente. A névoa continua
+     vagando (mesma animação e desfoque), mas em poeira de pergaminho. */
+  .tile-reino.estado-nao-iniciado { filter: none; }
+  .tile-reino.estado-nao-iniciado .tile-cabecalho { filter: saturate(0.6); }
+  .tile-reino.estado-nao-iniciado .tile-clima::before {
+    background: linear-gradient(100deg, transparent 15%, rgba(230,211,168,0.10) 45%, transparent 75%);
+  }
+
+  /* Este arquivo vem depois do style.css, então o ":hover" dos quadros
+     (acima) passaria por cima de estados que lá ganhavam dele. Aqui eles
+     são repetidos para continuarem valendo:
+     - painel largo das runas abertas: mantém a sombra mais funda;
+     - tile ABERTO com o mouse em cima: mantém o anel dourado de "aberto". */
+  .painel-runas-aberto { box-shadow: 0 0 0 1px #1c1108, var(--sombra-3); }
+  .tile-reino.tile-aberto:hover {
+    box-shadow:
+      var(--sombra-3),
+      0 0 0 1px rgba(212,175,55,0.55),
+      0 0 26px rgba(212,175,55,0.45);
+  }
+  @supports (color: color-mix(in srgb, red 50%, blue)) {
+    .tile-reino.tile-aberto:hover {
+      box-shadow:
+        var(--sombra-3),
+        0 0 0 1px rgba(212,175,55,0.55),
+        0 0 26px color-mix(in srgb, var(--cor-reino, #d4af37) 45%, transparent);
+    }
+  }
+}
+
+
+/* ---------- 7. Cartas das runas (claras, sobre a madeira) ----------
+   Cada runa vira uma cartinha de papel claro. O título e o ✓ têm a cor
+   escrita no app.js como var(--pergaminho) e var(--ciano-mistico);
+   aqui, SÓ dentro da carta, essas variáveis passam a valer tinta e musgo
+   (um musgo mais escuro, #2e4620: a carta lida fica a 70% sobre a madeira
+   e o ✓ fino precisava de folga acima do mínimo de contraste).
+   No hover, a BORDA na cor do reino continua vindo do style.css (por isso
+   o .espada-card:hover daqui não mexe na borda de carta com tema); só a
+   sombra preta e o brilho ciano viram marrom e dourado. */
+.espada-card {
+  --pergaminho: var(--tinta);
+  --ciano-mistico: #2e4620;
+  background: var(--ruido-papel), var(--papel-claro);
+  border: 1px solid var(--bronze-envelhecido);
+  box-shadow: 0 2px 0 rgba(140,98,57,0.45), 0 6px 12px rgba(0,0,0,0.32);
+  color: var(--tinta);
+}
+.espada-card::before { background: linear-gradient(90deg, transparent, rgba(232,180,80,0.22), transparent); }
+.espada-card > span[title="Já lida"] { font-weight: 700; }
+/* Borda latão no hover só como reserva, para carta sem tema de reino */
+.espada-card:not([class*="theme-"]):hover { border-color: var(--latao); }
+.espada-card:hover {
+  box-shadow: 0 2px 0 rgba(140,98,57,0.45), 0 10px 20px rgba(0,0,0,0.4), 0 0 14px rgba(232,180,80,0.35);
+}
+.theme-indigo:hover   { box-shadow: 0 8px 18px rgba(20,12,4,0.5), 0 0 12px rgba(92, 107, 192, 0.35); }
+.theme-laranja:hover  { box-shadow: 0 8px 18px rgba(20,12,4,0.5), 0 0 12px rgba(255, 112, 67, 0.35); }
+.theme-ambar:hover    { box-shadow: 0 8px 18px rgba(20,12,4,0.5), 0 0 12px rgba(224, 168, 62, 0.35); }
+.theme-cinza:hover    { box-shadow: 0 8px 18px rgba(20,12,4,0.5), 0 0 12px rgba(158, 158, 158, 0.35); }
+.theme-vermelho:hover { box-shadow: 0 8px 18px rgba(20,12,4,0.5), inset 0 0 15px rgba(192, 57, 43, 0.2); }
+.theme-ciano:hover    { box-shadow: 0 8px 18px rgba(20,12,4,0.5), 0 0 12px rgba(0, 229, 255, 0.35); }
+.theme-roxo:hover     { box-shadow: 0 8px 18px rgba(20,12,4,0.5), 0 0 12px rgba(171, 71, 188, 0.35); }
+.theme-oxblood:hover  { box-shadow: 0 8px 18px rgba(20,12,4,0.5), 0 0 12px rgba(160, 32, 32, 0.4); }
+
+/* Número da runa (ex.: 2.3): carimbo em vinho sobre a carta */
+.runa-numero {
+  color: var(--vinho);
+  font-weight: 700;
+  background: rgba(122,31,31,0.07);
+  border-color: rgba(122,31,31,0.38);
+  box-shadow: inset 0 1px 2px rgba(43,29,16,0.18);
+}
+/* Runa com desafio resolvido: aro de ouro velho (era brilho dourado no escuro) */
+.espada-card.runa-desafio-resolvido {
+  border-color: var(--ouro-envelhecido);
+  box-shadow: 0 0 0 1px var(--ouro-envelhecido), 0 0 12px rgba(184,137,44,0.5);
+}
+/* Runas negras (Ilha): carta de papel queimado. O número e o ✓ vermelhos
+   (#e05555 e #c93030, escritos no style.css e no app.js) ficavam ilegíveis
+   nesse papel; viram vinho (6,7:1). */
+.espada-card.runa-negra {
+  background: var(--ruido-papel), var(--papel-queimado);
+  border-color: rgba(122,31,31,0.6);
+}
+.runa-negra .runa-numero {
+  color: var(--vinho);
+  background: rgba(122,31,31,0.08);
+  border-color: rgba(122,31,31,0.45);
+}
+.runa-negra > span[title="Já explorada"] { color: var(--vinho) !important; }
+
+
+/* ---------- 8. Botões de madeira (.btn-gotico) ----------
+   Continuam de madeira, com tom mais quente e letra um pouco menos
+   espaçada. Tamanho, espaçamento interno e borda NÃO mudam: eles são os
+   "calços" do ✕ dos modais e dos botões pequenos dos reinos. */
+.btn-gotico {
+  letter-spacing: 0.12em;
+  background: var(--veios-madeira), linear-gradient(180deg, #5a3a1c, var(--madeira) 60%, #2a190b);
+  border-color: #1c1108;
+  box-shadow: 0 3px 0 #1c1108, 0 5px 12px rgba(43,29,16,0.35), inset 0 1px 0 rgba(255,220,160,0.22), inset 0 -2px 3px rgba(0,0,0,0.35);
+}
+.btn-gotico:hover {
+  box-shadow: 0 4px 0 #1c1108, 0 6px 14px rgba(43,29,16,0.4), inset 0 1px 0 rgba(255,220,160,0.28), 0 0 18px rgba(232,180,80,0.45);
+}
+/* Botões que no style.css têm espaçamento próprio: as regras acima (que
+   vêm depois) passariam por cima. O ✕ da Crônica fica sem espaço extra
+   (senão sai descentralizado) e o botão do topo mantém o seu .14em. */
+.btn-gotico.cronica-fechar { letter-spacing: 0; }
+.btn-gotico.hero-botao-cronica { letter-spacing: 0.14em; }
+/* Botão recém-destrancado: o brilho dourado parado continua com o mouse
+   em cima (sem isto, o hover genérico acima apagava o brilho). */
+.btn-gotico.botao-recem-destrancado:hover {
+  box-shadow: 0 4px 12px rgba(43,29,16,0.5), 0 0 10px rgba(212,175,55,0.5);
+}
+
+/* Opção escolhida nos Julgamentos: era ciano. Agora é uma carta CLARA
+   (papel com tinta escura, 14,7:1) com borda vinho forte e um ✓ na frente.
+   Assim a escolhida se destaca das outras (madeira escura) até para quem
+   tem daltonismo. O ✓ é desenho do CSS: não entra no texto do botão.
+   O "/ """ dá ao ✓ um texto alternativo vazio, para o leitor de tela não
+   ler "marca de seleção" (o aria-pressed já anuncia "pressionado"); a
+   1ª linha "content" é a reserva para navegador que não entende isso.
+   As 2 classes + :hover vencem o creme do botão comum. */
+.btn-gotico.opcao-marcada, .btn-gotico.opcao-marcada:hover {
+  background: var(--ruido-papel), var(--papel-claro);
+  color: var(--tinta);
+  border-color: var(--vinho);
+  box-shadow: 0 0 0 2px var(--vinho), 0 0 14px rgba(232,180,80,0.55);
+}
+.btn-gotico.opcao-marcada::before,
+.btn-gotico.opcao-marcada-suprema::before {
+  content: "✓ ";
+  content: "✓ " / "";
+  font-weight: 700;
+}
+.btn-gotico.opcao-marcada::before { color: var(--musgo); }
+
+
+/* ---------- 9. Modais e véus ----------
+   O véu quase preto-azulado atrás das janelas vira um véu sépia (marrom).
+   O JavaScript escreve o véu direto no elemento, por isso o !important,
+   que aqui mexe SÓ na cor de fundo (abrir/fechar e posição continuam com
+   o JS). Fica dentro de @media screen: na impressão do certificado manda
+   a regra de papel branco do style.css. */
+@media screen {
+  #modal-overlay, #modal-diario-overlay, #modal-missao-overlay, #modal-missao-boss-overlay,
+  #modal-certificado-overlay, #modal-card-overlay, #modal-sprint-overlay, #modal-torre-overlay {
+    background: var(--veu-sepia) !important;
+  }
+}
+.cronica-overlay { background: var(--veu-sepia); }
+/* Texto dos pergaminhos dos modais em tinta; título em vinho */
+.painel-leitura { color: var(--tinta); }
+.painel-leitura > h2, #area-nao-imprimir > h2 { color: var(--vinho); }
+/* Sprint: o placar era ciano sobre papel (ilegível) → musgo.
+   Torre: o andar era ouro sobre papel (ilegível) → ouro de tinta. */
+#modal-sprint-overlay { --ciano-mistico: var(--musgo); }
+#modal-torre-overlay { --ouro-velho: var(--ouro-tinta); }
+/* Portal (efeito ao entrar num reino): o véu escuro fica sépia */
+.portal-magico { --magia-profunda: #1c1108; }
+
+
+/* ---------- 10. Galeria de conquistas (quadro de madeira) ----------
+   A galeria ficava solta no céu escuro. No papel, o título dourado e os
+   textos claros sumiriam; então ela vira um quadro de madeira, como os
+   reinos. Os selos já usam a "madeira-noite"; o aro deles vira latão. */
+#galeria-conquistas {
+  --bronze-envelhecido: var(--latao);
+  position: relative;
+  padding: 1.25rem 1rem 1.5rem;
+  border-radius: 14px;
+  border: 1px solid transparent;
+  background:
+    var(--veios-madeira) padding-box,
+    linear-gradient(180deg, var(--madeira), var(--madeira-noite)) padding-box,
+    var(--borda-metal) border-box;
+  box-shadow: 0 0 0 1px #1c1108, var(--sombra-2);
+  color: var(--pergaminho);
+}
+#galeria-conquistas .divisor-rune { background: linear-gradient(90deg, transparent, rgba(201,161,74,0.6), transparent); }
+/* Selos trancados (galeria) e coroas apagadas (Diário): de cinza frio para
+   gravura sépia. Continuam com cara de "apagado" (a transparência do
+   style.css fica); os conquistados e as coroas acesas não mudam. */
+/* O jogo.js escreve "filter: grayscale(1)" direto no ícone do selo, e o
+   estilo escrito no elemento ganha da folha de estilos: o !important (só
+   neste filtro) é o que deixa o sépia valer. A transparência continua a
+   do style.css. */
+.selo-trancado .selo-icone { filter: grayscale(1) sepia(0.6) !important; }
+.coroa-apagada .coroa-svg { filter: sepia(0.5); }
+
+
+/* ---------- 11. Botões e avisos flutuantes ----------
+   Avisos (toasts), botão ↑, botões de som e o Mago: tudo em madeira com
+   aro de latão. Eles usam variáveis escritas no JavaScript; aqui as
+   variáveis ganham outro valor só dentro de cada botão. */
+#pilha-toasts { --bronze-envelhecido: var(--latao); }
+#botao-topo { --pedra-ardosia: var(--madeira); --bronze-envelhecido: var(--latao); }
+
+.botao-som {
+  background: radial-gradient(circle at 35% 30%, #6b4423, var(--madeira-noite) 78%);
+  border-color: rgba(201,161,74,0.75);
+  box-shadow: 0 4px 10px rgba(43,29,16,0.45), 0 0 8px rgba(201,161,74,0.2);
+}
+.botao-som:hover, .botao-som:focus-visible {
+  box-shadow: 0 6px 14px rgba(43,29,16,0.5), 0 0 14px rgba(201,161,74,0.45);
+}
+.botao-som-mudo.ativo { border-color: rgba(212,196,157,0.45); box-shadow: 0 4px 10px rgba(43,29,16,0.45); }
+.botao-som-ambiente { background: radial-gradient(circle at 35% 30%, #7a5230, #3a2412 78%); }
+/* Música ambiente: o ícone 🎶 não muda ao ligar, então o estado tem de ser
+   lido pelo aro — e sem depender só da cor (verde e latão ficam iguais
+   para quem tem daltonismo vermelho-verde). Por isso a diferença é de
+   CLARIDADE:
+   - desligada: aro de latão apagado (meio transparente);
+   - ligada: aro CREME bem claro (13:1 na madeira) + anel verde-folha e
+     brilho em volta. */
+.botao-som-ambiente:not(.ativo) { border-color: rgba(201,161,74,0.4); }
+.botao-som-ambiente.ativo {
+  border-color: var(--papel-claro);
+  box-shadow: 0 0 0 2px #9cb86a, 0 4px 10px rgba(43,29,16,0.45), 0 0 14px rgba(156,184,106,0.6);
+}
+
+/* Mago Aurelius: medalhão de madeira; a borda das mensagens da criança
+   (que era ciano) vira latão */
+.avatar-mago { box-shadow: 0 0 0 3px var(--pedra-ardosia), 0 0 0 5px var(--latao), 0 8px 18px rgba(43,29,16,0.55); }
+#oraculo-container { --ciano-mistico: var(--latao); }
+/* Campos de texto (pergunta ao Mago e nome no certificado): o navegador
+   dava a eles a letra do sistema (Arial) e uma dica cinza-fria fraca
+   (2,8:1). Agora: letra de livro, fundo de papel claro e dica em tinta
+   suave em itálico (8:1). */
+.chat-input { font-family: var(--font-body); background: rgba(250,243,224,0.8); color: var(--tinta); }
+.chat-input::placeholder { color: var(--tinta-suave); opacity: 1; font-style: italic; }
+.chat-input:focus { border-color: var(--vinho); box-shadow: 0 0 0 2px rgba(122,31,31,0.3); }
+/* Conversa com o Mago: o oraculo.js escreve as falas e o campo a 0,75rem
+   (12 px). A Alegreya é mais "baixinha" que a Arial, e a 12 px o texto
+   longo ficava pequeno para 11 anos: sobe para 0,875rem (14 px). O
+   !important vale SÓ para o tamanho e a entrelinha (vence o escrito no JS);
+   o balão continua com a mesma altura e rola por dentro como antes. */
+#mensagens-oraculo > div { font-size: 0.875rem !important; line-height: 1.45 !important; }
+#input-oraculo { font-size: 0.875rem !important; }
+
+/* Caderno do Aprendiz (em todo modal de runa): mesmo tratamento do campo
+   do Mago — texto em tinta e a dica "Escreva aqui..." em tinta suave
+   itálica (era o cinza-frio do navegador, 3,9:1; agora ~7,8:1). */
+.caderno-textarea { color: var(--tinta); }
+.caderno-textarea::placeholder { color: var(--tinta-suave); opacity: 1; font-style: italic; }
+
+
+/* ---------- 12. Crônica do Reino (o livro de história) ----------
+   Os medalhões numerados e o emblema saem da pedra-grafite e viram
+   madeira (o aro continua na cor do reino). A palavra final
+   "Engenharia." troca o roxo pelo vinho. */
+.cronica-medalhao, .cronica-emblema {
+  background: radial-gradient(circle at 35% 30%, #6b4423, var(--madeira-noite) 75%);
+}
+.cronica-medalhao { box-shadow: 0 2px 6px rgba(43,29,16,0.4), inset 0 1px 0 rgba(255,235,190,0.15); }
+.cronica-medalhao.atual { box-shadow: 0 0 0 2px #f3e7c8, 0 0 0 4px var(--ouro-envelhecido), 0 4px 12px rgba(43,29,16,0.45); }
+.cronica-emblema { box-shadow: 0 0 0 2px rgba(184,137,44,0.7), 0 4px 10px rgba(43,29,16,0.4); }
+/* O emblema com brasão desenhado não tem fundo redondo (regra do style.css) */
+.cronica-emblema-brasao { background: none; box-shadow: none; }
+.cronica-fecho {
+  color: var(--vinho);
+  text-shadow: 0 1px 0 rgba(255,245,204,0.9), 0 0 10px rgba(184,137,44,0.35);
+}
+/* Título do capítulo ("O Portal de Entrada"): estava em tinta e menor que
+   o rótulo de cima ("CAPÍTULO 1 DE 7 · ..."), e a ordem de importância se
+   invertia. Agora é vinho e maior, como os outros títulos em MedievalSharp
+   (8,3:1 no papel; 6:1 no ponto mais escuro do pergaminho). O sublinhado
+   continua o do style.css. */
+.cronica-titulo { color: var(--vinho); font-size: 1.75rem; line-height: 1.15; }
+@media (max-width: 600px) {
+  .cronica-titulo { font-size: 1.45rem; }
+}
+
+
+/* ---------- 13. Simuladores ----------
+   Só os fundos escuros dos mostradores ficam mais quentes (carvão em vez
+   de grafite) e as letras entram nas 3 famílias. Nenhuma cor de estado
+   (verde/âmbar/vermelho, viga ciano→vermelha) muda, e os arquivos dos
+   simuladores não são tocados. */
+/* Caixas de pergaminho dentro dos modais (Desafio, painel do simulador,
+   "Próximo passo"): a sombra PRETA do tema antigo virava uma mancha
+   cinza-oliva embaixo de cada caixa no papel. Vira sombra sépia, curta.
+   (Na impressão nada muda: o certificado não usa esta caixa.) */
+.painel-pergaminho-velho {
+  box-shadow: inset 0 0 0 1px rgba(184,137,44,0.28), inset 0 6px 14px rgba(74,16,16,0.12), 0 6px 14px rgba(43,29,16,0.26);
+}
+/* Botões e campos criados pelos simuladores sem letra própria (materiais,
+   monumentos, peças do arco, estandartes e o "Nome do Construtor" da
+   runa 0.4): o navegador dava a eles Arial, uma 4ª família no meio do
+   pergaminho. Passam para a letra de livro. Só a LETRA muda: tamanho
+   (escrito no JS), cores e espaçamento ficam. Os botões de madeira
+   (.btn-gotico) continuam em Cinzel. */
+.sim-painel button:not(.btn-gotico),
+.sim-painel input[type="text"] { font-family: var(--font-body); }
+/* Estandarte escolhido (0.4) e material escolhido (1.1): o simuladores.js
+   pinta de grafite frio (#1c1e22) com borda branca — um bloco cinza-azulado
+   no papel. Vira madeira-noite com aro de latão (texto branco 17,6:1).
+   O seletor procura a cor no próprio atributo style (o navegador guarda
+   "#1c1e22" como "rgb(28, 30, 34)"; as duas grafias entram). Só o visual
+   muda: o atributo continua o mesmo, e o polimento lê igual. */
+.sim-painel button[style*="rgb(28, 30, 34)"],
+.sim-painel button[style*="#1c1e22"] {
+  background: var(--madeira-noite) !important;
+  border-color: var(--latao) !important;
+}
+/* E.7: "Escolha as 3 peças pra testar" desabilitado era #2a2620 (acinzentado) */
+.sim-painel #ponte-testar:disabled { background: var(--madeira-noite); }
+/* E.7: as 9 opções da ponte eram frases longas em Cinzel CAIXA-ALTA a
+   0,68rem (até 3 linhas cada). Como nos Julgamentos, vão para a letra de
+   livro em caixa normal, um pouco maiores (no máximo 2 linhas). O estado
+   escolhido (◉, borda ouro e letra #fff5cc, escritos no JS) não muda. */
+#ponte-paleta .btn-gotico {
+  font-family: var(--font-body);
+  text-transform: none;
+  font-size: 0.9rem !important;
+  line-height: 1.3;
+}
+.sim-painel .sim-mostrador,
+.sim-painel .sim-veredito { background-color: #1f150c !important; }
+.sim-painel .sim-visor { background: #1f150c; }
+/* Mostradores numéricos ("Força de Tração no Cabo: 40 kN"): saem da letra
+   de máquina de escrever do sistema e vão para a letra de livro, em
+   negrito, com algarismos de largura igual (o número não "dança" ao mexer
+   o controle). Só a LETRA muda; as cores continuam as do simulador.
+   Não usar Cinzel aqui: ela troca minúscula por maiúscula pequena e "kN"
+   viraria "KN" (unidade errada). */
+.sim-painel [style*="font-family:monospace"] {
+  font-family: var(--font-body) !important;
+  font-variant-numeric: lining-nums tabular-nums;
+  font-weight: 700;
+}
+
+
+/* ---------- 14. Castelo e rodapé ----------
+   A faixa preta embaixo do castelo some: a legenda fica em tinta, direto
+   no papel. O castelo, as montanhas e o chão eram quase pretos e frios
+   (cores escritas no horizonte.js); viram gravura sépia:
+   - castelo em tinta sépia, com filete de ouro velho;
+   - montanhas em aguada marrom (transparentes, como pincel no papel);
+   - chão em tinta que se desfaz no papel (sem borda reta embaixo).
+   Uma regra de CSS vence a cor escrita como atributo no desenho, por isso
+   o horizonte.js não é tocado. Nada muda de tamanho ou posição.
+   O castelo NÃO recebe filtro, e o "> path" pega só a silhueta: os vitrais
+   ficam dentro de <g>. O vitral ACESO continua com a cor do reino (o
+   ":not(.vitral-aceso)" só pinta o vidro apagado). */
+.horizonte-legenda { background: transparent; color: var(--tinta); }
+.horizonte-reino::after { background: none; }
+.horizonte-castelo > path { fill: #2b1d10; stroke: rgba(184,137,44,0.6); }
+.horizonte-vitral:not(.vitral-aceso) .vitral-vidro { fill: #170e06; }
+.horizonte-vitral > path:last-child { stroke: #170e06; }   /* chumbo do vitral */
+.horizonte-montanhas path:nth-child(1) { fill: #8c6239; opacity: 0.42; }
+.horizonte-montanhas path:nth-child(2) { fill: #5a4228; opacity: 0.62; }
+.horizonte-chao path { fill: #2b1d10; }
+.horizonte-chao {
+  -webkit-mask-image: linear-gradient(#000 35%, transparent);
+  mask-image: linear-gradient(#000 35%, transparent);
+}
+
+
+/* ---------- 15. Foco do teclado, pulo para o conteúdo, barra de rolagem e impressão ----------
+   Foco: quem navega pelo teclado vê um contorno VINHO (aparece no papel)
+   com um halo creme por dentro. Nas superfícies de madeira o contorno
+   vira CREME (o vinho sumiria na madeira). Continua diferente do anel
+   dourado da gema do reino atual. */
+*:focus-visible {
+  outline: 3px solid var(--vinho);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--papel-claro);
+}
+/* Botão de madeira com foco: o halo de foco acima apagaria a sombra 3D do
+   botão (ele parecia "afundar" ao receber o Tab). Aqui o halo é SOMADO à
+   sombra de madeira, e o botão continua em pé. */
+.btn-gotico:not(.opcao-marcada):focus-visible {
+  box-shadow: 0 0 0 2px var(--papel-claro), 0 3px 0 #1c1108, 0 5px 12px rgba(43,29,16,0.35);
+}
+.barra-navegacao :focus-visible,
+.painel-reino-premium :focus-visible,
+#galeria-conquistas :focus-visible,
+#oraculo-container :focus-visible {
+  outline-color: var(--papel-claro);
+}
+/* Botões flutuantes ↑ e de som: ficam ora sobre o PAPEL (computador, fim
+   da página), ora sobre um quadro de MADEIRA (celular). Nenhuma cor única
+   aparece nos dois, então o foco é um anel DUPLO:
+   - por fora, contorno VINHO (aparece no papel, 8:1);
+   - colado no botão, halo CREME + a borda do botão em creme (aparecem na
+     madeira e no próprio botão escuro, 13:1).
+   O ↑ tem a sombra e a borda escritas no navegacao.js: o !important só
+   nesta sombra de foco é o que vence a escrita no JS; a borda dele usa
+   var(--bronze-envelhecido), que aqui passa a valer creme. */
+#botao-topo:focus-visible {
+  outline-color: var(--vinho);
+  --bronze-envelhecido: var(--papel-claro);
+  box-shadow: 0 0 0 2px var(--papel-claro), 0 4px 10px rgba(43,29,16,0.5) !important;
+}
+.som-controles .botao-som:focus-visible {
+  outline-color: var(--vinho);
+  border-color: var(--papel-claro);
+  box-shadow: 0 0 0 2px var(--papel-claro), 0 6px 14px rgba(43,29,16,0.5);
+}
+/* Dentro do chat do Mago, o campo e o ✨ ficam sobre papel: voltam ao vinho.
+   O próprio avatar do Mago flutua sobre o papel: vinho também. */
+#oraculo-container form :focus-visible,
+#oraculo-container > .avatar-mago:focus-visible { outline-color: var(--vinho); }
+/* Slider dos simuladores e Caderno do Aprendiz: eram dourados (somem no papel) */
+input[type="range"]:focus-visible { outline-color: var(--vinho); }
+.caderno-textarea:focus {
+  border-color: var(--vinho);
+  box-shadow: inset 0 2px 6px rgba(43,29,16,0.12), 0 0 0 2px rgba(122,31,31,0.35);
+}
+
+/* "Pular para o conteúdo" (aparece só com o Tab): fita vinho com letra creme */
+.skip-link {
+  background: var(--vinho);
+  color: var(--papel-claro);
+  border: 2px solid var(--latao);
+}
+
+/* Barra de rolagem (Chrome/Edge/Safari): trilho de papel queimado, alça de
+   madeira. A largura de 8 px continua a do style.css. (No Firefox a cor
+   vem do "scrollbar-color" da seção 3.) */
+::-webkit-scrollbar-track { background: var(--papel-borda); }
+::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--bronze-envelhecido), var(--madeira)); }
+::-webkit-scrollbar-thumb:hover { background: var(--madeira-clara); }
+
+/* Impressão: garantia de papel branco (o certificado sai limpo). O <html>
+   entra junto porque agora ele tem fundo de papel próprio: sem isso, o
+   resto da folha abaixo do certificado saía bege quando a pessoa liga
+   "gráficos de fundo" na janela de impressão. */
+@media print {
+  html, body { background: #fff !important; }
+}

@@ -693,29 +693,29 @@ function desenharCardConquista(canvas, nome, nivel, estado) {
   const altura = canvas.height;
 
   const gradiente = ctx.createLinearGradient(0, 0, 0, altura);
-  gradiente.addColorStop(0, "#0d0f12");
-  gradiente.addColorStop(1, "#2d3238");
+  gradiente.addColorStop(0, "#f2e6c9"); // pergaminho do mapa (redesign)
+  gradiente.addColorStop(1, "#e6d3a8"); // borda queimada
   ctx.fillStyle = gradiente;
   ctx.fillRect(0, 0, largura, altura);
 
-  ctx.strokeStyle = "#d4af37";
+  ctx.strokeStyle = "#7a1f1f"; // moldura vinho
   ctx.lineWidth = 6;
   ctx.strokeRect(15, 15, largura - 30, altura - 30);
 
   ctx.textAlign = "center";
-  ctx.fillStyle = "#e6c34a";
+  ctx.fillStyle = "#7a1f1f"; // título em vinho
   ctx.font = "bold 34px serif";
   ctx.fillText("🏰 MUNDO BORGESTRÁVEL", largura / 2, 100);
 
-  ctx.fillStyle = "#f1e4c3";
+  ctx.fillStyle = "#2b1d10"; // nome em tinta sépia
   ctx.font = "italic 22px serif";
   ctx.fillText(nome, largura / 2, 160);
 
-  ctx.fillStyle = "#00e5ff";
+  ctx.fillStyle = "#3e5a2b"; // nível em verde-musgo (era ciano)
   ctx.font = "bold 26px serif";
   ctx.fillText(nivel.nome, largura / 2, 210);
 
-  ctx.fillStyle = "#f1e4c3";
+  ctx.fillStyle = "#5a4228"; // números em tinta suave
   ctx.font = "20px serif";
   ctx.fillText(`⚡ ${estado.xp} Poder Rúnico`, largura / 2, 260);
 
@@ -735,7 +735,7 @@ function desenharCardConquista(canvas, nome, nivel, estado) {
     ctx.fillText(def.icone, x, y);
   });
 
-  ctx.fillStyle = "rgba(241,228,195,0.6)";
+  ctx.fillStyle = "#5a4228"; // marca-d'água em tinta suave (6,4:1 no papel)
   ctx.font = "italic 16px serif";
   ctx.fillText("mundoborgestravel", largura / 2, altura - 40);
 
@@ -1073,7 +1073,7 @@ function iniciarSprint(painel) {
 
   area.innerHTML = `
     <div style="display:flex; justify-content:space-between; font-weight:bold; margin-bottom:0.75rem;">
-      <span id="sprint-timer" style="color:#ff7043;">⏱️ ${segundosRestantes}s</span>
+      <span id="sprint-timer" style="color:var(--sprint-relogio, #ff7043);">⏱️ ${segundosRestantes}s</span>
       <span id="sprint-placar" style="color:var(--ciano-mistico);">✅ 0 / 0</span>
     </div>
     <div id="sprint-pergunta"></div>
@@ -1117,7 +1117,7 @@ function iniciarSprint(painel) {
   sprintTimerId = setInterval(() => {
     segundosRestantes--;
     timerEl.textContent = `⏱️ ${segundosRestantes}s`;
-    if (segundosRestantes <= 10) timerEl.style.color = "#c0392b";
+    if (segundosRestantes <= 10) timerEl.style.color = "var(--sprint-relogio-fim, #c0392b)";
     if (segundosRestantes <= 0) {
       clearInterval(sprintTimerId);
       sprintTimerId = null;
