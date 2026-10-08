@@ -1,0 +1,863 @@
+/* ==========================================================================
+   pergaminho-2-molduras.css — REDESIGN, ETAPA 2 de 3: MOLDURAS E ORNAMENTOS
+   --------------------------------------------------------------------------
+   O QUE É ESTE ARQUIVO
+   A segunda "roupa" vestida por cima do site. Ordem de carregamento no
+   index.html: style.css → pergaminho-1-cores-fontes.css (etapa 1: cores e
+   letras) → ESTE arquivo. Como vem por último, as regras daqui ganham.
+   Os outros dois arquivos continuam intocados.
+
+   O QUE ELE MUDA (só enfeite, nada muda de lugar)
+     - fundo do mapa: rosa-dos-ventos, lua desenhada com rosto, estrelas
+       de 4 pontas que piscam de leve e constelações (Cruzeiro do Sul e
+       Órion) em tinta dourada/sépia, e "Aqui há dragões" no computador;
+     - topo: moldura de livro iluminado, fita vermelha no "O REINO DAS
+       SUPER ESTRUTURAS", brasão como lacre de cera;
+     - barra: tábua com pregos e friso de latão; gemas com aro de latão;
+     - quadros dos reinos: cantoneiras de latão e faixa de tecido na cor
+       do reino; Ilha com cantoneiras de ferro;
+     - runas: cartas com tachinha, selo de cera e marcador na cor do reino;
+     - botões: placas de madeira com 4 pregos; Julgamentos como lacre;
+     - janelas (modais): pergaminho com friso vinho/ouro e cantoneiras;
+     - Crônica como livro de couro; galeria como Mural de Honra;
+     - Mago, som, ↑ e avisos como medalhões e plaquinhas;
+     - simuladores como "Bancada do Mestre"; castelo com legenda em fita.
+
+   O QUE ELE NÃO MUDA
+     - nenhuma largura, altura, espaçamento interno, margem, espessura de
+       borda ou tamanho de letra de CONTROLE (barra 56/100 px, gemas
+       34/30 px, ✕ e ☆ dos modais, Mago 56 px, som 42 px, ↑ 42 px, botões
+       de Julgamento, avisos). Todo enfeite é camada de fundo, sombra ou
+       pseudo-elemento livre (que ainda não era usado para nada);
+     - as cores dos 7 reinos e da Ilha (#5c6bc0 #ff7043 #e0a83e #9e9e9e
+       #c0392b #00e5ff #ab47bc #7a1414) — e elas nunca viram texto no papel;
+     - textos, lógica do jogo, ids, progresso salvo das crianças;
+     - a impressão do certificado (continua só o certificado, papel branco).
+
+   COMO DESFAZER
+   Tirar do index.html a linha
+     <link rel="stylesheet" href="estilos/pergaminho-2-molduras.css?fr=16">
+   O site volta exatamente ao visual da etapa 1.
+
+   NOTAS TÉCNICAS (para quem for mexer depois)
+   - Desenhos em SVG "data-URI" ficam guardados em variáveis (--orn-...).
+     Isso é seguro porque não tem caminho de arquivo. As IMAGENS de verdade
+     (textura de pergaminho, veios de pedra) são escritas direto em cada
+     regra com url("../imagens/..."), nunca dentro de variável.
+   - Pseudo-elementos que JÁ têm dono e não são usados aqui para outra
+     coisa: trilha .tile-pos-N::after, fita .estado-completo::before
+     (só ganha roupa nova), clima .tile-clima::before/::after, brilho
+     .espada-card::before, rabinho .balao-fala::after, fio
+     .barra-navegacao::after (vira friso, mesma peça), ✓ do medalhão lido
+     da Crônica, ✓ da .opcao-marcada::before e os calços dos títulos dos
+     modais (h2::before).
+   - Nenhum enfeite é animado com sombra ou filtro. Só a lua e as
+     estrelas "piscam", mexendo apenas na transparência (barato), e param
+     quando o aparelho pede menos movimento.
+   ========================================================================== */
+
+
+/* ---------- 1. Biblioteca de ornamentos ----------
+   Os "carimbos" de desenho usados no arquivo inteiro. Cada um é um
+   desenhinho vetorial (não perde qualidade ao aumentar):
+     rosa-ventos, lua, estrela, cruzeiro-do-sul, orion, dragao,
+     cant-* (cantoneira de latão, 4 cantos), ferro-* (cantoneira de ferro
+     da Ilha), canto-papel-* (cantoneira de tinta dourada para o papel),
+     flor (divisor sob títulos), losango (troca o ❖), friso (barra).
+   Prego de latão e tamanhos ficam logo abaixo. */
+:root {
+  --orn-rosa-ventos: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cg opacity='.62'%3E%3Ccircle cx='100' cy='100' r='93' fill='none' stroke='%235a4228' stroke-width='1.3'/%3E%3Ccircle cx='100' cy='100' r='87' fill='none' stroke='%235a4228' stroke-width='.7'/%3E%3Ccircle cx='100' cy='100' r='60' fill='none' stroke='%235a4228' stroke-width='.5' stroke-dasharray='1.5 2.5'/%3E%3Cpath d='M100 13L100 7M108.53 13.42L108.87 9.94M116.97 14.67L117.66 11.24M125.25 16.75L126.27 13.4M133.29 19.62L135.59 14.08M141.01 23.27L142.66 20.19M148.33 27.66L150.28 24.75M155.19 32.75L157.41 30.04M161.52 38.48L165.76 34.24M167.25 44.81L169.96 42.59M172.34 51.67L175.25 49.72M176.73 58.99L179.81 57.34M180.38 66.71L185.92 64.41M183.25 74.75L186.6 73.73M185.33 83.03L188.76 82.34M186.58 91.47L190.06 91.13M187 100L193 100M186.58 108.53L190.06 108.87M185.33 116.97L188.76 117.66M183.25 125.25L186.6 126.27M180.38 133.29L185.92 135.59M176.73 141.01L179.81 142.66M172.34 148.33L175.25 150.28M167.25 155.19L169.96 157.41M161.52 161.52L165.76 165.76M155.19 167.25L157.41 169.96M148.33 172.34L150.28 175.25M141.01 176.73L142.66 179.81M133.29 180.38L135.59 185.92M125.25 183.25L126.27 186.6M116.97 185.33L117.66 188.76M108.53 186.58L108.87 190.06M100 187L100 193M91.47 186.58L91.13 190.06M83.03 185.33L82.34 188.76M74.75 183.25L73.73 186.6M66.71 180.38L64.41 185.92M58.99 176.73L57.34 179.81M51.67 172.34L49.72 175.25M44.81 167.25L42.59 169.96M38.48 161.52L34.24 165.76M32.75 155.19L30.04 157.41M27.66 148.33L24.75 150.28M23.27 141.01L20.19 142.66M19.62 133.29L14.08 135.59M16.75 125.25L13.4 126.27M14.67 116.97L11.24 117.66M13.42 108.53L9.94 108.87M13 100L7 100M13.42 91.47L9.94 91.13M14.67 83.03L11.24 82.34M16.75 74.75L13.4 73.73M19.62 66.71L14.08 64.41M23.27 58.99L20.19 57.34M27.66 51.67L24.75 49.72M32.75 44.81L30.04 42.59M38.48 38.48L34.24 34.24M44.81 32.75L42.59 30.04M51.67 27.66L49.72 24.75M58.99 23.27L57.34 20.19M66.71 19.62L64.41 14.08M74.75 16.75L73.73 13.4M83.03 14.67L82.34 11.24M91.47 13.42L91.13 9.94' stroke='%235a4228' stroke-width='.6'/%3E%3Cpath d='M100 100L119.13 53.81L95.38 98.09Z' fill='%23f3e6c4' stroke='%232b1d10' stroke-width='.6' stroke-linejoin='round'/%3E%3Cpath d='M100 100L119.13 53.81L104.62 101.91Z' fill='%235a4228' stroke='%232b1d10' stroke-width='.6' stroke-linejoin='round'/%3E%3Cpath d='M100 100L146.19 80.87L98.09 95.38Z' fill='%23f3e6c4' stroke='%232b1d10' stroke-width='.6' stroke-linejoin='round'/%3E%3Cpath d='M100 100L146.19 80.87L101.91 104.62Z' fill='%235a4228' stroke='%232b1d10' stroke-width='.6' stroke-linejoin='round'/%3E%3Cpath d='M100 100L146.19 119.13L101.91 95.38Z' fill='%23f3e6c4' stroke='%232b1d10' stroke-width='.6' stroke-linejoin='round'/%3E%3Cpath d='M100 100L146.19 119.13L98.09 104.62Z' fill='%235a4228' stroke='%232b1d10' stroke-width='.6' stroke-linejoin='round'/%3E%3Cpath d='M100 100L119.13 146.19L104.62 98.09Z' fill='%23f3e6c4' stroke='%232b1d10' stroke-width='.6' stroke-linejoin='round'/%3E%3Cpath d='M100 100L119.13 146.19L95.38 101.91Z' fill='%235a4228' stroke='%232b1d10' stroke-width='.6' stroke-linejoin='round'/%3E%3Cpath d='M100 100L80.87 146.19L104.62 101.91Z' fill='%23f3e6c4' stroke='%232b1d10' stroke-width='.6' stroke-linejoin='round'/%3E%3Cpath d='M100 100L80.87 146.19L95.38 98.09Z' fill='%235a4228' stroke='%232b1d10' stroke-width='.6' stroke-linejoin='round'/%3E%3Cpath d='M100 100L53.81 119.13L101.91 104.62Z' fill='%23f3e6c4' stroke='%232b1d10' stroke-width='.6' stroke-linejoin='round'/%3E%3Cpath d='M100 100L53.81 119.13L98.09 95.38Z' fill='%235a4228' stroke='%232b1d10' stroke-width='.6' stroke-linejoin='round'/%3E%3Cpath d='M100 100L53.81 80.87L98.09 104.62Z' fill='%23f3e6c4' stroke='%232b1d10' stroke-width='.6' stroke-linejoin='round'/%3E%3Cpath d='M100 100L53.81 80.87L101.91 95.38Z' fill='%235a4228' stroke='%232b1d10' stroke-width='.6' stroke-linejoin='round'/%3E%3Cpath d='M100 100L80.87 53.81L95.38 101.91Z' fill='%23f3e6c4' stroke='%232b1d10' stroke-width='.6' stroke-linejoin='round'/%3E%3Cpath d='M100 100L80.87 53.81L104.62 98.09Z' fill='%235a4228' stroke='%232b1d10' stroke-width='.6' stroke-linejoin='round'/%3E%3Cpath d='M100 100L146.67 53.33L93.64 93.64Z' fill='%23e3c37a' stroke='%232b1d10' stroke-width='.6' stroke-linejoin='round'/%3E%3Cpath d='M100 100L146.67 53.33L106.36 106.36Z' fill='%23b8892c' stroke='%232b1d10' stroke-width='.6' stroke-linejoin='round'/%3E%3Cpath d='M100 100L146.67 146.67L106.36 93.64Z' fill='%23e3c37a' stroke='%232b1d10' stroke-width='.6' stroke-linejoin='round'/%3E%3Cpath d='M100 100L146.67 146.67L93.64 106.36Z' fill='%23b8892c' stroke='%232b1d10' stroke-width='.6' stroke-linejoin='round'/%3E%3Cpath d='M100 100L53.33 146.67L106.36 106.36Z' fill='%23e3c37a' stroke='%232b1d10' stroke-width='.6' stroke-linejoin='round'/%3E%3Cpath d='M100 100L53.33 146.67L93.64 93.64Z' fill='%23b8892c' stroke='%232b1d10' stroke-width='.6' stroke-linejoin='round'/%3E%3Cpath d='M100 100L53.33 53.33L93.64 106.36Z' fill='%23e3c37a' stroke='%232b1d10' stroke-width='.6' stroke-linejoin='round'/%3E%3Cpath d='M100 100L53.33 53.33L106.36 93.64Z' fill='%23b8892c' stroke='%232b1d10' stroke-width='.6' stroke-linejoin='round'/%3E%3Cpath d='M100 100L100 14L87 100Z' fill='%23f3e6c4' stroke='%232b1d10' stroke-width='.6' stroke-linejoin='round'/%3E%3Cpath d='M100 100L100 14L113 100Z' fill='%235a4228' stroke='%232b1d10' stroke-width='.6' stroke-linejoin='round'/%3E%3Cpath d='M100 100L186 100L100 87Z' fill='%23f3e6c4' stroke='%232b1d10' stroke-width='.6' stroke-linejoin='round'/%3E%3Cpath d='M100 100L186 100L100 113Z' fill='%235a4228' stroke='%232b1d10' stroke-width='.6' stroke-linejoin='round'/%3E%3Cpath d='M100 100L100 186L113 100Z' fill='%23f3e6c4' stroke='%232b1d10' stroke-width='.6' stroke-linejoin='round'/%3E%3Cpath d='M100 100L100 186L87 100Z' fill='%235a4228' stroke='%232b1d10' stroke-width='.6' stroke-linejoin='round'/%3E%3Cpath d='M100 100L14 100L100 113Z' fill='%23f3e6c4' stroke='%232b1d10' stroke-width='.6' stroke-linejoin='round'/%3E%3Cpath d='M100 100L14 100L100 87Z' fill='%235a4228' stroke='%232b1d10' stroke-width='.6' stroke-linejoin='round'/%3E%3Ccircle cx='100' cy='100' r='7' fill='%237a1f1f' stroke='%232b1d10' stroke-width='.8'/%3E%3Ccircle cx='100' cy='100' r='2.4' fill='%23e3c37a'/%3E%3Cpath d='M100 2c-3 4-3 7 0 9c3-2 3-5 0-9zM100 9c-5-1-8 1-8 4c3 0 6-1 8-4zM100 9c5-1 8 1 8 4c-3 0-6-1-8-4z' fill='%237a1f1f' stroke='%232b1d10' stroke-width='.4'/%3E%3C/g%3E%3C/svg%3E");
+  --orn-lua: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cpath d='M67.28 10.53A50 50 0 1 0 97.36 93.23L97.36 93.23L95.9 93.75L94.43 94.21L92.94 94.62L91.44 94.98L89.93 95.28L88.4 95.53L86.87 95.73L85.34 95.87L83.8 95.96L82.25 96L80.71 95.98L79.17 95.91L77.63 95.78L76.1 95.6L74.57 95.37L73.05 95.08L71.55 94.74L70.06 94.35L68.58 93.9L67.12 93.41L65.67 92.86L64.25 92.26L62.85 91.61L61.47 90.92L60.12 90.17L58.8 89.38L57.5 88.55L56.23 87.66L55 86.73L53.82 85.74L52.69 84.69L51.64 83.56L50.72 82.31L49.99 80.91L49.5 79.35L49.21 77.68L49.01 76.03L48.63 74.55L47.86 73.37L46.63 72.45L45.12 71.63L43.76 70.66L43.32 69.23L43.7 67.47L42.7 66.29L41.36 65.18L41.84 63.49L41.26 62.12L39.91 60.9L40.45 59.28L42.62 57.48L45.34 55.8L46.58 54.42L45.14 53.22L42.2 51.92L39.77 50.43L38.64 48.86L38.44 47.31L38.76 45.8L39.42 44.37L40.25 42.99L40.89 41.61L41.11 40.12L41.07 38.54L41.12 36.95L41.41 35.41L41.91 33.96L42.54 32.55L43.24 31.17L44 29.82L44.8 28.51L45.64 27.22L46.54 25.96L47.47 24.73L48.45 23.53L49.47 22.37L50.53 21.25L51.63 20.17L52.76 19.12L53.93 18.12L55.14 17.15L56.38 16.23L57.65 15.35L58.95 14.52L60.27 13.74L61.63 13L63.01 12.31L64.41 11.67L65.84 11.08L67.28 10.53Z' fill='%23e3c37a' stroke='%235a4228' stroke-width='1.6' stroke-linejoin='round'/%3E%3Cpath d='M36 101.57L38.5 97.24M26.06 93.94L31.72 88.28M18.43 84L22.76 81.5M13.64 72.42L21.36 70.35M12 60L17 60M13.64 47.58L21.36 49.65M18.43 36L22.76 38.5M26.06 26.06L31.72 31.72M36 18.43L38.5 22.76' stroke='%235a4228' stroke-width='.8' stroke-linecap='round' opacity='.75'/%3E%3Cpath d='M40 20A44 44 0 0 0 38 99' fill='none' stroke='%23b8892c' stroke-width='1' opacity='.8'/%3E%3Cpath d='M27 47q5 4 10 0' fill='none' stroke='%232b1d10' stroke-width='1.3' stroke-linecap='round'/%3E%3Cpath d='M28 49.5l-1 2.2M31.5 50.6l-.4 2.4M35 50l.4 2.3' stroke='%232b1d10' stroke-width='.7' stroke-linecap='round'/%3E%3Cpath d='M26 41q6-4 12-1' fill='none' stroke='%235a4228' stroke-width='1' stroke-linecap='round'/%3E%3Ccircle cx='29' cy='60' r='4' fill='%23c9853f' opacity='.25'/%3E%3Cpath d='M33 67q2.5 1.6 4.5 0' fill='none' stroke='%232b1d10' stroke-width='1' stroke-linecap='round'/%3E%3C/svg%3E");
+  --orn-estrela: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M10 0.8Q11.84 8.16 19.2 10Q11.84 11.84 10 19.2Q8.16 11.84 0.8 10Q8.16 8.16 10 0.8Z' fill='%23c9a14a' stroke='%235a4228' stroke-width='.7' stroke-linejoin='round'/%3E%3Ccircle cx='10' cy='10' r='1.3' fill='%23fff3d0'/%3E%3C/svg%3E");
+  --orn-cruzeiro-do-sul: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 150'%3E%3Cg opacity='.7'%3E%3Cpath d='M60 14L56 134M16 66L100 58' stroke='%235a4228' stroke-width='.9' stroke-dasharray='1.4 3.2' stroke-linecap='round' fill='none'/%3E%3Cpath d='M60 7Q61.4 12.6 67 14Q61.4 15.4 60 21Q58.6 15.4 53 14Q58.6 12.6 60 7Z' fill='%23c9a14a' stroke='%235a4228' stroke-width='.7' stroke-linejoin='round'/%3E%3Ccircle cx='60' cy='14' r='10.2' fill='none' stroke='%235a4228' stroke-width='.45' opacity='.7'/%3E%3Cpath d='M56 125Q57.8 132.2 65 134Q57.8 135.8 56 143Q54.2 135.8 47 134Q54.2 132.2 56 125Z' fill='%23c9a14a' stroke='%235a4228' stroke-width='.7' stroke-linejoin='round'/%3E%3Ccircle cx='56' cy='134' r='12.2' fill='none' stroke='%235a4228' stroke-width='.45' opacity='.7'/%3E%3Cpath d='M16 58Q17.6 64.4 24 66Q17.6 67.6 16 74Q14.4 67.6 8 66Q14.4 64.4 16 58Z' fill='%23c9a14a' stroke='%235a4228' stroke-width='.7' stroke-linejoin='round'/%3E%3Ccircle cx='16' cy='66' r='11.2' fill='none' stroke='%235a4228' stroke-width='.45' opacity='.7'/%3E%3Cpath d='M100 52Q101.2 56.8 106 58Q101.2 59.2 100 64Q98.8 59.2 94 58Q98.8 56.8 100 52Z' fill='%23c9a14a' stroke='%235a4228' stroke-width='.7' stroke-linejoin='round'/%3E%3Ccircle cx='100' cy='58' r='9.2' fill='none' stroke='%235a4228' stroke-width='.45' opacity='.7'/%3E%3Cpath d='M82 100Q82.8 103.2 86 104Q82.8 104.8 82 108Q81.2 104.8 78 104Q81.2 103.2 82 100Z' fill='%23c9a14a' stroke='%235a4228' stroke-width='.7' stroke-linejoin='round'/%3E%3C/g%3E%3C/svg%3E");
+  --orn-orion: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 130 170'%3E%3Cg opacity='.7'%3E%3Cpath d='M66 12L24 42M66 12L104 50M24 42L50 96M104 50L78 82M50 96L64 89M64 89L78 82M50 96L34 156M78 82L112 146' stroke='%235a4228' stroke-width='.9' stroke-dasharray='1.4 3.2' stroke-linecap='round' fill='none'/%3E%3Cpath d='M66 7.5Q66.9 11.1 70.5 12Q66.9 12.9 66 16.5Q65.1 12.9 61.5 12Q65.1 11.1 66 7.5Z' fill='%23c9a14a' stroke='%235a4228' stroke-width='.7' stroke-linejoin='round'/%3E%3Cpath d='M24 33Q25.8 40.2 33 42Q25.8 43.8 24 51Q22.2 43.8 15 42Q22.2 40.2 24 33Z' fill='%23c9a14a' stroke='%235a4228' stroke-width='.7' stroke-linejoin='round'/%3E%3Ccircle cx='24' cy='42' r='12.2' fill='none' stroke='%235a4228' stroke-width='.45' opacity='.7'/%3E%3Cpath d='M104 43Q105.4 48.6 111 50Q105.4 51.4 104 57Q102.6 51.4 97 50Q102.6 48.6 104 43Z' fill='%23c9a14a' stroke='%235a4228' stroke-width='.7' stroke-linejoin='round'/%3E%3Ccircle cx='104' cy='50' r='10.2' fill='none' stroke='%235a4228' stroke-width='.45' opacity='.7'/%3E%3Cpath d='M50 90.5Q51.1 94.9 55.5 96Q51.1 97.1 50 101.5Q48.9 97.1 44.5 96Q48.9 94.9 50 90.5Z' fill='%23c9a14a' stroke='%235a4228' stroke-width='.7' stroke-linejoin='round'/%3E%3Cpath d='M64 83.5Q65.1 87.9 69.5 89Q65.1 90.1 64 94.5Q62.9 90.1 58.5 89Q62.9 87.9 64 83.5Z' fill='%23c9a14a' stroke='%235a4228' stroke-width='.7' stroke-linejoin='round'/%3E%3Cpath d='M78 76.5Q79.1 80.9 83.5 82Q79.1 83.1 78 87.5Q76.9 83.1 72.5 82Q76.9 80.9 78 76.5Z' fill='%23c9a14a' stroke='%235a4228' stroke-width='.7' stroke-linejoin='round'/%3E%3Cpath d='M34 150Q35.2 154.8 40 156Q35.2 157.2 34 162Q32.8 157.2 28 156Q32.8 154.8 34 150Z' fill='%23c9a14a' stroke='%235a4228' stroke-width='.7' stroke-linejoin='round'/%3E%3Ccircle cx='34' cy='156' r='9.2' fill='none' stroke='%235a4228' stroke-width='.45' opacity='.7'/%3E%3Cpath d='M112 137.5Q113.7 144.3 120.5 146Q113.7 147.7 112 154.5Q110.3 147.7 103.5 146Q110.3 144.3 112 137.5Z' fill='%23c9a14a' stroke='%235a4228' stroke-width='.7' stroke-linejoin='round'/%3E%3Ccircle cx='112' cy='146' r='11.7' fill='none' stroke='%235a4228' stroke-width='.45' opacity='.7'/%3E%3C/g%3E%3C/svg%3E");
+  --orn-dragao: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 170 110'%3E%3Cg opacity='.6'%3E%3Cpath d='M6 92q10-6 20 0t20 0t20 0t20 0t20 0t20 0t20 0t20 0M14 101q10-5 20 0t20 0t20 0t20 0t20 0t20 0t20 0' fill='none' stroke='%235a4228' stroke-width='1' stroke-linecap='round'/%3E%3Cpath d='M48 90c2-22 24-22 26 0M88 90c2-20 22-20 24 0M124 90c1-13 14-13 15 0' fill='%23e3cf9e' stroke='%235a4228' stroke-width='1.4'/%3E%3Cpath d='M52 82c4-9 14-10 18 0M92 82c4-9 12-9 16 0' fill='none' stroke='%235a4228' stroke-width='.6' stroke-dasharray='1.5 2'/%3E%3Cpath d='M55 74l2-6 3 5M63 72l3-6 2 6M95 74l2-6 3 5M102 73l3-5 1 6' fill='none' stroke='%235a4228' stroke-width='.9' stroke-linejoin='round'/%3E%3Cpath d='M48 90c-3-18-8-28-20-30c-7-1-12 3-14 6l6 1-5 4c6 2 12 1 15-3c5 6 7 14 7 22' fill='%23e3cf9e' stroke='%235a4228' stroke-width='1.4' stroke-linejoin='round'/%3E%3Ccircle cx='25' cy='63.5' r='1.3' fill='%232b1d10'/%3E%3Cpath d='M30 57l4-7 1 7' fill='none' stroke='%235a4228' stroke-width='1'/%3E%3Cpath d='M139 90c4-10 14-12 18-6c3 5-2 9-6 6' fill='none' stroke='%235a4228' stroke-width='1.4' stroke-linecap='round'/%3E%3Cpath d='M30 10h110l-6 8 6 8H30l6-8z' fill='%23f3e6c4' stroke='%235a4228' stroke-width='1'/%3E%3Ctext x='85' y='22' text-anchor='middle' font-family='Georgia,serif' font-style='italic' font-size='11' fill='%237a1f1f'%3EAqui há dragões%3C/text%3E%3C/g%3E%3C/svg%3E");
+  --orn-cant-tl: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 26'%3E%3Cpath d='M3 23V3h20' fill='none' stroke='%231c1108' stroke-width='4.6' stroke-linecap='round' opacity='.85'/%3E%3Cpath d='M3 23V3h20' fill='none' stroke='%23c9a14a' stroke-width='2.8' stroke-linecap='round'/%3E%3Cpath d='M3.6 22V3.6H22' fill='none' stroke='%23f0d48a' stroke-width='.8' stroke-linecap='round' opacity='.8'/%3E%3Cpath d='M8 17V8h9' fill='none' stroke='%23c9a14a' stroke-width='1.1' stroke-linecap='round'/%3E%3Cpath d='M23 3q2.4 2.6 0 5M3 23q2.6 2.4 5 0' fill='none' stroke='%23c9a14a' stroke-width='1.2' stroke-linecap='round'/%3E%3Ccircle cx='4.4' cy='4.4' r='2.5' fill='%23e8c977' stroke='%231c1108' stroke-width='.8'/%3E%3C/svg%3E");
+  --orn-cant-tr: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 26'%3E%3Cg transform='translate(26 0) scale(-1 1)'%3E%3Cpath d='M3 23V3h20' fill='none' stroke='%231c1108' stroke-width='4.6' stroke-linecap='round' opacity='.85'/%3E%3Cpath d='M3 23V3h20' fill='none' stroke='%23c9a14a' stroke-width='2.8' stroke-linecap='round'/%3E%3Cpath d='M3.6 22V3.6H22' fill='none' stroke='%23f0d48a' stroke-width='.8' stroke-linecap='round' opacity='.8'/%3E%3Cpath d='M8 17V8h9' fill='none' stroke='%23c9a14a' stroke-width='1.1' stroke-linecap='round'/%3E%3Cpath d='M23 3q2.4 2.6 0 5M3 23q2.6 2.4 5 0' fill='none' stroke='%23c9a14a' stroke-width='1.2' stroke-linecap='round'/%3E%3Ccircle cx='4.4' cy='4.4' r='2.5' fill='%23e8c977' stroke='%231c1108' stroke-width='.8'/%3E%3C/g%3E%3C/svg%3E");
+  --orn-cant-bl: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 26'%3E%3Cg transform='translate(0 26) scale(1 -1)'%3E%3Cpath d='M3 23V3h20' fill='none' stroke='%231c1108' stroke-width='4.6' stroke-linecap='round' opacity='.85'/%3E%3Cpath d='M3 23V3h20' fill='none' stroke='%23c9a14a' stroke-width='2.8' stroke-linecap='round'/%3E%3Cpath d='M3.6 22V3.6H22' fill='none' stroke='%23f0d48a' stroke-width='.8' stroke-linecap='round' opacity='.8'/%3E%3Cpath d='M8 17V8h9' fill='none' stroke='%23c9a14a' stroke-width='1.1' stroke-linecap='round'/%3E%3Cpath d='M23 3q2.4 2.6 0 5M3 23q2.6 2.4 5 0' fill='none' stroke='%23c9a14a' stroke-width='1.2' stroke-linecap='round'/%3E%3Ccircle cx='4.4' cy='4.4' r='2.5' fill='%23e8c977' stroke='%231c1108' stroke-width='.8'/%3E%3C/g%3E%3C/svg%3E");
+  --orn-cant-br: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 26'%3E%3Cg transform='translate(26 26) scale(-1 -1)'%3E%3Cpath d='M3 23V3h20' fill='none' stroke='%231c1108' stroke-width='4.6' stroke-linecap='round' opacity='.85'/%3E%3Cpath d='M3 23V3h20' fill='none' stroke='%23c9a14a' stroke-width='2.8' stroke-linecap='round'/%3E%3Cpath d='M3.6 22V3.6H22' fill='none' stroke='%23f0d48a' stroke-width='.8' stroke-linecap='round' opacity='.8'/%3E%3Cpath d='M8 17V8h9' fill='none' stroke='%23c9a14a' stroke-width='1.1' stroke-linecap='round'/%3E%3Cpath d='M23 3q2.4 2.6 0 5M3 23q2.6 2.4 5 0' fill='none' stroke='%23c9a14a' stroke-width='1.2' stroke-linecap='round'/%3E%3Ccircle cx='4.4' cy='4.4' r='2.5' fill='%23e8c977' stroke='%231c1108' stroke-width='.8'/%3E%3C/g%3E%3C/svg%3E");
+  --orn-ferro-tl: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 26'%3E%3Cpath d='M3 23V3h20' fill='none' stroke='%230d0807' stroke-width='4.6' stroke-linecap='round' opacity='.85'/%3E%3Cpath d='M3 23V3h20' fill='none' stroke='%234a423d' stroke-width='2.8' stroke-linecap='round'/%3E%3Cpath d='M3.6 22V3.6H22' fill='none' stroke='%238a7c72' stroke-width='.8' stroke-linecap='round' opacity='.8'/%3E%3Cpath d='M8 17V8h9' fill='none' stroke='%234a423d' stroke-width='1.1' stroke-linecap='round'/%3E%3Cpath d='M23 3q2.4 2.6 0 5M3 23q2.6 2.4 5 0' fill='none' stroke='%234a423d' stroke-width='1.2' stroke-linecap='round'/%3E%3Ccircle cx='4.4' cy='4.4' r='2.5' fill='%236b2a1e' stroke='%230d0807' stroke-width='.8'/%3E%3C/svg%3E");
+  --orn-ferro-tr: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 26'%3E%3Cg transform='translate(26 0) scale(-1 1)'%3E%3Cpath d='M3 23V3h20' fill='none' stroke='%230d0807' stroke-width='4.6' stroke-linecap='round' opacity='.85'/%3E%3Cpath d='M3 23V3h20' fill='none' stroke='%234a423d' stroke-width='2.8' stroke-linecap='round'/%3E%3Cpath d='M3.6 22V3.6H22' fill='none' stroke='%238a7c72' stroke-width='.8' stroke-linecap='round' opacity='.8'/%3E%3Cpath d='M8 17V8h9' fill='none' stroke='%234a423d' stroke-width='1.1' stroke-linecap='round'/%3E%3Cpath d='M23 3q2.4 2.6 0 5M3 23q2.6 2.4 5 0' fill='none' stroke='%234a423d' stroke-width='1.2' stroke-linecap='round'/%3E%3Ccircle cx='4.4' cy='4.4' r='2.5' fill='%236b2a1e' stroke='%230d0807' stroke-width='.8'/%3E%3C/g%3E%3C/svg%3E");
+  --orn-ferro-bl: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 26'%3E%3Cg transform='translate(0 26) scale(1 -1)'%3E%3Cpath d='M3 23V3h20' fill='none' stroke='%230d0807' stroke-width='4.6' stroke-linecap='round' opacity='.85'/%3E%3Cpath d='M3 23V3h20' fill='none' stroke='%234a423d' stroke-width='2.8' stroke-linecap='round'/%3E%3Cpath d='M3.6 22V3.6H22' fill='none' stroke='%238a7c72' stroke-width='.8' stroke-linecap='round' opacity='.8'/%3E%3Cpath d='M8 17V8h9' fill='none' stroke='%234a423d' stroke-width='1.1' stroke-linecap='round'/%3E%3Cpath d='M23 3q2.4 2.6 0 5M3 23q2.6 2.4 5 0' fill='none' stroke='%234a423d' stroke-width='1.2' stroke-linecap='round'/%3E%3Ccircle cx='4.4' cy='4.4' r='2.5' fill='%236b2a1e' stroke='%230d0807' stroke-width='.8'/%3E%3C/g%3E%3C/svg%3E");
+  --orn-ferro-br: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 26'%3E%3Cg transform='translate(26 26) scale(-1 -1)'%3E%3Cpath d='M3 23V3h20' fill='none' stroke='%230d0807' stroke-width='4.6' stroke-linecap='round' opacity='.85'/%3E%3Cpath d='M3 23V3h20' fill='none' stroke='%234a423d' stroke-width='2.8' stroke-linecap='round'/%3E%3Cpath d='M3.6 22V3.6H22' fill='none' stroke='%238a7c72' stroke-width='.8' stroke-linecap='round' opacity='.8'/%3E%3Cpath d='M8 17V8h9' fill='none' stroke='%234a423d' stroke-width='1.1' stroke-linecap='round'/%3E%3Cpath d='M23 3q2.4 2.6 0 5M3 23q2.6 2.4 5 0' fill='none' stroke='%234a423d' stroke-width='1.2' stroke-linecap='round'/%3E%3Ccircle cx='4.4' cy='4.4' r='2.5' fill='%236b2a1e' stroke='%230d0807' stroke-width='.8'/%3E%3C/g%3E%3C/svg%3E");
+  --orn-canto-papel-tl: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 26'%3E%3Cpath d='M3 23V3h20' fill='none' stroke='%235a4228' stroke-width='4.6' stroke-linecap='round' opacity='.55'/%3E%3Cpath d='M3 23V3h20' fill='none' stroke='%23b8892c' stroke-width='2.8' stroke-linecap='round'/%3E%3Cpath d='M3.6 22V3.6H22' fill='none' stroke='%23f0d48a' stroke-width='.8' stroke-linecap='round' opacity='.8'/%3E%3Cpath d='M8 17V8h9' fill='none' stroke='%23b8892c' stroke-width='1.1' stroke-linecap='round'/%3E%3Cpath d='M23 3q2.4 2.6 0 5M3 23q2.6 2.4 5 0' fill='none' stroke='%23b8892c' stroke-width='1.2' stroke-linecap='round'/%3E%3Ccircle cx='4.4' cy='4.4' r='2.5' fill='%237a1f1f' stroke='%235a4228' stroke-width='.8'/%3E%3C/svg%3E");
+  --orn-canto-papel-tr: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 26'%3E%3Cg transform='translate(26 0) scale(-1 1)'%3E%3Cpath d='M3 23V3h20' fill='none' stroke='%235a4228' stroke-width='4.6' stroke-linecap='round' opacity='.55'/%3E%3Cpath d='M3 23V3h20' fill='none' stroke='%23b8892c' stroke-width='2.8' stroke-linecap='round'/%3E%3Cpath d='M3.6 22V3.6H22' fill='none' stroke='%23f0d48a' stroke-width='.8' stroke-linecap='round' opacity='.8'/%3E%3Cpath d='M8 17V8h9' fill='none' stroke='%23b8892c' stroke-width='1.1' stroke-linecap='round'/%3E%3Cpath d='M23 3q2.4 2.6 0 5M3 23q2.6 2.4 5 0' fill='none' stroke='%23b8892c' stroke-width='1.2' stroke-linecap='round'/%3E%3Ccircle cx='4.4' cy='4.4' r='2.5' fill='%237a1f1f' stroke='%235a4228' stroke-width='.8'/%3E%3C/g%3E%3C/svg%3E");
+  --orn-canto-papel-bl: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 26'%3E%3Cg transform='translate(0 26) scale(1 -1)'%3E%3Cpath d='M3 23V3h20' fill='none' stroke='%235a4228' stroke-width='4.6' stroke-linecap='round' opacity='.55'/%3E%3Cpath d='M3 23V3h20' fill='none' stroke='%23b8892c' stroke-width='2.8' stroke-linecap='round'/%3E%3Cpath d='M3.6 22V3.6H22' fill='none' stroke='%23f0d48a' stroke-width='.8' stroke-linecap='round' opacity='.8'/%3E%3Cpath d='M8 17V8h9' fill='none' stroke='%23b8892c' stroke-width='1.1' stroke-linecap='round'/%3E%3Cpath d='M23 3q2.4 2.6 0 5M3 23q2.6 2.4 5 0' fill='none' stroke='%23b8892c' stroke-width='1.2' stroke-linecap='round'/%3E%3Ccircle cx='4.4' cy='4.4' r='2.5' fill='%237a1f1f' stroke='%235a4228' stroke-width='.8'/%3E%3C/g%3E%3C/svg%3E");
+  --orn-canto-papel-br: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 26'%3E%3Cg transform='translate(26 26) scale(-1 -1)'%3E%3Cpath d='M3 23V3h20' fill='none' stroke='%235a4228' stroke-width='4.6' stroke-linecap='round' opacity='.55'/%3E%3Cpath d='M3 23V3h20' fill='none' stroke='%23b8892c' stroke-width='2.8' stroke-linecap='round'/%3E%3Cpath d='M3.6 22V3.6H22' fill='none' stroke='%23f0d48a' stroke-width='.8' stroke-linecap='round' opacity='.8'/%3E%3Cpath d='M8 17V8h9' fill='none' stroke='%23b8892c' stroke-width='1.1' stroke-linecap='round'/%3E%3Cpath d='M23 3q2.4 2.6 0 5M3 23q2.6 2.4 5 0' fill='none' stroke='%23b8892c' stroke-width='1.2' stroke-linecap='round'/%3E%3Ccircle cx='4.4' cy='4.4' r='2.5' fill='%237a1f1f' stroke='%235a4228' stroke-width='.8'/%3E%3C/g%3E%3C/svg%3E");
+  --orn-flor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 12'%3E%3Cpath d='M2 6h44M74 6h44' stroke='%238c6239' stroke-width='1.2' stroke-linecap='round'/%3E%3Cpath d='M46 6q5-5 9 0q-4 5-9 0zM74 6q-5-5-9 0q4 5 9 0z' fill='none' stroke='%238c6239' stroke-width='.9'/%3E%3Cpath d='M60 1l4.6 5-4.6 5-4.6-5z' fill='%237a1f1f'/%3E%3Ccircle cx='52' cy='6' r='1.4' fill='%23b8892c'/%3E%3Ccircle cx='68' cy='6' r='1.4' fill='%23b8892c'/%3E%3C/svg%3E");
+  --orn-losango: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 16'%3E%3Cpath d='M16 1.5l5.5 6.5-5.5 6.5-5.5-6.5z' fill='%237a1f1f' stroke='%234a1010' stroke-width='.6'/%3E%3Cpath d='M16 5l2.4 3-2.4 3-2.4-3z' fill='%23e3c37a'/%3E%3Cpath d='M9 8q-3.5-4-7 0M23 8q3.5-4 7 0' fill='none' stroke='%238c6239' stroke-width='1.1' stroke-linecap='round'/%3E%3Ccircle cx='6.5' cy='10' r='1.2' fill='%23b8892c'/%3E%3Ccircle cx='25.5' cy='10' r='1.2' fill='%23b8892c'/%3E%3C/svg%3E");
+  --orn-friso: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 6'%3E%3Crect width='14' height='6' fill='%231c1108'/%3E%3Cpath d='M0 .8h14M0 5.2h14' stroke='%23c9a14a' stroke-width='1.1'/%3E%3Cpath d='M7 1.6l2.2 1.4L7 4.4 4.8 3z' fill='%23f0d48a'/%3E%3C/svg%3E");
+  /* Prego de latão (cabeça redonda com brilho) — grande e pequeno */
+  --orn-prego: radial-gradient(circle at 42% 38%, #fbeab0 0 0.9px, #c9a14a 1.5px 2.3px, #5c430c 2.9px, rgba(28,17,8,0.6) 3.3px, transparent 3.7px);
+  --orn-prego-p: radial-gradient(circle at 42% 38%, #fbeab0 0 0.6px, #c9a14a 1px 1.6px, #5c430c 2.1px, transparent 2.6px);
+  /* Tamanho e recuo das cantoneiras dos quadros (menores no celular estreito) */
+  --cant-tam: 22px;
+  --cant-dx: 4px;
+  --cant-dy: 4px;
+  /* Tamanho da rosa-dos-ventos do fundo */
+  --rosa-tam: clamp(96px, 9vw, 150px);
+}
+@media (max-width: 374px) {
+  :root { --cant-tam: 14px; --cant-dx: 3px; --cant-dy: 3px; }
+}
+
+
+/* ---------- 2. O mapa antigo (fundo da página inteira) ----------
+   O fundo fixo ganha desenhos de carta náutica, sempre clarinhos e
+   longe do texto:
+   - linhas de rumo: o feixe marrom agora sai do centro da ROSA-DOS-VENTOS
+     (lado esquerdo, um pouco abaixo do meio, longe dos botões de som); o feixe vinho sai do pé da página;
+   - constelações desenhadas (estrelas de 4 pontas ligadas por pontinhos):
+     Cruzeiro do Sul no alto à esquerda; Órion (com as Três Marias) e a
+     cartela "Aqui há dragões" só nas telas largas, nas margens do mapa
+     (a rosa-dos-ventos também some no celular, onde cairia atrás do texto);
+   - a LUA volta, desenhada como nos mapas medievais (crescente com rosto),
+     no mesmo lugar de antes (alto, à direita). O efeitos.js continua
+     fazendo ela descer devagar ao rolar a página;
+   - ESTRELAS: das 60 que o efeitos.js espalha ao acaso, só aparecem as
+     que caíram nas BEIRADAS da tela (as do meio ficariam atrás do texto
+     e pareceriam sujeira no papel). Elas viram estrelinhas de 4 pontas e
+     piscam de leve.
+   Nada disso passa da camada 3 do fundo (o conteúdo fica na camada 10). */
+.fundo-magico-fixo {
+  --ceu-rosa: none;
+  --ceu-orion: none;
+  --ceu-dragao: none;
+}
+.fundo-magico-fixo::before {
+  background-image:
+    var(--ceu-rosa),
+    var(--orn-cruzeiro-do-sul),
+    var(--ceu-orion),
+    var(--ceu-dragao),
+    repeating-conic-gradient(from 3deg at 4.5vw 58vh, rgba(92,67,40,0.12) 0deg 0.12deg, transparent 0.12deg 22.5deg),
+    repeating-conic-gradient(from 8deg at 55% 104%, rgba(122,31,31,0.07) 0deg 0.12deg, transparent 0.12deg 22.5deg);
+  background-size: var(--rosa-tam) var(--rosa-tam), 52px 65px, 104px 136px, 124px 80px, auto, auto;
+  background-position:
+    calc(4.5vw - var(--rosa-tam) / 2) calc(58vh - var(--rosa-tam) / 2),
+    left 6vw top 17vh,
+    right 1.4vw top 40vh,
+    right 0.8vw top 70vh,
+    0 0,
+    0 0;
+  background-repeat: no-repeat;
+}
+/* No celular a rosa ficaria atrás do texto do topo: ela aparece só de 768 px para cima */
+@media (min-width: 768px) {
+  .fundo-magico-fixo { --ceu-rosa: var(--orn-rosa-ventos); }
+  .fundo-magico-fixo::before {
+    background-size: var(--rosa-tam) var(--rosa-tam), 96px 120px, 104px 136px, 124px 80px, auto, auto;
+    background-position:
+      calc(4.5vw - var(--rosa-tam) / 2) calc(58vh - var(--rosa-tam) / 2),
+      left 2vw top 11vh,
+      right 1.4vw top 40vh,
+      right 0.8vw top 70vh,
+      0 0,
+      0 0;
+  }
+}
+/* Órion e o dragão só onde existe margem de papel dos lados do mapa */
+@media (min-width: 1200px) {
+  .fundo-magico-fixo { --ceu-orion: var(--orn-orion); }
+}
+@media (min-width: 1280px) {
+  .fundo-magico-fixo { --ceu-dragao: var(--orn-dragao); }
+}
+
+/* A lua desenhada. Fica por cima das linhas de rumo (camada 3 do fundo).
+   O desenho vai no FUNDO do elemento: a posição (8% do alto, 12% da
+   direita) e o movimento ao rolar são escritos pelo efeitos.js e ficam
+   como estão. "Pisca" só mudando a transparência, bem devagar. */
+.fundo-magico-fixo .lua {
+  display: block;
+  z-index: 3;
+  width: clamp(56px, 8vw, 110px);
+  height: clamp(56px, 8vw, 110px);
+  border-radius: 0;
+  background: var(--orn-lua) center / contain no-repeat;
+  opacity: 0.74;
+  animation: luaCintilar 7s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes luaCintilar { 0%, 100% { opacity: 0.74; } 50% { opacity: 0.56; } }
+/* No celular a barra tem 100 px e cobriria a lua: ela desce um pouco */
+@media (max-width: 700px) {
+  .fundo-magico-fixo .lua { margin-top: 64px; }
+}
+/* De 1024 a 1299 px a lua encostaria na moldura do topo: ela chega um
+   pouco mais para a direita (só uma margem; a posição do efeitos.js fica) */
+@media (min-width: 1024px) and (max-width: 1299px) {
+  .fundo-magico-fixo .lua { margin-right: calc((100vw - 1300px) * 0.3 - 4px); }
+}
+
+/* Estrelas de 4 pontas. O efeitos.js escreve a posição, o tamanho (1–3 px)
+   e o ritmo do piscar no próprio elemento; aqui o desenho fica num
+   ::before centrado (de 6 a 11 px) e o piscar vira suave (0,22 → 0,7). */
+.fundo-magico-fixo .estrela {
+  z-index: 3;
+  background: none;
+  box-shadow: none;
+  border-radius: 0;
+  overflow: visible;
+  pointer-events: none;
+  animation-name: estrelaCintilar;
+}
+.fundo-magico-fixo .estrela::before {
+  content: "";
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 8px; height: 8px;
+  margin: -4px 0 0 -4px;
+  background: var(--orn-estrela) center / contain no-repeat;
+}
+.fundo-magico-fixo .estrela:nth-child(3n)::before { width: 11px; height: 11px; margin: -5.5px 0 0 -5.5px; }
+.fundo-magico-fixo .estrela:nth-child(3n+1)::before { width: 6px; height: 6px; margin: -3px 0 0 -3px; }
+@keyframes estrelaCintilar { 0%, 100% { opacity: 0.22; } 50% { opacity: 0.7; } }
+/* Quais aparecem: celular → só as que caíram nos 6% de cada beirada
+   (a faixa de papel ao lado dos quadros); telas maiores → 12% de cada
+   lado. O seletor lê o "left: 3.4%" que o efeitos.js escreveu. */
+.fundo-magico-fixo .estrela:is(
+  [style*="left: 0."], [style*="left: 1."], [style*="left: 2."], [style*="left: 3."], [style*="left: 4."], [style*="left: 5."],
+  [style*="left: 94."], [style*="left: 95."], [style*="left: 96."], [style*="left: 97."], [style*="left: 98."], [style*="left: 99."]
+) { display: block; }
+@media (min-width: 768px) {
+  .fundo-magico-fixo .estrela:is(
+    [style*="left: 6."], [style*="left: 7."], [style*="left: 8."], [style*="left: 9."], [style*="left: 10."], [style*="left: 11."],
+    [style*="left: 88."], [style*="left: 89."], [style*="left: 90."], [style*="left: 91."], [style*="left: 92."], [style*="left: 93."]
+  ) { display: block; }
+}
+/* Quem pediu menos movimento: nada pisca */
+@media (prefers-reduced-motion: reduce) {
+  .fundo-magico-fixo .lua { animation: none; }
+  .fundo-magico-fixo .estrela { animation: none; opacity: 0.5; }
+}
+
+
+/* ---------- 3. Topo (herói) como cartucho de mapa ----------
+   - Moldura de livro iluminado (filete duplo vinho + filete de ouro e
+     4 cantoneiras), centrada e com até ~760 px. É só um desenho por trás:
+     não empurra nada. No topo compacto (ao rolar) ela encolhe junto.
+   - "O REINO DAS SUPER ESTRUTURAS" vira FITA vinho com letra creme
+     (9,3:1) e pontas recortadas. O título usa o truque "texto pintado
+     pelo fundo"; por isso as 5 propriedades (fundo, 2 recortes, cor de
+     preenchimento e filtro) são trocadas juntas.
+   - O núcleo do brasão vira lacre de cera com beirada irregular.
+   - O ❖ vira um losango desenhado (o caractere continua no HTML). */
+.hero-principal::before {
+  content: "";
+  position: absolute;
+  top: clamp(0.6rem, 2vw, 1.5rem);
+  bottom: clamp(0.6rem, 2vw, 1.5rem);
+  left: max(0.5rem, calc(50% - 380px));
+  right: max(0.5rem, calc(50% - 380px));
+  border: 3px double rgba(122,31,31,0.72);
+  border-radius: 4px;
+  outline: 1px solid rgba(184,137,44,0.6);
+  outline-offset: -9px;
+  background:
+    var(--orn-canto-papel-tl) left 3px top 3px / 22px 22px no-repeat,
+    var(--orn-canto-papel-tr) right 3px top 3px / 22px 22px no-repeat,
+    var(--orn-canto-papel-bl) left 3px bottom 3px / 22px 22px no-repeat,
+    var(--orn-canto-papel-br) right 3px bottom 3px / 22px 22px no-repeat;
+  pointer-events: none;
+  transition: top 0.35s ease, bottom 0.35s ease;
+}
+.hero-principal.hero-compacto::before { top: 0.35rem; bottom: 0.35rem; }
+@media (max-width: 374px) {
+  .hero-principal::before {
+    background-size: 15px 15px;
+    outline-offset: -7px;
+  }
+}
+
+.hero-titulo-linha2 {
+  width: fit-content;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0.42em 2.1em 0.38em;
+  /* as margens negativas devolvem a altura da fita: o topo não cresce */
+  margin-top: calc(0.55rem - 0.42em);
+  margin-bottom: -0.38em;
+  background: linear-gradient(180deg, #8e2a2a, var(--vinho) 50%, #5e1616);
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  -webkit-text-fill-color: currentColor;
+  color: var(--papel-claro);
+  filter: none;
+  text-shadow: 0 1px 0 rgba(43,8,8,0.55);
+  clip-path: polygon(0 0, 100% 0, calc(100% - 0.9em) 50%, 100% 100%, 0 100%, 0.9em 50%);
+}
+/* Celular estreito (320–374 px): letra um pouco menos espaçada e pontas
+   mais curtas, para a fita caber em 1 linha sem o recorte comer letras */
+@media (max-width: 374px) {
+  .hero-titulo-linha2 {
+    padding-left: 0.9em;
+    padding-right: 0.9em;
+    letter-spacing: 0.06em;
+    clip-path: polygon(0 0, 100% 0, calc(100% - 0.6em) 50%, 100% 100%, 0 100%, 0.6em 50%);
+  }
+}
+
+.hero-emblema-nucleo {
+  border-radius: 47% 53% 50% 50% / 52% 48% 52% 48%;
+  box-shadow:
+    0 6px 16px rgba(58,36,18,0.45),
+    inset 0 0 0 4px rgba(92,16,16,0.35),
+    inset 0 0 0 5px rgba(255,190,170,0.16),
+    inset 0 2px 4px rgba(255,170,170,0.3),
+    inset 0 -3px 6px rgba(0,0,0,0.35);
+}
+
+/* As alturas (20 e 24 px) são as mesmas que o ❖ ocupava: nada sobe nem desce */
+.divisor-losango > span {
+  font-size: 0;
+  width: 2rem;
+  height: 20px;
+  transform: none;
+  text-shadow: none;
+  background: var(--orn-losango) center / contain no-repeat;
+}
+.hero-divisor > span { height: 24px; }
+
+
+/* ---------- 4. Barra de navegação como prancha ----------
+   Tábua de madeira com 4 pregos de latão nas pontas e o fio de baixo
+   virando um friso de latão trabalhado (a mesma peça, só mais rica).
+   Gemas: ganham um aro de latão DESENHADO POR DENTRO (camada de fundo),
+   para não crescer nem ser cortado pela fileira que rola de lado.
+   Altura da barra (56/100 px) e tamanho das gemas (34/30 px) iguais. */
+.barra-navegacao {
+  background:
+    var(--orn-prego) left 5px top 5px / 8px 8px no-repeat,
+    var(--orn-prego) right 5px top 5px / 8px 8px no-repeat,
+    var(--orn-prego) left 5px bottom 8px / 8px 8px no-repeat,
+    var(--orn-prego) right 5px bottom 8px / 8px 8px no-repeat,
+    var(--veios-madeira),
+    linear-gradient(180deg, var(--couro), var(--madeira) 55%, #2a190b);
+}
+.barra-navegacao::after {
+  height: 5px;
+  background: var(--orn-friso) left bottom / 14px 5px repeat-x;
+  box-shadow: 0 1px 0 rgba(28,17,8,0.55);
+}
+.botao-bloco-nav {
+  border-color: rgba(28,17,8,0.8);
+  background:
+    radial-gradient(circle at 32% 26%, rgba(255,255,255,0.55), transparent 42%),
+    radial-gradient(closest-side, transparent 83%, #f0d48a 86%, #c9a14a 91%, #6b4f16 97%, rgba(28,17,8,0.9) 100%),
+    radial-gradient(circle at 50% 125%, rgba(0,0,0,0.6), transparent 62%),
+    var(--cor-reino, #5c6bc0);
+}
+
+
+/* ---------- 5. Quadros dos reinos (acordeão do celular, mapa e painel aberto) ----------
+   Cada quadro de madeira ganha, SÓ em camadas de fundo (sem pseudo-elemento,
+   porque o ::before dos quadros do mapa já é a fita de "reino completo"):
+   - 4 cantoneiras de latão, encaixadas no filete fino de dentro;
+   - uma faixa de tecido de 6 px no alto, na cor PURA do reino, com um
+     filete de latão embaixo.
+   Primeiro a versão sem mistura de cores (navegador antigo) e, dentro do
+   @supports, a mesma com o leve tinte do reino da etapa 1. */
+.painel-reino-premium {
+  background:
+    var(--orn-cant-tl) left var(--cant-dx) top calc(var(--cant-dy) + 6px) / var(--cant-tam) var(--cant-tam) no-repeat padding-box,
+    var(--orn-cant-tr) right var(--cant-dx) top calc(var(--cant-dy) + 6px) / var(--cant-tam) var(--cant-tam) no-repeat padding-box,
+    var(--orn-cant-bl) left var(--cant-dx) bottom var(--cant-dy) / var(--cant-tam) var(--cant-tam) no-repeat padding-box,
+    var(--orn-cant-br) right var(--cant-dx) bottom var(--cant-dy) / var(--cant-tam) var(--cant-tam) no-repeat padding-box,
+    linear-gradient(rgba(201,161,74,0.85), rgba(201,161,74,0.85)) left 0 top 6px / 100% 1px no-repeat padding-box,
+    linear-gradient(var(--cor-reino, transparent), var(--cor-reino, transparent)) left 0 top 0 / 100% 6px no-repeat padding-box,
+    var(--veios-madeira) padding-box,
+    linear-gradient(180deg, var(--madeira), var(--madeira-noite)) padding-box,
+    var(--borda-metal) border-box;
+}
+@supports (color: color-mix(in srgb, red 50%, blue)) {
+  .painel-reino-premium {
+    background:
+      var(--orn-cant-tl) left var(--cant-dx) top calc(var(--cant-dy) + 6px) / var(--cant-tam) var(--cant-tam) no-repeat padding-box,
+      var(--orn-cant-tr) right var(--cant-dx) top calc(var(--cant-dy) + 6px) / var(--cant-tam) var(--cant-tam) no-repeat padding-box,
+      var(--orn-cant-bl) left var(--cant-dx) bottom var(--cant-dy) / var(--cant-tam) var(--cant-tam) no-repeat padding-box,
+      var(--orn-cant-br) right var(--cant-dx) bottom var(--cant-dy) / var(--cant-tam) var(--cant-tam) no-repeat padding-box,
+      linear-gradient(rgba(201,161,74,0.85), rgba(201,161,74,0.85)) left 0 top 6px / 100% 1px no-repeat padding-box,
+      linear-gradient(var(--cor-reino, transparent), var(--cor-reino, transparent)) left 0 top 0 / 100% 6px no-repeat padding-box,
+      var(--veios-madeira) padding-box,
+      linear-gradient(180deg, color-mix(in srgb, var(--cor-reino, var(--madeira)) 7%, var(--madeira)) 0, var(--madeira) 56px, var(--madeira) 140px, var(--madeira-noite)) padding-box,
+      var(--borda-metal) border-box;
+  }
+}
+
+/* Ilha Amaldiçoada: madeira carbonizada (a textura de brasa continua),
+   cantoneiras de FERRO escuro com rebite de ferrugem e a faixa no rubro
+   da Ilha (#7a1414). Vem depois do quadro comum de propósito (mesmo peso,
+   ganha o último). Mesmo esquema da etapa 1: imagem .webp e, para quem
+   não entende .webp, a .png. */
+.painel-ilha {
+  background: linear-gradient(145deg, #2e1a1a, #160c0c);
+  background:
+    var(--orn-ferro-tl) left var(--cant-dx) top calc(var(--cant-dy) + 6px) / var(--cant-tam) var(--cant-tam) no-repeat padding-box,
+    var(--orn-ferro-tr) right var(--cant-dx) top calc(var(--cant-dy) + 6px) / var(--cant-tam) var(--cant-tam) no-repeat padding-box,
+    var(--orn-ferro-bl) left var(--cant-dx) bottom var(--cant-dy) / var(--cant-tam) var(--cant-tam) no-repeat padding-box,
+    var(--orn-ferro-br) right var(--cant-dx) bottom var(--cant-dy) / var(--cant-tam) var(--cant-tam) no-repeat padding-box,
+    linear-gradient(#3a2f2a, #3a2f2a) left 0 top 6px / 100% 1px no-repeat padding-box,
+    linear-gradient(#7a1414, #7a1414) left 0 top 0 / 100% 6px no-repeat padding-box,
+    linear-gradient(145deg, rgba(46,26,26,0.94), rgba(22,12,12,0.97)) padding-box,
+    url("../imagens/textura-pedra-veios.webp") var(--veios-pos, 0 0) / 320px 320px repeat padding-box,
+    linear-gradient(145deg, #2e1a1a, #160c0c) padding-box,
+    linear-gradient(135deg, rgba(160,32,32,0.85), #4a1010 38%, rgba(255,160,160,0.55) 52%, #4a1010 68%, rgba(160,32,32,0.8)) border-box;
+}
+@supports not (background-image: image-set(url("../imagens/textura-pedra-veios.webp") type("image/webp"))) {
+  .painel-ilha {
+    background: linear-gradient(145deg, #2e1a1a, #160c0c);
+    background:
+      var(--orn-ferro-tl) left var(--cant-dx) top calc(var(--cant-dy) + 6px) / var(--cant-tam) var(--cant-tam) no-repeat padding-box,
+      var(--orn-ferro-tr) right var(--cant-dx) top calc(var(--cant-dy) + 6px) / var(--cant-tam) var(--cant-tam) no-repeat padding-box,
+      var(--orn-ferro-bl) left var(--cant-dx) bottom var(--cant-dy) / var(--cant-tam) var(--cant-tam) no-repeat padding-box,
+      var(--orn-ferro-br) right var(--cant-dx) bottom var(--cant-dy) / var(--cant-tam) var(--cant-tam) no-repeat padding-box,
+      linear-gradient(#3a2f2a, #3a2f2a) left 0 top 6px / 100% 1px no-repeat padding-box,
+      linear-gradient(#7a1414, #7a1414) left 0 top 0 / 100% 6px no-repeat padding-box,
+      linear-gradient(145deg, rgba(46,26,26,0.94), rgba(22,12,12,0.97)) padding-box,
+      url("../imagens/textura-pedra-veios.png") var(--veios-pos, 0 0) / 320px 320px repeat padding-box,
+      linear-gradient(145deg, #2e1a1a, #160c0c) padding-box,
+      linear-gradient(135deg, rgba(160,32,32,0.85), #4a1010 38%, rgba(255,160,160,0.55) 52%, #4a1010 68%, rgba(160,32,32,0.8)) border-box;
+  }
+}
+
+
+/* ---------- 6. Mapa do computador (telas de 1024 px ou mais) ----------
+   Os quadros viram placas cravadas no pergaminho (cantoneiras um pouco
+   menores, para não brigar com a tocha 🔥 e a bandeira ⚑ dos cantos).
+   A trilha tracejada vinho da etapa 1 continua igual (não é repetida
+   aqui). Mudam só:
+   - a fita de "reino completo" (o ::before que já era dela) vira uma
+     faixa de ouro mais larga, presa na beirada de cima;
+   - a trilha morta da Ilha vira tinta preta queimada;
+   - a sombra dos brasões fica marrom (cores dos brasões intactas). */
+@media (min-width: 1024px) {
+  .tile-reino { --cant-tam: 18px; --cant-dx: 3px; --cant-dy: 3px; }
+  .tile-reino.estado-completo::before {
+    top: -2px;
+    left: 22%;
+    right: 22%;
+    height: 6px;
+    border-radius: 0 0 3px 3px;
+    background: linear-gradient(180deg, #f0d48a, #c9a14a 55%, #7a5a18);
+    box-shadow: 0 1px 2px rgba(28,17,8,0.6), 0 0 8px rgba(212,175,55,0.4);
+  }
+  .tile-pos-ilha::after {
+    background: repeating-linear-gradient(90deg, rgba(43,20,12,0.8) 0 6px, transparent 6px 15px);
+    filter: none;
+  }
+}
+.tile-brasao .brasao-svg { filter: drop-shadow(0 3px 4px rgba(28,17,8,0.6)); }
+
+
+/* ---------- 7. Cartas das runas ----------
+   - cantos levemente irregulares (papel cortado à mão);
+   - MARCADOR na cor do reino na beirada direita (sombra interna). A cor
+     vem do quadro; onde o quadro não tem cor (Ilha no celular) vale a
+     cor de cera. O marcador é repetido em TODAS as regras de "passar o
+     mouse", senão ele sumiria no hover;
+   - tachinha de latão no alto (o ::after estava livre);
+   - número da runa como SELO DE CERA vermelho com letra creme (8,4:1);
+   - desafio resolvido: aro de ouro duplo;
+   - runas negras (Ilha): beiradas queimadas, selo de cera PRETA e
+     tachinha de ferro. */
+.espada-card {
+  border-radius: 3px 8px 4px 9px / 7px 3px 8px 4px;
+  box-shadow: inset -4px 0 0 var(--cor-reino, var(--cera)), 0 2px 0 rgba(140,98,57,0.45), 0 6px 12px rgba(43,29,16,0.32);
+}
+.espada-card::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  margin-left: -4px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #f4dc94, var(--latao) 55%, #6b4f16);
+  box-shadow: 0 1px 1.5px rgba(28,17,8,0.55);
+  pointer-events: none;
+}
+.espada-card.runa-negra {
+  border-color: rgba(74,20,10,0.75);
+  box-shadow: inset -4px 0 0 var(--cor-reino, var(--cera)), inset 0 0 12px rgba(74,30,10,0.45), 0 2px 0 rgba(60,20,10,0.5), 0 6px 12px rgba(28,17,8,0.4);
+}
+.espada-card.runa-negra::after { background: radial-gradient(circle at 35% 35%, #8a7c72, #3a322d 55%, #0d0807); }
+.espada-card:hover {
+  box-shadow: inset -4px 0 0 var(--cor-reino, var(--cera)), 0 2px 0 rgba(140,98,57,0.45), 0 10px 20px rgba(43,29,16,0.4), 0 0 14px rgba(232,180,80,0.35);
+}
+.theme-indigo:hover   { box-shadow: inset -4px 0 0 var(--cor-reino, var(--cera)), 0 8px 18px rgba(20,12,4,0.5), 0 0 12px rgba(92, 107, 192, 0.35); }
+.theme-laranja:hover  { box-shadow: inset -4px 0 0 var(--cor-reino, var(--cera)), 0 8px 18px rgba(20,12,4,0.5), 0 0 12px rgba(255, 112, 67, 0.35); }
+.theme-ambar:hover    { box-shadow: inset -4px 0 0 var(--cor-reino, var(--cera)), 0 8px 18px rgba(20,12,4,0.5), 0 0 12px rgba(224, 168, 62, 0.35); }
+.theme-cinza:hover    { box-shadow: inset -4px 0 0 var(--cor-reino, var(--cera)), 0 8px 18px rgba(20,12,4,0.5), 0 0 12px rgba(158, 158, 158, 0.35); }
+.theme-vermelho:hover { box-shadow: inset -4px 0 0 var(--cor-reino, var(--cera)), 0 8px 18px rgba(20,12,4,0.5), inset 0 0 15px rgba(192, 57, 43, 0.2); }
+.theme-ciano:hover    { box-shadow: inset -4px 0 0 var(--cor-reino, var(--cera)), 0 8px 18px rgba(20,12,4,0.5), 0 0 12px rgba(0, 229, 255, 0.35); }
+.theme-roxo:hover     { box-shadow: inset -4px 0 0 var(--cor-reino, var(--cera)), 0 8px 18px rgba(20,12,4,0.5), 0 0 12px rgba(171, 71, 188, 0.35); }
+.theme-oxblood:hover  { box-shadow: inset -4px 0 0 var(--cor-reino, var(--cera)), inset 0 0 12px rgba(74,30,10,0.45), 0 8px 18px rgba(20,12,4,0.5), 0 0 12px rgba(160, 32, 32, 0.4); }
+.espada-card.runa-desafio-resolvido {
+  border-color: var(--ouro-envelhecido);
+  box-shadow:
+    inset -4px 0 0 var(--cor-reino, var(--cera)),
+    0 0 0 1px var(--ouro-envelhecido),
+    0 0 0 3px var(--papel-claro),
+    0 0 0 4px var(--ouro-envelhecido),
+    0 6px 12px rgba(43,29,16,0.32);
+}
+
+.runa-numero {
+  color: var(--papel-claro);
+  background: radial-gradient(circle at 35% 30%, #b83434, var(--cera) 58%, #5c1010);
+  border-color: #4a0e0e;
+  border-radius: 46% 54% 44% 56% / 58% 46% 54% 42%;
+  box-shadow: 0 1px 2px rgba(43,29,16,0.45), inset 0 1px 1px rgba(255,190,170,0.35), inset 0 -2px 3px rgba(0,0,0,0.3);
+  text-shadow: 0 1px 0 rgba(43,8,8,0.6);
+}
+.runa-negra .runa-numero {
+  color: var(--papel-claro);
+  background: radial-gradient(circle at 35% 30%, #4a4340, #1e1a18 60%, #0c0a09);
+  border-color: #000;
+}
+
+
+/* ---------- 8. Botões como placas de madeira entalhada ----------
+   Todos os .btn-gotico ganham 4 preguinhos de latão (camadas de fundo,
+   sem pseudo-elemento), bisel (luz em cima, sombra embaixo) e letra
+   "entalhada" (sombra escura em cima da letra). Ao apertar, a placa afunda
+   1 px. Espaçamento interno, tamanho de letra e borda NÃO mudam: eles são
+   os calços do ✕ dos modais e cabem nos quadros do mapa.
+   A opção escolhida nos Julgamentos (carta clara) não ganha pregos nem
+   letra entalhada. */
+.btn-gotico {
+  background:
+    var(--orn-prego-p) left 3px top 3px / 6px 6px no-repeat,
+    var(--orn-prego-p) right 3px top 3px / 6px 6px no-repeat,
+    var(--orn-prego-p) left 3px bottom 3px / 6px 6px no-repeat,
+    var(--orn-prego-p) right 3px bottom 3px / 6px 6px no-repeat,
+    var(--veios-madeira),
+    linear-gradient(180deg, #5a3a1c, var(--madeira) 60%, #2a190b);
+  text-shadow: 0 -1px 0 rgba(0,0,0,0.6), 0 1px 0 rgba(255,220,160,0.12);
+  box-shadow:
+    0 3px 0 #1c1108,
+    0 5px 12px rgba(43,29,16,0.35),
+    inset 0 1px 0 rgba(255,220,160,0.25),
+    inset 1px 0 0 rgba(255,220,160,0.08),
+    inset -1px 0 0 rgba(0,0,0,0.3),
+    inset 0 -2px 3px rgba(0,0,0,0.35);
+}
+.btn-gotico:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 #1c1108, 0 2px 5px rgba(43,29,16,0.3), inset 0 2px 4px rgba(0,0,0,0.45);
+}
+.btn-gotico.opcao-marcada { text-shadow: none; }
+/* Botões só com ícone (✕, ☆) e opções das perguntas: madeira sem pregos
+   (no ✕ pequeno os pregos disputavam com o desenho; nas listas de
+   respostas, pregos em toda linha cansavam a vista). A opção ESCOLHIDA
+   continua a carta clara da etapa 1 (fica de fora pelo :not). */
+#fechar-modal, [id^="fechar-modal"], #botao-favoritar-runa, .btn-gotico.botao-fechar-painel, .btn-gotico.cronica-fechar,
+#lista-perguntas-missao button:not(.opcao-marcada):not(.opcao-marcada-suprema),
+#lista-perguntas-missao-boss button:not(.opcao-marcada):not(.opcao-marcada-suprema),
+#sprint-pergunta button:not(.opcao-marcada):not(.opcao-marcada-suprema),
+#torre-pergunta button:not(.opcao-marcada):not(.opcao-marcada-suprema) {
+  background: var(--veios-madeira), linear-gradient(180deg, #5a3a1c, var(--madeira) 60%, #2a190b);
+}
+
+/* Botões de Julgamento (dentro dos quadros dos reinos): placa de LACRE.
+   - Julgamento liberado: cera vermelha, letra #f5dc9a (6,9:1);
+   - Julgamento Supremo (sempre o 2º botão seguido): lacre PRETO; o aro
+     rubro #c0392b continua vindo do jogo.js;
+   - já superados (o jogo.js deixa a 60% de transparência): voltam a ser
+     madeira, porque cera a 60% sobre madeira não teria contraste. */
+.botao-julgamento-reino {
+  background:
+    var(--orn-prego-p) left 3px top 3px / 6px 6px no-repeat,
+    var(--orn-prego-p) right 3px top 3px / 6px 6px no-repeat,
+    var(--orn-prego-p) left 3px bottom 3px / 6px 6px no-repeat,
+    var(--orn-prego-p) right 3px bottom 3px / 6px 6px no-repeat,
+    radial-gradient(ellipse at 50% 30%, #a82c2c, var(--cera) 55%, #5c1010);
+  border-color: #3a0c0c;
+}
+.botao-julgamento-reino + .botao-julgamento-reino {
+  background:
+    var(--orn-prego-p) left 3px top 3px / 6px 6px no-repeat,
+    var(--orn-prego-p) right 3px top 3px / 6px 6px no-repeat,
+    var(--orn-prego-p) left 3px bottom 3px / 6px 6px no-repeat,
+    var(--orn-prego-p) right 3px bottom 3px / 6px 6px no-repeat,
+    radial-gradient(ellipse at 50% 30%, #3a2c2a, #171010 55%, #050303);
+}
+.botao-julgamento-reino[style*="opacity"] {
+  background:
+    var(--orn-prego-p) left 3px top 3px / 6px 6px no-repeat,
+    var(--orn-prego-p) right 3px top 3px / 6px 6px no-repeat,
+    var(--orn-prego-p) left 3px bottom 3px / 6px 6px no-repeat,
+    var(--orn-prego-p) right 3px bottom 3px / 6px 6px no-repeat,
+    var(--veios-madeira),
+    linear-gradient(180deg, #5a3a1c, var(--madeira) 60%, #2a190b);
+}
+
+
+/* ---------- 9. Janelas de leitura (modais) como pergaminho iluminado ----------
+   Runa, Julgamentos, Diário, Sprint, Torre, Card e Certificado:
+   - friso duplo: borda vinho + filete creme + filete de ouro (sombras
+     internas — a espessura da borda continua 1 px);
+   - 4 cantoneiras de tinta dourada nos cantos (camadas de fundo; ficam
+     paradas nos cantos mesmo quando o texto rola);
+   - a textura de pergaminho continua por baixo (escrita aqui de novo);
+   - um floreio embaixo do título.
+   Logo depois, a runa NEGRA é declarada de novo (senão perderia o
+   pergaminho envelhecido e a borda escura): cantoneiras de ferro e
+   beiradas queimadas. */
+.painel-leitura {
+  border-color: var(--vinho);
+  background:
+    var(--orn-canto-papel-tl) left 4px top 4px / 20px 20px no-repeat,
+    var(--orn-canto-papel-tr) right 4px top 4px / 20px 20px no-repeat,
+    var(--orn-canto-papel-bl) left 4px bottom 4px / 20px 20px no-repeat,
+    var(--orn-canto-papel-br) right 4px bottom 4px / 20px 20px no-repeat,
+    radial-gradient(ellipse at top, rgba(255,255,255,0.22), transparent 60%),
+    linear-gradient(to bottom, rgba(241,228,195,0.86), rgba(212,196,157,0.90)),
+    url("../imagens/textura-pergaminho.jpg") center / cover no-repeat;
+  box-shadow:
+    inset 0 0 0 2px rgba(122,31,31,0.85),
+    inset 0 0 0 5px rgba(250,243,224,0.45),
+    inset 0 0 0 6px rgba(184,137,44,0.85),
+    inset 0 4px 10px rgba(43,29,16,0.2),
+    inset 0 0 40px rgba(140,98,57,0.15),
+    0 12px 24px rgba(28,17,8,0.55);
+}
+.painel-leitura:hover { border-color: #5e1616; }
+.painel-leitura.modal-runa-negra {
+  border-color: #6b1a1a;
+  background:
+    var(--orn-ferro-tl) left 4px top 4px / 20px 20px no-repeat,
+    var(--orn-ferro-tr) right 4px top 4px / 20px 20px no-repeat,
+    var(--orn-ferro-bl) left 4px bottom 4px / 20px 20px no-repeat,
+    var(--orn-ferro-br) right 4px bottom 4px / 20px 20px no-repeat,
+    radial-gradient(ellipse at top, rgba(255,255,255,0.18), transparent 60%),
+    linear-gradient(to bottom, rgba(232,214,186,0.86), rgba(199,175,144,0.90)),
+    url("../imagens/textura-pergaminho.jpg") center / cover no-repeat;
+  box-shadow:
+    inset 0 0 0 2px rgba(74,16,16,0.85),
+    inset 0 0 0 5px rgba(232,214,186,0.4),
+    inset 0 0 0 6px rgba(58,40,30,0.75),
+    inset 0 0 26px rgba(60,20,8,0.35),
+    inset 0 4px 10px rgba(74,16,16,0.3),
+    inset 0 0 40px rgba(107,26,26,0.18),
+    0 12px 24px rgba(0,0,0,0.55);
+}
+.painel-leitura.modal-runa-negra:hover { border-color: #4a1010; }
+
+/* Floreio sob o título de cada janela (o ::before do título é o calço
+   do ✕ e não é tocado; o ::after estava livre) */
+.painel-leitura > h2:first-of-type::after,
+#area-nao-imprimir > h2:first-of-type::after {
+  content: "";
+  display: block;
+  width: 7.5rem;
+  height: 0.75rem;
+  margin-top: 0.35rem;
+  background: var(--orn-flor) left center / contain no-repeat;
+  pointer-events: none;
+}
+#modal-card-overlay .painel-leitura > h2::after {
+  margin-left: auto;
+  margin-right: auto;
+  background-position: center;
+}
+
+
+/* ---------- 10. Crônica do Reino como livro de couro ----------
+   Em volta do pergaminho, uma capa de couro com filete de ouro gravado
+   (anéis de sombra POR FORA: o livro não muda de tamanho e cabe no
+   espaço de 8 px que a janela já deixa no celular). Os medalhões dos
+   capítulos viram lacres de cera (o aro na cor do reino continua; a
+   marquinha ✓ dos lidos continua a do style.css). */
+.cronica-pergaminho {
+  border-color: #2a1a0c;
+  box-shadow:
+    0 0 0 3px var(--couro),
+    0 0 0 4px rgba(201,161,74,0.8),
+    0 0 0 7px #2e1c0d,
+    inset 0 0 0 1px rgba(212,175,55,0.45),
+    inset 0 0 0 5px rgba(140,98,57,0.12),
+    inset 0 0 50px rgba(140,98,57,0.2),
+    var(--sombra-3);
+}
+.cronica-medalhao,
+.cronica-emblema:not(.cronica-emblema-brasao) {
+  background: radial-gradient(circle at 35% 30%, #b83434, var(--cera) 58%, #5c1010);
+}
+.cronica-medalhao { border-radius: 48% 52% 46% 54% / 53% 47% 53% 47%; }
+
+
+/* ---------- 11. Galeria como "Mural de Honra da Taverna" ----------
+   - o quadro de madeira da etapa 1 ganha as 4 cantoneiras de latão;
+   - o título vira uma placa pregada no mural;
+   - cada selo vira uma medalha pendurada num prego (o prego é o ::before
+     do selo; para ele não "fugir" para outro lugar, o selo passa a ser a
+     referência de posição). Os trancados continuam tracejados.
+   Os botões (Card, Sprint, Torre, Certificado) já são placas (seção 8)
+   e continuam soltos, sem nenhuma caixa nova em volta. */
+#galeria-conquistas {
+  background:
+    var(--orn-cant-tl) left var(--cant-dx) top var(--cant-dy) / var(--cant-tam) var(--cant-tam) no-repeat padding-box,
+    var(--orn-cant-tr) right var(--cant-dx) top var(--cant-dy) / var(--cant-tam) var(--cant-tam) no-repeat padding-box,
+    var(--orn-cant-bl) left var(--cant-dx) bottom var(--cant-dy) / var(--cant-tam) var(--cant-tam) no-repeat padding-box,
+    var(--orn-cant-br) right var(--cant-dx) bottom var(--cant-dy) / var(--cant-tam) var(--cant-tam) no-repeat padding-box,
+    var(--veios-madeira) padding-box,
+    linear-gradient(180deg, var(--madeira), var(--madeira-noite)) padding-box,
+    var(--borda-metal) border-box;
+}
+#galeria-conquistas > h2 {
+  display: table;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0.3rem 1.5rem 0.35rem;
+  /* margens descontam o espaço da placa: os selos não descem */
+  margin-top: calc(0.83em - 0.3rem - 1px);
+  border: 1px solid rgba(201,161,74,0.7);
+  border-radius: 4px;
+  background:
+    var(--orn-prego) left 5px center / 8px 8px no-repeat,
+    var(--orn-prego) right 5px center / 8px 8px no-repeat,
+    var(--veios-madeira),
+    linear-gradient(180deg, #4a2e16, var(--madeira-noite));
+  box-shadow: 0 2px 0 #1c1108, 0 4px 10px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,220,160,0.15);
+}
+@media (max-width: 374px) {
+  #galeria-conquistas > h2 {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    background-size: 6px 6px, 6px 6px, auto, auto;
+    background-position: left 3px center, right 3px center, 0 0, 0 0;
+  }
+}
+#galeria-conquistas > h2 + p { margin-top: calc(1em - 0.35rem - 1px); }
+#grade-conquistas > div {
+  position: relative;
+  border-radius: 10px 10px 24px 24px / 10px 10px 16px 16px !important;
+  box-shadow: inset 0 0 0 1px rgba(201,161,74,0.16), 0 3px 6px rgba(0,0,0,0.4);
+}
+#grade-conquistas > div::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  margin-left: -3.5px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #f4dc94, var(--latao) 55%, #5c430c);
+  box-shadow: 0 1px 1px rgba(0,0,0,0.6);
+  pointer-events: none;
+}
+
+
+/* ---------- 12. Botões e avisos flutuantes ----------
+   Nenhum muda de tamanho. O aro de latão é desenhado POR DENTRO (camada
+   de fundo), então aparece também com o mouse em cima e no foco.
+   - Mago: medalhão de madeira (o jogo escreve a cor de fundo no próprio
+     botão; o !important vale só para a imagem de fundo);
+   - som e ↑: medalhões de madeira com aro de latão;
+   - avisos (toasts): plaquinhas de madeira com bisel;
+   - cabeçalho do balão do Mago: tábua de madeira. */
+#oraculo-container > .avatar-mago {
+  background-image:
+    radial-gradient(closest-side, transparent 86%, rgba(201,161,74,0.55) 89% 95%, transparent 98%),
+    radial-gradient(circle at 35% 30%, #7a5230, #3a2412 60%, #24160a) !important;
+}
+.botao-som {
+  background:
+    radial-gradient(closest-side, transparent 84%, rgba(201,161,74,0.6) 88% 95%, transparent 99%),
+    radial-gradient(circle at 35% 30%, #6b4423, var(--madeira-noite) 78%);
+}
+.botao-som-ambiente {
+  background:
+    radial-gradient(closest-side, transparent 84%, rgba(201,161,74,0.6) 88% 95%, transparent 99%),
+    radial-gradient(circle at 35% 30%, #7a5230, #3a2412 78%);
+}
+#botao-topo {
+  background-image:
+    radial-gradient(closest-side, transparent 84%, rgba(201,161,74,0.6) 88% 95%, transparent 99%),
+    radial-gradient(circle at 35% 30%, #6b4423, var(--madeira-noite) 78%) !important;
+}
+#pilha-toasts > div {
+  background-image: var(--veios-madeira), linear-gradient(180deg, #4a2e16, var(--madeira-noite)) !important;
+  box-shadow: inset 0 1px 0 rgba(255,220,160,0.15), inset 0 -2px 3px rgba(0,0,0,0.3), 0 4px 14px rgba(28,17,8,0.55) !important;
+}
+#oraculo-container .balao-fala > div:first-child {
+  background-image:
+    var(--veios-madeira),
+    linear-gradient(180deg, #4a2e16, var(--madeira-noite)) !important;
+}
+
+
+/* ---------- 13. Simuladores: "Bancada do Mestre" ----------
+   Só a CAIXA do simulador (.sim-painel) ganha moldura de madeira por fora
+   (anéis de sombra) e 4 cantoneiras pequenas. As peças que se mexem lá
+   dentro (torre, viga, setas, ponte, visores) não são tocadas. */
+.sim-painel {
+  background:
+    var(--orn-canto-papel-tl) left 3px top 3px / 16px 16px no-repeat,
+    var(--orn-canto-papel-tr) right 3px top 3px / 16px 16px no-repeat,
+    var(--orn-canto-papel-bl) left 3px bottom 3px / 16px 16px no-repeat,
+    var(--orn-canto-papel-br) right 3px bottom 3px / 16px 16px no-repeat,
+    radial-gradient(circle at 20% 0%, rgba(107,26,26,0.06), transparent 40%),
+    linear-gradient(160deg, rgba(245,233,200,0.86), rgba(239,226,189,0.90)),
+    url("../imagens/textura-pergaminho.jpg") center / cover no-repeat;
+  box-shadow:
+    0 0 0 3px var(--madeira),
+    0 0 0 4px var(--latao),
+    0 0 0 5px #1c1108,
+    inset 0 0 0 1px rgba(184,137,44,0.28),
+    inset 0 6px 14px rgba(74,16,16,0.12),
+    0 6px 14px rgba(43,29,16,0.3);
+}
+
+
+/* ---------- 14. Castelo, rodapé e barra de rolagem ----------
+   - A frase embaixo do castelo vira uma fita de pergaminho com pontas
+     recortadas (o castelo, os vitrais, as coroas e o cadeado não são
+     tocados).
+   - O brilho atrás do castelo vira um "amanhecer" quente.
+   - O risco do rodapé vira um floreio.
+   - Barra de rolagem: alça de madeira com aro de latão (mesma largura). */
+.horizonte-legenda {
+  width: fit-content;
+  max-width: calc(100% - 2rem);
+  margin: 0.3rem auto 0;
+  padding: 0.35rem 2rem 0.45rem;
+  background: var(--ruido-papel), linear-gradient(180deg, #faf3e0, #e6d3a8);
+  color: var(--tinta);
+  box-shadow: inset 0 2px 0 rgba(140,98,57,0.75), inset 0 -2px 0 rgba(140,98,57,0.75);
+  clip-path: polygon(0 0, 100% 0, calc(100% - 0.8rem) 50%, 100% 100%, 0 100%, 0.8rem 50%);
+}
+@media (max-width: 374px) {
+  .horizonte-legenda { padding-left: 1.2rem; padding-right: 1.2rem; }
+}
+.horizonte-cena::before {
+  background: radial-gradient(ellipse 50% 92% at 50% 100%, rgba(240,180,90,0.30), rgba(214,140,70,0.12) 55%, transparent 80%);
+}
+body > footer .divisor-rune {
+  height: 12px;
+  background: var(--orn-flor) center / auto 12px no-repeat;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, #6b4423, var(--madeira) 70%);
+  border: 1px solid rgba(201,161,74,0.6);
+}
+::-webkit-scrollbar-thumb:hover { background: linear-gradient(90deg, #7a5230, #4a2e16 70%); }
+
+
+/* ---------- 15. Impressão do certificado ----------
+   Na impressão sai SÓ o certificado, em papel branco: sem a borda vinho,
+   sem friso, sem cantoneiras e sem floreio (o certificado já tem a sua
+   própria borda dupla). */
+@media print {
+  body.modo-impressao-certificado .painel-leitura {
+    border: 0 !important;
+    background: #fff !important;
+    box-shadow: none !important;
+    transition: none !important;
+  }
+}
