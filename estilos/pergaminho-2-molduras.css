@@ -521,19 +521,17 @@
 
 
 /* ---------- 8. Botões como placas de madeira entalhada ----------
-   Todos os .btn-gotico ganham 4 preguinhos de latão (camadas de fundo,
-   sem pseudo-elemento), bisel (luz em cima, sombra embaixo) e letra
-   "entalhada" (sombra escura em cima da letra). Ao apertar, a placa afunda
-   1 px. Espaçamento interno, tamanho de letra e borda NÃO mudam: eles são
-   os calços do ✕ dos modais e cabem nos quadros do mapa.
-   A opção escolhida nos Julgamentos (carta clara) não ganha pregos nem
-   letra entalhada. */
+   Todos os .btn-gotico viram placas de madeira com bisel (luz em cima,
+   sombra embaixo) e letra "entalhada" (sombra escura em cima da letra).
+   Ao apertar, a placa afunda 1 px. Espaçamento interno, tamanho de letra
+   e borda NÃO mudam: eles são os calços do ✕ dos modais e cabem nos
+   quadros do mapa.
+   Os 4 preguinhos de latão (camadas de fundo, sem pseudo-elemento) ficam
+   SÓ nas placas principais (decisão do dono, 08/10): pregos em todo botão
+   pequeno poluíam a tela.
+   A opção escolhida nos Julgamentos (carta clara) não tem letra entalhada. */
 .btn-gotico {
   background:
-    var(--orn-prego-p) left 3px top 3px / 6px 6px no-repeat,
-    var(--orn-prego-p) right 3px top 3px / 6px 6px no-repeat,
-    var(--orn-prego-p) left 3px bottom 3px / 6px 6px no-repeat,
-    var(--orn-prego-p) right 3px bottom 3px / 6px 6px no-repeat,
     var(--veios-madeira),
     linear-gradient(180deg, #5a3a1c, var(--madeira) 60%, #2a190b);
   text-shadow: 0 -1px 0 rgba(0,0,0,0.6), 0 1px 0 rgba(255,220,160,0.12);
@@ -550,16 +548,22 @@
   box-shadow: 0 1px 0 #1c1108, 0 2px 5px rgba(43,29,16,0.3), inset 0 2px 4px rgba(0,0,0,0.45);
 }
 .btn-gotico.opcao-marcada { text-shadow: none; }
-/* Botões só com ícone (✕, ☆) e opções das perguntas: madeira sem pregos
-   (no ✕ pequeno os pregos disputavam com o desenho; nas listas de
-   respostas, pregos em toda linha cansavam a vista). A opção ESCOLHIDA
-   continua a carta clara da etapa 1 (fica de fora pelo :not). */
-#fechar-modal, [id^="fechar-modal"], #botao-favoritar-runa, .btn-gotico.botao-fechar-painel, .btn-gotico.cronica-fechar,
-#lista-perguntas-missao button:not(.opcao-marcada):not(.opcao-marcada-suprema),
-#lista-perguntas-missao-boss button:not(.opcao-marcada):not(.opcao-marcada-suprema),
-#sprint-pergunta button:not(.opcao-marcada):not(.opcao-marcada-suprema),
-#torre-pergunta button:not(.opcao-marcada):not(.opcao-marcada-suprema) {
-  background: var(--veios-madeira), linear-gradient(180deg, #5a3a1c, var(--madeira) 60%, #2a190b);
+/* Placas PRINCIPAIS com os 4 pregos de latão: o botão "Crônica do Reino"
+   do topo, os botões da galeria (Card, Sprint, Torre, Certificado), o
+   "Confirmar respostas" dos Julgamentos, o "Começar" do Sprint e da Torre,
+   o "Gerar e Imprimir" do certificado e o "Baixar imagem" do card. */
+#botao-cronica-hero,
+#galeria-conquistas > .btn-gotico,
+#confirmar-missao, #confirmar-missao-boss,
+#comecar-sprint, #comecar-torre,
+#botao-gerar-certificado, #link-baixar-card {
+  background:
+    var(--orn-prego-p) left 3px top 3px / 6px 6px no-repeat,
+    var(--orn-prego-p) right 3px top 3px / 6px 6px no-repeat,
+    var(--orn-prego-p) left 3px bottom 3px / 6px 6px no-repeat,
+    var(--orn-prego-p) right 3px bottom 3px / 6px 6px no-repeat,
+    var(--veios-madeira),
+    linear-gradient(180deg, #5a3a1c, var(--madeira) 60%, #2a190b);
 }
 
 /* Botões de Julgamento (dentro dos quadros dos reinos): placa de LACRE.
@@ -570,27 +574,15 @@
      madeira, porque cera a 60% sobre madeira não teria contraste. */
 .botao-julgamento-reino {
   background:
-    var(--orn-prego-p) left 3px top 3px / 6px 6px no-repeat,
-    var(--orn-prego-p) right 3px top 3px / 6px 6px no-repeat,
-    var(--orn-prego-p) left 3px bottom 3px / 6px 6px no-repeat,
-    var(--orn-prego-p) right 3px bottom 3px / 6px 6px no-repeat,
     radial-gradient(ellipse at 50% 30%, #a82c2c, var(--cera) 55%, #5c1010);
   border-color: #3a0c0c;
 }
 .botao-julgamento-reino + .botao-julgamento-reino {
   background:
-    var(--orn-prego-p) left 3px top 3px / 6px 6px no-repeat,
-    var(--orn-prego-p) right 3px top 3px / 6px 6px no-repeat,
-    var(--orn-prego-p) left 3px bottom 3px / 6px 6px no-repeat,
-    var(--orn-prego-p) right 3px bottom 3px / 6px 6px no-repeat,
     radial-gradient(ellipse at 50% 30%, #3a2c2a, #171010 55%, #050303);
 }
 .botao-julgamento-reino[style*="opacity"] {
   background:
-    var(--orn-prego-p) left 3px top 3px / 6px 6px no-repeat,
-    var(--orn-prego-p) right 3px top 3px / 6px 6px no-repeat,
-    var(--orn-prego-p) left 3px bottom 3px / 6px 6px no-repeat,
-    var(--orn-prego-p) right 3px bottom 3px / 6px 6px no-repeat,
     var(--veios-madeira),
     linear-gradient(180deg, #5a3a1c, var(--madeira) 60%, #2a190b);
 }

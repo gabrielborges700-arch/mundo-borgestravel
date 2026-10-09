@@ -672,8 +672,22 @@ function abrirModalCardConquista() {
   overlay.addEventListener("click", (evento) => { if (evento.target === overlay) fecharModalCardConquista(); });
   painel.querySelector("#fechar-modal-card").addEventListener("click", fecharModalCardConquista);
 
-  desenharCardConquista(painel.querySelector("#canvas-card-conquista"), nomeSalvo, nivel, estado);
+  const canvasCard = painel.querySelector("#canvas-card-conquista");
+  desenharCardConquista(canvasCard, nomeSalvo, nivel, estado);
+
+  // As letras do card vêm do Google Fonts. Se alguma ainda não tiver
+  // chegado, o 1º desenho sai com a letra de reserva (serif); assim que
+  // elas carregam, o card é desenhado de novo (e a imagem de baixar é
+  // refeita). Sem internet ou sem document.fonts, fica o 1º desenho.
+  if (document.fonts && document.fonts.load) {
+    Promise.all(FONTES_CARD.map((fonte) => document.fonts.load(fonte)))
+      .then(() => { if (canvasCard.isConnected) desenharCardConquista(canvasCard, nomeSalvo, nivel, estado); })
+      .catch(() => {});
+  }
 }
+
+// Letras usadas no desenho do card (as mesmas do site novo)
+const FONTES_CARD = ["34px MedievalSharp", "italic 22px Alegreya", "bold 26px Alegreya", "20px Cinzel", "italic 16px Alegreya"];
 
 function fecharModalCardConquista() {
   const overlay = document.getElementById("modal-card-overlay");
@@ -704,19 +718,19 @@ function desenharCardConquista(canvas, nome, nivel, estado) {
 
   ctx.textAlign = "center";
   ctx.fillStyle = "#7a1f1f"; // título em vinho
-  ctx.font = "bold 34px serif";
-  ctx.fillText("🏰 MUNDO BORGESTRÁVEL", largura / 2, 100);
+  ctx.font = "34px MedievalSharp, serif"; // letra medieval dos títulos do site (só existe no peso normal)
+  ctx.fillText("🏰 Mundo Borgestrável", largura / 2, 100);
 
   ctx.fillStyle = "#2b1d10"; // nome em tinta sépia
-  ctx.font = "italic 22px serif";
+  ctx.font = "italic 22px Alegreya, serif";
   ctx.fillText(nome, largura / 2, 160);
 
   ctx.fillStyle = "#3e5a2b"; // nível em verde-musgo (era ciano)
-  ctx.font = "bold 26px serif";
+  ctx.font = "bold 26px Alegreya, serif";
   ctx.fillText(nivel.nome, largura / 2, 210);
 
   ctx.fillStyle = "#5a4228"; // números em tinta suave
-  ctx.font = "20px serif";
+  ctx.font = "20px Cinzel, serif"; // números em Cinzel: na Alegreya o zero parece um "o"
   ctx.fillText(`⚡ ${estado.xp} Poder Rúnico`, largura / 2, 260);
 
   const totalRunas = Object.keys(dadosEspecificosCards).length;
@@ -736,7 +750,7 @@ function desenharCardConquista(canvas, nome, nivel, estado) {
   });
 
   ctx.fillStyle = "#5a4228"; // marca-d'água em tinta suave (6,4:1 no papel)
-  ctx.font = "italic 16px serif";
+  ctx.font = "italic 16px Alegreya, serif";
   ctx.fillText("mundoborgestravel", largura / 2, altura - 40);
 
   const link = document.getElementById("link-baixar-card");
