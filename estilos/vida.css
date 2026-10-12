@@ -1,0 +1,483 @@
+/* ==========================================================================
+   vida.css — "VIDA NO MAPA": o visual e o movimento das 20 animações
+   --------------------------------------------------------------------------
+   Trabalha junto com o vida.js. Quase tudo só vale com a classe
+   "vida-ativa" no <html>, que o vida.js põe SÓ quando o aparelho NÃO pediu
+   "menos movimento": sem ela, nada se mexe.
+   Só se anima transparência e as propriedades translate/rotate/scale
+   (nunca o "transform" que o JavaScript do jogo usa na lua, nas estrelas,
+   nos simuladores e nos quadros). Os desenhos (nuvem, barquinho, corvo,
+   olho da lua) são SVG escritos aqui mesmo: nada para baixar.
+
+   COMO DESFAZER
+   Tirar do index.html o <link> deste arquivo e o <script src="vida.js">.
+   ========================================================================== */
+
+:root {
+  --vida-nuvem: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 360 140'%3E%3Cdefs%3E%3Cfilter id='b' x='-20%25' y='-40%25' width='140%25' height='180%25'%3E%3CfeGaussianBlur stdDeviation='7'/%3E%3C/filter%3E%3C/defs%3E%3Cg filter='url(%23b)' fill='%238c6239' opacity='.55'%3E%3Cellipse cx='120' cy='82' rx='90' ry='28'/%3E%3Cellipse cx='190' cy='64' rx='70' ry='34'/%3E%3Cellipse cx='255' cy='84' rx='80' ry='24'/%3E%3Cellipse cx='165' cy='92' rx='120' ry='20'/%3E%3C/g%3E%3Cpath d='M60 92q20-26 50-14q14-30 52-22q22-24 58-6q30-6 44 20q30 2 36 22' fill='none' stroke='%235a4228' stroke-opacity='.35' stroke-width='1.2'/%3E%3C/svg%3E");
+  --vida-corvo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 12'%3E%3Cpath d='M1 9Q6 2 12 8Q18 2 23 9' fill='none' stroke='%232b1d10' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --vida-barco: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 44'%3E%3Cpath d='M30 3V28' stroke='%235a4228' stroke-width='1.4'/%3E%3Cpath d='M31 5L31 27L48 27Z' fill='%23faf3e0' stroke='%235a4228' stroke-width='1.2' stroke-linejoin='round'/%3E%3Cpath d='M29 9L29 27L15 27Z' fill='%23f3e6c6' stroke='%235a4228' stroke-width='1.2' stroke-linejoin='round'/%3E%3Cpath d='M6 29H54L46 38H14Z' fill='%23e3c37a' stroke='%235a4228' stroke-width='1.3' stroke-linejoin='round'/%3E%3Cpath d='M2 41q6-3 12 0t12 0t12 0t12 0t8 0' fill='none' stroke='%238c6239' stroke-width='1.1' stroke-linecap='round'/%3E%3C/svg%3E");
+  --vida-olho-lua: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 16'%3E%3Cellipse cx='10' cy='8' rx='9.6' ry='7.4' fill='%23e3c37a'/%3E%3Cpath d='M2.5 8.5Q10 1.5 17.5 8.5Q10 13.5 2.5 8.5Z' fill='%23faf3e0' stroke='%232b1d10' stroke-width='1.1'/%3E%3Ccircle cx='9' cy='8.2' r='2.4' fill='%232b1d10'/%3E%3Ccircle cx='8.2' cy='7.3' r='.65' fill='%23fff'/%3E%3C/svg%3E");
+}
+
+
+/* ---------- 1. Nuvens de tinta passando devagar ---------- */
+.vida-nuvem {
+  position: absolute;
+  left: 0;
+  z-index: 2;
+  width: 340px;
+  height: 132px;
+  background: var(--vida-nuvem) center / contain no-repeat;
+  opacity: 0.22;
+  pointer-events: none;
+  will-change: translate;
+  animation: vidaNuvem 170s linear infinite;
+}
+.vida-nuvem-1 { top: 13vh; animation-delay: -40s; }
+.vida-nuvem-2 { top: 47vh; width: 260px; height: 101px; opacity: 0.16; animation-duration: 210s; animation-delay: -125s; }
+.vida-nuvem-3 { top: 79vh; width: 300px; height: 116px; opacity: 0.19; animation-duration: 190s; animation-delay: -75s; }
+@media (max-width: 767px) {
+  .vida-nuvem { width: 210px; height: 82px; }
+}
+@keyframes vidaNuvem { from { translate: -45vw 0; } to { translate: 115vw 0; } }
+
+
+/* ---------- 2, 4. Rosa-dos-ventos girando e serpente nadando ----------
+   A rosa e a serpente PARADAS da etapa 2 saem (as variáveis do céu viram
+   "none") e entram estas, no mesmo lugar e tamanho. */
+.vida-ativa .fundo-magico-fixo.vida-ceu { --ceu-rosa: none; --ceu-dragao: none; }
+.vida-rosa {
+  display: none;
+  position: absolute;
+  z-index: 2;
+  left: calc(4.5vw - var(--rosa-tam) / 2);
+  top: calc(58vh - var(--rosa-tam) / 2);
+  width: var(--rosa-tam);
+  height: var(--rosa-tam);
+  pointer-events: none;
+  rotate: var(--vida-giro, 0deg);
+  transition: rotate 0.6s ease-out;   /* o balanço ao rolar a página */
+}
+.vida-rosa-desenho {
+  width: 100%;
+  height: 100%;
+  background: var(--orn-rosa-ventos) center / contain no-repeat;
+  animation: vidaRosaGira 240s linear infinite;   /* uma volta a cada 4 minutos */
+}
+@keyframes vidaRosaGira { to { rotate: 360deg; } }
+@media (min-width: 768px) { .vida-rosa { display: block; } }
+
+.vida-serpente {
+  display: none;
+  position: absolute;
+  z-index: 2;
+  right: 0.8vw;
+  top: 70vh;
+  width: 124px;
+  height: 80px;
+  background: var(--orn-dragao) center / contain no-repeat;
+  pointer-events: none;
+  animation: vidaNadar 7s ease-in-out infinite;
+}
+@keyframes vidaNadar {
+  0%, 100% { translate: 0 0; rotate: 0deg; }
+  25% { translate: -6px -3px; rotate: -2deg; }
+  50% { translate: -11px 1px; rotate: 0deg; }
+  75% { translate: -4px 3px; rotate: 2deg; }
+}
+@media (min-width: 1280px) { .vida-serpente { display: block; } }
+
+/* Barquinho de papel na margem esquerda (telas largas), entre a
+   rosa-dos-ventos e os botões de som (que ficam no canto de baixo) */
+.vida-barco {
+  display: none;
+  position: absolute;
+  z-index: 2;
+  left: 1.4vw;
+  top: 69vh;
+  width: 56px;
+  height: 41px;
+  background: var(--vida-barco) center / contain no-repeat;
+  opacity: 0.85;
+  pointer-events: none;
+  animation: vidaBarcoBalanca 4.5s ease-in-out infinite, vidaBarcoDeriva 60s ease-in-out infinite alternate;
+}
+@keyframes vidaBarcoBalanca { 0%, 100% { rotate: -4deg; } 50% { rotate: 4deg; } }
+@keyframes vidaBarcoDeriva { from { translate: 0 0; } to { translate: 1.6vw 1.2vh; } }
+@media (min-width: 1200px) { .vida-barco { display: block; } }
+
+
+/* ---------- 3. A lua dorme... e de vez em quando abre o olho e espia ---------- */
+.vida-ativa .fundo-magico-fixo .lua::after {
+  content: "";
+  position: absolute;
+  left: 20.8%;
+  top: 35.8%;
+  width: 11.7%;
+  height: 9.2%;
+  background: var(--vida-olho-lua) center / contain no-repeat;
+  opacity: 0;
+  animation: vidaLuaEspia 11s ease-in-out infinite;
+}
+@keyframes vidaLuaEspia {
+  0%, 82% { opacity: 0; }
+  84%, 92% { opacity: 1; }
+  93% { opacity: 0; }
+  94.5% { opacity: 1; }
+  96%, 100% { opacity: 0; }
+}
+
+
+/* ---------- 5. Corvos de tinta voando sobre o castelo ---------- */
+.horizonte-cena { position: relative; }
+.vida-corvos {
+  position: absolute;
+  left: 0;
+  top: 6%;
+  z-index: 2;
+  width: 72px;
+  height: 30px;
+  opacity: 0;
+  pointer-events: none;
+}
+.vida-corvo {
+  position: absolute;
+  width: 22px;
+  height: 11px;
+  background: var(--vida-corvo) center / contain no-repeat;
+}
+.vida-corvo:nth-child(1) { left: 0; top: 10px; }
+.vida-corvo:nth-child(2) { left: 26px; top: 0; width: 18px; height: 9px; }
+.vida-corvo:nth-child(3) { left: 48px; top: 15px; width: 16px; height: 8px; }
+.vida-corvos.voando { animation: vidaCorvosVoo 9s linear 1; }
+.vida-corvos.voando .vida-corvo { animation: vidaBater 0.45s ease-in-out infinite alternate; }
+.vida-corvos.voando .vida-corvo:nth-child(2) { animation-delay: -0.2s; }
+.vida-corvos.voando .vida-corvo:nth-child(3) { animation-delay: -0.35s; }
+@keyframes vidaCorvosVoo {
+  0% { opacity: 0; translate: -90px 12px; }
+  8% { opacity: 0.85; }
+  50% { translate: 50vw -16px; }
+  92% { opacity: 0.85; }
+  100% { opacity: 0; translate: 100vw 6px; }
+}
+@keyframes vidaBater { from { scale: 1 1; } to { scale: 1 0.45; } }
+
+
+/* ---------- 6. Bandeiras tremulando (reinos completos e castelo) ---------- */
+@media (min-width: 1024px) {
+  .vida-ativa .tile-reino.estado-completo .tile-clima::after {
+    transform-origin: 15% 90%;
+    animation: vidaBandeira 1.8s ease-in-out infinite;
+  }
+}
+@keyframes vidaBandeira {
+  0%, 100% { transform: skewY(0deg) scaleX(1); }
+  50% { transform: skewY(-9deg) scaleX(0.92); }
+}
+.vida-ativa .horizonte-estandarte path:last-child {
+  transform-box: fill-box;
+  transform-origin: 0% 50%;
+  animation: vidaFlamula 2.4s ease-in-out infinite;
+}
+@keyframes vidaFlamula {
+  0%, 100% { transform: skewY(0deg) scaleX(1); }
+  50% { transform: skewY(-7deg) scaleX(0.93); }
+}
+
+
+/* ---------- 7. Toque: placas e cartas afundam, e sai uma poeirinha ---------- */
+.vida-ativa .espada-card:active { scale: 0.965; }
+.vida-ativa .tile-cabecalho:active,
+.vida-ativa .cabecalho-bloco:active { scale: 0.985; }
+.vida-poeira { position: fixed; z-index: 95; width: 0; height: 0; pointer-events: none; }
+.vida-poeira span {
+  position: absolute;
+  left: -2.5px;
+  top: -2.5px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #f4dc94 0 35%, #b8892c 70%, transparent 72%);
+  animation: vidaPoeira 0.55s ease-out forwards;
+}
+@keyframes vidaPoeira {
+  from { opacity: 0.95; translate: 0 0; scale: 1; }
+  to { opacity: 0; translate: var(--dx) var(--dy); scale: 0.4; }
+}
+
+
+/* ---------- 8. Carimbo de cera na runa lida e barra de XP ---------- */
+.vida-carimbada { animation: vidaCarimbada 0.5s ease-out; }
+@keyframes vidaCarimbada { 0%, 100% { scale: 1; } 35% { scale: 0.96; } }
+.vida-carimbo { display: inline-block; animation: vidaCarimbo 0.7s cubic-bezier(0.2, 1.4, 0.4, 1); }
+@keyframes vidaCarimbo {
+  from { scale: 2.8; rotate: -25deg; opacity: 0; }
+  60% { scale: 0.9; opacity: 1; }
+  to { scale: 1; rotate: 0deg; }
+}
+.vida-ativa #xp-barra-preenchida { transition: width 0.9s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.vida-brilho { animation: vidaBarraBrilho 1.1s ease-out; }
+@keyframes vidaBarraBrilho { 35% { filter: brightness(1.7) drop-shadow(0 0 4px #f4dc94); } }
+
+
+/* ---------- 9. A gema do próximo reino chama (anel por dentro, não é cortado) ---------- */
+.vida-ativa .botao-bloco-nav { position: relative; }
+.vida-ativa .botao-bloco-nav.vida-gema-chamando::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border: 2px solid #f4dc94;
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(244,220,148,0.9);
+  opacity: 0;
+  pointer-events: none;
+  animation: vidaGemaChama 2.4s ease-in-out infinite;
+}
+@keyframes vidaGemaChama {
+  0%, 100% { opacity: 0; scale: 0.85; }
+  45% { opacity: 1; scale: 1.08; }
+}
+
+
+/* ---------- 10. Título da runa escrito à mão (aparece da esquerda) ---------- */
+.vida-ativa .painel-leitura > h2.vida-escrever { animation: vidaEscrever 1s cubic-bezier(0.3, 0.6, 0.3, 1); }
+@keyframes vidaEscrever {
+  from { clip-path: inset(-30% 100% -60% -4%); }
+  to { clip-path: inset(-30% -4% -60% -4%); }
+}
+
+
+/* ---------- 11. Contadores: o número entra rolando ---------- */
+.vida-rolar { animation: vidaRolar 0.35s ease-out; }
+@keyframes vidaRolar { from { translate: 0 -35%; opacity: 0.35; } }
+
+
+/* ---------- 12. Mago vivo: brilho no cajado, comemoração e dicas ---------- */
+.vida-ativa #oraculo-container .avatar-mago { position: relative; }
+.vida-ativa #oraculo-container .avatar-mago::after {
+  content: "✦";
+  position: absolute;
+  top: 3px;
+  right: 7px;
+  font-size: 12px;
+  line-height: 1;
+  color: #f4dc94;
+  text-shadow: 0 0 6px #f4dc94;
+  pointer-events: none;
+  animation: vidaCajado 3.4s ease-in-out infinite;
+}
+@keyframes vidaCajado {
+  0%, 100% { opacity: 0; scale: 0.6; }
+  45% { opacity: 1; scale: 1.15; rotate: 25deg; }
+  60% { opacity: 0.8; scale: 1; }
+}
+.vida-ativa #oraculo-container .avatar-mago.flutuando.vida-comemora {
+  animation: flutuar 4s ease-in-out infinite, vidaPulo 0.8s cubic-bezier(0.3, 1.6, 0.5, 1) 1;
+}
+@keyframes vidaPulo {
+  0% { translate: 0 0; rotate: 0deg; }
+  30% { translate: 0 -16px; rotate: -10deg; }
+  60% { translate: 0 0; rotate: 7deg; }
+  100% { translate: 0 0; rotate: 0deg; }
+}
+/* O balão de dica, em cima do Mago */
+.vida-mago-dica {
+  position: fixed;
+  right: 1rem;
+  bottom: calc(1rem + 70px);
+  z-index: 61;
+  max-width: min(260px, calc(100vw - 2rem));
+  padding: 0.6rem 2rem 0.65rem 0.8rem;
+  border: 1px solid var(--latao);
+  border-radius: 10px;
+  background: var(--papel-claro);
+  color: var(--tinta);
+  box-shadow: 0 8px 20px rgba(43,29,16,0.4);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+.vida-mago-dica::after {
+  content: "";
+  position: absolute;
+  right: 22px;
+  bottom: -8px;
+  width: 14px;
+  height: 14px;
+  background: var(--papel-claro);
+  border-right: 1px solid var(--latao);
+  border-bottom: 1px solid var(--latao);
+  rotate: 45deg;
+}
+.vida-mago-dica-fechar {
+  position: absolute;
+  top: 0.3rem;
+  right: 0.35rem;
+  padding: 0.15rem 0.35rem;
+  border: 0;
+  background: none;
+  color: var(--tinta-suave);
+  font-size: 0.85rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.vida-ativa .vida-mago-dica { animation: vidaDicaEntra 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
+@keyframes vidaDicaEntra { from { opacity: 0; translate: 0 10px; scale: 0.95; } }
+
+
+/* ---------- 13. Guardiões falando letra por letra ---------- */
+.vida-letra { opacity: 0; animation: vidaLetra 0.01s linear forwards; animation-delay: calc(var(--i) * 24ms); }
+@keyframes vidaLetra { to { opacity: 1; } }
+.vida-so-leitor {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+
+/* ---------- 14. Vilões respirando antes da luta ---------- */
+.vida-ativa .chefe-arena:not(.chefe-derrotado):not(.chefe-golpe) .chefe-icone {
+  animation: vidaRespirar 3.2s ease-in-out infinite;
+}
+@keyframes vidaRespirar {
+  0%, 100% { scale: 1; translate: 0 0; }
+  50% { scale: 1.08; translate: 0 -2px; }
+}
+
+
+/* ---------- 15. Trilha do mapa: tinta dourada entre os reinos conquistados ----------
+   O trecho que SAI de um reino completo fica dourado. Quando um reino é
+   completado durante a visita, o trecho novo se "desenha" (o vida.js põe
+   a classe só nesse momento). */
+@media (min-width: 1024px) {
+  .tile-reino.vida-trilha-conquistada { --trilha-cor: rgba(184,137,44,0.95); }
+  .vida-ativa .tile-pos-1.vida-trilha-desenhar::after,
+  .vida-ativa .tile-pos-2.vida-trilha-desenhar::after,
+  .vida-ativa .tile-pos-3.vida-trilha-desenhar::after {
+    transform-origin: 0% 50%;
+    animation: vidaTrilhaX 1s ease-out 1, trilhaFluindoX 1.4s linear infinite;
+  }
+  .vida-ativa .tile-pos-5.vida-trilha-desenhar::after,
+  .vida-ativa .tile-pos-6.vida-trilha-desenhar::after {
+    transform-origin: 100% 50%;
+    animation: vidaTrilhaX 1s ease-out 1, trilhaFluindoX 1.4s linear infinite;
+    animation-direction: normal, reverse;
+  }
+  .vida-ativa .tile-pos-4.vida-trilha-desenhar::after {
+    transform-origin: 50% 0%;
+    animation: vidaTrilhaY 1s ease-out 1, trilhaFluindoY 1.4s linear infinite;
+  }
+}
+@keyframes vidaTrilhaX { from { scale: 0 1; } }
+@keyframes vidaTrilhaY { from { scale: 1 0; } }
+
+
+/* ---------- 16. Cena de novo título ---------- */
+.vida-nivel {
+  position: fixed;
+  inset: 0;
+  z-index: 76;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(28,17,8,0.5);
+  cursor: pointer;
+}
+.vida-nivel-pergaminho {
+  max-width: 360px;
+  padding: 1.4rem 1.6rem;
+  border: 2px solid var(--latao);
+  border-radius: 12px;
+  background: var(--ruido-papel), linear-gradient(180deg, #faf3e0, #e6d3a8);
+  box-shadow: 0 0 0 4px var(--madeira), 0 16px 40px rgba(28,17,8,0.6);
+  text-align: center;
+}
+.vida-nivel-titulo { margin: 0 0 0.3rem; font-family: var(--font-display); font-weight: 700; letter-spacing: 0.08em; color: var(--ouro-tinta); }
+.vida-nivel-nome { margin: 0; font-family: var(--font-titulo); font-size: 1.5rem; line-height: 1.2; color: var(--vinho); }
+.vida-nivel-dica { margin: 0.7rem 0 0; font-size: 0.8rem; font-style: italic; color: var(--tinta-suave); }
+.vida-ativa .vida-nivel { animation: veuEsmaecer 0.25s ease-out; }
+.vida-ativa .vida-nivel-pergaminho { animation: vidaDesenrolar 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
+@keyframes vidaDesenrolar { from { scale: 1 0.05; opacity: 0; } }
+
+/* Folhas douradas caindo (nova patente e Julgamento superado) */
+.vida-folhas { position: fixed; inset: 0; z-index: 96; overflow: hidden; pointer-events: none; }
+.vida-folhas span {
+  position: absolute;
+  top: -20px;
+  left: var(--x);
+  width: 10px;
+  height: 14px;
+  border-radius: 0 100% 0 100%;
+  background: linear-gradient(135deg, #f4dc94, #c9a14a 60%, #8a6a2a);
+  opacity: 0;
+  animation: vidaFolha 2.5s ease-in var(--atraso) forwards;
+}
+@keyframes vidaFolha {
+  0% { opacity: 0; translate: 0 0; rotate: 0deg; }
+  10% { opacity: 1; }
+  100% { opacity: 0.2; translate: var(--lado) 105vh; rotate: var(--giro); }
+}
+
+
+/* ---------- 17. Vitral do castelo acendendo: a luz se espalha ----------
+   Mesma duração (1,4 s) da animação do horizonte.js, que tira a classe no fim. */
+.vida-ativa .horizonte-vitral.vitral-recem-aceso .vitral-halo {
+  animation: vidaVitralLuz 1.4s ease-in-out 1;
+}
+@keyframes vidaVitralLuz {
+  0% { opacity: 0; transform: scale(0.6); }
+  35% { opacity: 0.95; transform: scale(1.9); }
+  70% { opacity: 0.55; transform: scale(1.3); }
+  100% { opacity: 0.3; transform: scale(1); }
+}
+
+
+/* ---------- 18. Julgamento: o resultado comemora ou treme ---------- */
+.vida-vitoria { animation: vidaVitoria 1.3s ease-out; }
+@keyframes vidaVitoria {
+  0% { scale: 0.96; box-shadow: 0 0 0 0 rgba(232,180,80,0.9); }
+  30% { scale: 1.03; box-shadow: 0 0 0 6px rgba(232,180,80,0.45), 0 0 26px rgba(232,180,80,0.7); }
+}
+.vida-tremer { animation: vidaTremer 0.55s ease-in-out; }
+@keyframes vidaTremer {
+  0%, 100% { translate: 0 0; }
+  20% { translate: -6px 0; }
+  40% { translate: 6px 0; }
+  60% { translate: -4px 0; }
+  80% { translate: 3px 0; }
+}
+
+
+/* ---------- 19. Crônica: virar a página ---------- */
+.vida-ativa .cronica-texto.vida-virar-frente { transform-origin: 0% 50%; animation: vidaVirarFrente 0.5s ease-out; }
+.vida-ativa .cronica-texto.vida-virar-tras { transform-origin: 100% 50%; animation: vidaVirarTras 0.5s ease-out; }
+@keyframes vidaVirarFrente { from { opacity: 0; transform: perspective(900px) rotateY(-12deg) translateX(18px); } }
+@keyframes vidaVirarTras { from { opacity: 0; transform: perspective(900px) rotateY(12deg) translateX(-18px); } }
+
+
+/* ---------- 20. "Pouso" no reino escolhido pela gema ---------- */
+.vida-pouso {
+  position: absolute;
+  inset: -3px;
+  z-index: 3;
+  border: 3px solid rgba(244,220,148,0.95);
+  border-radius: inherit;
+  box-shadow: 0 0 22px rgba(244,220,148,0.75), inset 0 0 18px rgba(244,220,148,0.35);
+  pointer-events: none;
+  animation: vidaPouso 1.4s ease-out forwards;
+}
+@keyframes vidaPouso {
+  0% { opacity: 0; scale: 1.05; }
+  25% { opacity: 1; scale: 1; }
+  100% { opacity: 0; scale: 1; }
+}
+
+
+/* ---------- Impressão: nada disto sai no papel ---------- */
+@media print {
+  .vida-nuvem, .vida-rosa, .vida-serpente, .vida-barco, .vida-corvos, .vida-poeira,
+  .vida-mago-dica, .vida-nivel, .vida-folhas, .vida-pouso { display: none !important; }
+}
