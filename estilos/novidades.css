@@ -1,0 +1,384 @@
+/* ==========================================================================
+   novidades.css — GLOSSÁRIO MÁGICO, CHEFÕES e ATLAS DAS MARAVILHAS
+   --------------------------------------------------------------------------
+   O visual das 3 novidades (a parte de JavaScript está em glossario.js,
+   chefoes.js e atlas.js). Carregado depois dos 3 arquivos do redesign
+   "pergaminho" e usa as mesmas cores deles (--tinta, --vinho, --latao...).
+   Nenhum tamanho de controle já existente muda.
+
+   COMO DESFAZER
+   Tirar do index.html o <link> deste arquivo e os 3 <script> das novidades.
+   ========================================================================== */
+
+
+/* ---------- 1. Glossário: a palavra marcada no texto ----------
+   É um botão (dá para usar com o teclado), mas com cara de texto comum:
+   só ganha um sublinhado pontilhado vinho. */
+.termo-glossario {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-bottom: 1.5px dotted var(--vinho);
+  border-radius: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  line-height: inherit;
+  text-align: inherit;
+  cursor: help;
+}
+.termo-glossario:hover,
+.termo-glossario[aria-expanded="true"] { background: rgba(184,137,44,0.2); }
+.termo-glossario:focus-visible { outline: 2px solid var(--vinho); outline-offset: 1px; box-shadow: none; }
+
+/* O balão com a explicação (fica logo embaixo da palavra) */
+.glossario-balao {
+  position: absolute;
+  z-index: 5;
+  display: block;
+  padding: 0.6rem 2rem 0.65rem 0.85rem;
+  border: 1px solid var(--latao);
+  border-left: 4px solid var(--vinho);
+  border-radius: 8px;
+  background: var(--papel-claro);
+  color: var(--tinta);
+  box-shadow: 0 8px 20px rgba(43,29,16,0.35);
+  font-size: 0.92rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.45;
+  text-align: left;
+  text-transform: none;
+  letter-spacing: normal;
+}
+.glossario-balao-titulo {
+  display: block;
+  margin-bottom: 0.2rem;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  color: var(--vinho);
+}
+.glossario-balao-texto { display: block; }
+.glossario-balao-novo { display: block; margin-top: 0.35rem; font-size: 0.8rem; font-weight: 700; color: var(--ouro-tinta); }
+.glossario-balao-fechar {
+  position: absolute;
+  top: 0.3rem;
+  right: 0.35rem;
+  padding: 0.15rem 0.35rem;
+  border: 0;
+  background: none;
+  color: var(--tinta-suave);
+  font-size: 0.85rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+/* A coleção no Diário: as palavras viram "fichinhas" */
+.glossario-diario-dica { font-size: 0.8rem; color: var(--tinta-suave); margin: 0.2rem 0 0.4rem; }
+.glossario-diario-lista { display: flex; flex-wrap: wrap; gap: 0.35rem 0.45rem; margin-bottom: 0.8rem; }
+.termo-glossario.termo-colecao {
+  padding: 0.15rem 0.6rem;
+  border: 1px solid rgba(122,31,31,0.35);
+  border-radius: 999px;
+  background: rgba(250,243,224,0.65);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+
+/* ---------- 2. Chefões do Julgamento Supremo ----------
+   Uma tabuleta de madeira com o retrato do vilão (medalhão de cera),
+   o nome, os 5 corações e a fala. */
+.chefe-arena {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin: 0.4rem 0 1rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid #1c1108;
+  border-radius: 12px;
+  background: var(--veios-madeira), linear-gradient(180deg, #4a2e16, var(--madeira-noite));
+  box-shadow: inset 0 0 0 1px rgba(201,161,74,0.35), 0 4px 10px rgba(43,29,16,0.35);
+  color: var(--papel-claro);
+}
+.chefe-retrato {
+  position: relative;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #6b2020, #2a0a0a 75%);
+  box-shadow: 0 0 0 2px var(--latao), 0 0 0 4px #1c1108;
+}
+.chefe-icone { display: block; font-size: 2rem; line-height: 1; }
+.chefe-info { min-width: 0; }
+.chefe-nome { margin: 0; font-family: var(--font-titulo); font-size: 1.05rem; line-height: 1.2; color: #f3d9a4; }
+.chefe-vida { margin: 0.3rem 0; font-size: 1.25rem; line-height: 1; letter-spacing: 0.12em; }
+.chefe-coracao { display: inline-block; color: #e04848; text-shadow: 0 1px 0 #3a0c0c; transition: opacity 0.3s, scale 0.3s, color 0.3s; }
+.chefe-coracao.perdido { color: #8a7560; opacity: 0.5; scale: 0.8; text-shadow: none; }
+.chefe-fala { margin: 0; font-size: 0.88rem; font-style: italic; color: var(--papel-claro); }
+.chefe-marca { margin: 0.3rem 0 0; font-size: 0.78rem; color: #c9e3a0; }
+.chefe-dano {
+  position: absolute;
+  top: -4px;
+  right: -8px;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #ffd27a;
+  text-shadow: 0 1px 2px #000;
+  pointer-events: none;
+}
+/* Derrotado: o vilão tomba, perde a cor e ganha o carimbo de cera */
+.chefe-arena.chefe-derrotado .chefe-icone { rotate: 90deg; translate: 0 6px; opacity: 0.45; filter: grayscale(1); }
+.chefe-arena.chefe-derrotado .chefe-retrato { box-shadow: 0 0 0 2px #8a7560, 0 0 0 4px #1c1108; }
+.chefe-arena.chefe-derrotado .chefe-retrato::after {
+  content: "DERROTADO";
+  position: absolute;
+  bottom: -7px;
+  left: 50%;
+  translate: -50% 0;
+  rotate: -12deg;
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+  background: var(--cera);
+  color: #fff3d0;
+  font-family: var(--font-display);
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .chefe-arena.chefe-golpe .chefe-retrato { animation: chefeTremer 0.35s ease-in-out; }
+  .chefe-arena.chefe-derrotado .chefe-icone { animation: chefeCair 0.7s ease-in; }
+  .chefe-arena.chefe-resiste .chefe-retrato { animation: chefeRir 0.6s ease-in-out 2; }
+  .chefe-dano { animation: chefeDano 0.9s ease-out forwards; }
+}
+@keyframes chefeTremer {
+  0%, 100% { translate: 0 0; }
+  20% { translate: -5px 0; }
+  40% { translate: 5px 0; }
+  60% { translate: -3px 0; }
+  80% { translate: 3px 0; }
+}
+@keyframes chefeCair { from { rotate: 0deg; translate: 0 0; opacity: 1; filter: none; } }
+@keyframes chefeRir { 0%, 100% { scale: 1; } 50% { scale: 1.12; } }
+@keyframes chefeDano { from { opacity: 1; translate: 0 0; } to { opacity: 0; translate: 0 -26px; } }
+
+
+/* ---------- 3. Atlas das Maravilhas ---------- */
+
+/* Botão do topo, ao lado da Crônica (placa principal: ganha os pregos) */
+.hero-acoes { flex-wrap: wrap; gap: 0.6rem; }
+#botao-atlas-hero {
+  background:
+    var(--orn-prego-p) left 3px top 3px / 6px 6px no-repeat,
+    var(--orn-prego-p) right 3px top 3px / 6px 6px no-repeat,
+    var(--orn-prego-p) left 3px bottom 3px / 6px 6px no-repeat,
+    var(--orn-prego-p) right 3px bottom 3px / 6px 6px no-repeat,
+    var(--veios-madeira),
+    linear-gradient(180deg, #5a3a1c, var(--madeira) 60%, #2a190b);
+}
+
+/* A janela se desenrola como as outras (animação da etapa 3) */
+@media (prefers-reduced-motion: no-preference) {
+  #modal-atlas-overlay { animation: veuEsmaecer 0.2s ease-out; }
+  #modal-atlas-overlay > .painel-leitura {
+    transform-origin: 50% 0;
+    animation: pergaminhoDesenrolar 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+}
+
+.atlas-intro { margin: 0.2rem 0 0.2rem; }
+.atlas-legenda { white-space: nowrap; font-size: 0.85rem; }
+.atlas-leg-maravilha { color: var(--ouro-tinta); font-weight: 700; margin-left: 0.3rem; }
+.atlas-leg-erro { color: var(--vinho); font-weight: 700; margin-left: 0.5rem; }
+.atlas-contagem { margin: 0 0 0.4rem; font-size: 0.85rem; color: var(--tinta-suave); }
+
+/* Abas das regiões */
+.atlas-abas { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.6rem 0 0.7rem; }
+.atlas-aba {
+  padding: 0.35rem 0.75rem;
+  border: 1px solid rgba(122,31,31,0.45);
+  border-radius: 999px;
+  background: rgba(250,243,224,0.7);
+  color: var(--tinta);
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+}
+.atlas-aba:hover { background: rgba(184,137,44,0.2); }
+.atlas-aba[aria-pressed="true"] { background: var(--vinho); border-color: var(--vinho); color: var(--papel-claro); }
+
+/* O mapa: uma "janela" que mostra só o recorte da região escolhida */
+.atlas-mapa-moldura {
+  padding: 4px;
+  border: 1px solid rgba(90,66,40,0.55);
+  border-radius: 6px;
+  background: #ead9b3;
+  box-shadow: inset 0 0 18px rgba(92,52,18,0.25), 0 2px 6px rgba(43,29,16,0.2);
+}
+.atlas-mapa {
+  position: relative;
+  width: 100%;
+  height: 0;
+  overflow: hidden;
+  border-radius: 3px;
+  background: rgba(140,98,57,0.08);
+}
+.atlas-mapa .atlas-mapa-img {
+  position: absolute;
+  max-width: none;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Regiões no mapa do mundo (moldura tracejada que aproxima ao tocar) */
+.atlas-regiao {
+  position: absolute;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 0;
+  border: 2px dashed rgba(122,31,31,0.75);
+  border-radius: 6px;
+  background: rgba(122,31,31,0.06);
+  color: var(--vinho);
+  font: inherit;
+  cursor: pointer;
+}
+.atlas-regiao:hover { background: rgba(122,31,31,0.15); }
+.atlas-regiao span {
+  margin-top: 4px;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  background: var(--papel-claro);
+  font-family: var(--font-display);
+  font-size: clamp(0.55rem, 1.6vw, 0.75rem);
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: 0 1px 3px rgba(43,29,16,0.3);
+}
+
+/* Os pontos das obras: ★ dourada (maravilha) e ☠ vermelha (erro famoso) */
+.atlas-ponto {
+  position: absolute;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  translate: -50% -50%;
+  border: 2px solid #5c430c;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #f4dc94, #c9a14a 60%, #8a6a2a);
+  color: #3a2412;
+  font-size: 0.85rem;
+  line-height: 1;
+  box-shadow: 0 2px 4px rgba(43,29,16,0.45);
+  cursor: pointer;
+}
+.atlas-ponto-erro {
+  border-color: #3a0c0c;
+  background: radial-gradient(circle at 35% 30%, #b83434, #8b1a1a 60%, #4a0c0c);
+  color: #fff3d0;
+}
+.atlas-ponto.lido { box-shadow: 0 0 0 2px var(--musgo), 0 2px 4px rgba(43,29,16,0.45); }
+.atlas-ponto.ativo { z-index: 2; scale: 1.2; box-shadow: 0 0 0 3px var(--papel-claro), 0 0 0 5px var(--vinho); }
+.atlas-ponto-num,
+.atlas-ponto-caveira {
+  position: absolute;
+  right: -8px;
+  min-width: 15px;
+  height: 15px;
+  padding: 0 3px;
+  border-radius: 8px;
+  font-family: var(--font-body);
+  font-size: 0.6rem;
+  font-weight: 700;
+  line-height: 15px;
+  text-align: center;
+}
+.atlas-ponto-num { top: -7px; background: var(--vinho); color: var(--papel-claro); }
+/* o selinho ☠ (ponto com maravilha E erro, como Londres) fica embaixo à esquerda */
+.atlas-ponto-caveira { right: auto; left: -8px; bottom: -7px; background: #8b1a1a; color: #fff3d0; }
+.atlas-ponto-nome {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  translate: -50% 3px;
+  font-family: var(--font-body);
+  font-size: 0.66rem;
+  font-weight: 700;
+  color: var(--tinta);
+  white-space: nowrap;
+  text-shadow: 0 0 3px #f2e6c9, 0 0 2px #f2e6c9, 0 0 1px #f2e6c9;
+  pointer-events: none;
+}
+/* No celular: os nomes encostariam uns nos outros (o nome aparece na ficha),
+   os pontos ficam um pouco menores e a janela do Atlas perde um pouco da
+   margem interna, para o mapa ficar maior. (O !important vence a margem
+   escrita pelo atlas.js na própria janela, só no celular.) */
+@media (max-width: 520px) {
+  .atlas-ponto-nome { display: none; }
+  .atlas-ponto { width: 21px; height: 21px; font-size: 0.72rem; }
+  .painel-leitura.atlas-painel { padding: 1.5rem 0.85rem !important; }
+  .atlas-painel > h2 { padding-right: 2.6rem; }
+}
+
+/* A ficha da obra (embaixo do mapa) */
+.atlas-ficha { margin-top: 0.8rem; }
+.atlas-ficha-vazia { margin: 0; font-size: 0.85rem; font-style: italic; color: var(--tinta-suave); }
+.atlas-obra {
+  margin-bottom: 0.6rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid rgba(184,137,44,0.45);
+  border-left: 5px solid var(--ouro-envelhecido);
+  border-radius: 10px;
+  background: rgba(250,243,224,0.65);
+}
+.atlas-obra-erro { border-left-color: var(--cera); }
+.atlas-obra h3 { margin: 0; font-size: 1.05rem; color: var(--vinho); }
+.atlas-obra-onde { margin: 0.15rem 0 0.4rem; font-size: 0.82rem; font-style: italic; color: var(--tinta-suave); }
+.atlas-obra-frase { margin: 0 0 0.6rem; }
+.atlas-ler { padding: 0.45rem 0.8rem; font-size: 0.72rem; }
+.atlas-obra-lida { margin-left: 0.4rem; font-size: 0.78rem; font-weight: 700; color: var(--musgo); white-space: nowrap; }
+
+/* A lista de todos os lugares */
+.atlas-todas { margin-top: 0.6rem; }
+.atlas-todas summary { cursor: pointer; font-family: var(--font-display); font-size: 0.8rem; font-weight: 700; color: var(--vinho); }
+.atlas-todas h3 { margin: 0.6rem 0 0.2rem; font-size: 0.85rem; }
+.atlas-todas ul { margin: 0 0 0.4rem; padding: 0; list-style: none; columns: 2 220px; }
+.atlas-item {
+  padding: 0.2rem 0;
+  border: 0;
+  background: none;
+  color: var(--tinta);
+  font: inherit;
+  font-size: 0.86rem;
+  text-align: left;
+  cursor: pointer;
+}
+.atlas-item span { font-size: 0.78rem; color: var(--tinta-suave); }
+.atlas-item:hover { text-decoration: underline; }
+
+/* Link "Ver no Atlas" dentro das runas */
+.atlas-ver-no-mapa { margin: 0.8rem 0; text-align: center; }
+.atlas-ver-no-mapa .btn-gotico { padding: 0.45rem 0.9rem; font-size: 0.72rem; }
+
+
+/* ---------- 4. Impressão ----------
+   Nada das novidades sai no papel (o certificado continua sozinho). */
+@media print {
+  #modal-atlas-overlay, .glossario-balao, .chefe-arena { display: none !important; }
+  .termo-glossario { border: 0; }
+}
