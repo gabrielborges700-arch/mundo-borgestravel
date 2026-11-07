@@ -1,0 +1,151 @@
+/* =====================================================================
+   simuladores-vivos.css — Cenas animadas dos simuladores (par do
+   simuladores-vivos.js). Os desenhos antigos ficam só escondidos.
+   ===================================================================== */
+
+.sv-oculto { display: none !important; }
+.sv-vivo .sim-visor { display: none !important; } /* visores pequenos do polimento: a cena faz o papel deles */
+
+.sv-palco {
+  position: relative; width: 100%; margin: 0.25rem 0 0.85rem;
+  border-radius: 10px; overflow: hidden;
+  background: linear-gradient(180deg, #f6ecd2, #ecdcb4);
+  border: 1px solid rgba(59, 36, 18, 0.45);
+  box-shadow: inset 0 0 0 3px rgba(250, 243, 224, 0.5), inset 0 -18px 30px rgba(120, 84, 44, 0.12);
+}
+.sv-cena { display: block; width: 100%; height: 100%; overflow: hidden; }
+
+/* 0.3: a cena entra dentro da caixa antiga (que guarda o mostrador do Desvio) */
+.sv-caixa-cena {
+  height: auto !important; aspect-ratio: var(--sv-proporcao, 600 / 250);
+  padding: 0 !important; background: #e9e1c8 !important;
+}
+.sv-caixa-cena > .sv-cena-fundo { position: absolute; inset: 0; width: 100%; height: 100%; }
+/* mostrador do Desvio no canto de baixo: em cima ele cobria o topo da torre no celular */
+.sv-caixa-cena > #leitura-desvio { z-index: 2; top: auto !important; bottom: 6px; right: 6px !important; }
+
+/* Peças comuns */
+.sv-texto { font-family: var(--font-body, Georgia, serif); font-size: 13px; fill: #2b1d10; }
+.sv-nota { font-size: 11.5px; font-style: italic; fill: #5a4228; }
+.sv-rotulo { font-family: var(--font-unicase, "Cinzel", Georgia, serif); font-weight: 700; font-size: 12.5px; fill: #3b2412; }
+.sv-numero { font-size: 11px; fill: #3b2412; }
+.sv-aviso { font-family: var(--font-unicase, "Cinzel", Georgia, serif); font-weight: 700; font-size: 13px; fill: #7a1f1f; }
+.sv-claro { fill: #f6ecd2; }
+.sv-claro.sv-nota { fill: #e9dcbc; }
+.sv-ciano { fill: #7ff3ff; font-weight: 700; }
+.sv-vermelho { fill: #ff8a80; font-weight: 700; }
+.sv-vermelho-escuro { fill: #8b1a1a; }
+.sv-laranja { fill: #8a3d00; }
+.sv-cinza { fill: #7d858c; }
+.sv-chao { fill: #c2ad7f; }
+.sv-linha-chao { stroke: #3b2412; stroke-width: 2; }
+.sv-morro { fill: #b9c39a; opacity: 0.55; }
+.sv-pedra { fill: #d9c49a; stroke: #3b2412; stroke-width: 1.6; stroke-linejoin: round; }
+.sv-juntas { stroke: #3b2412; stroke-width: 1; opacity: 0.5; fill: none; }
+.sv-madeira { fill: #a8733d; stroke: #3b2412; stroke-width: 1.6; }
+.sv-veio { stroke: #6e4520; stroke-width: 1.2; fill: none; opacity: 0.7; }
+.sv-caixa-peso { fill: #6d6d6d; stroke: #3b2412; stroke-width: 1.4; }
+.sv-fantasma { fill: none; stroke: #3b2412; stroke-width: 1.4; stroke-dasharray: 5 5; opacity: 0; transition: opacity 0.3s ease; }
+.sv-tracejado { stroke: #3b2412; stroke-width: 1.2; stroke-dasharray: 4 4; opacity: 0.55; fill: none; }
+.sv-tracejado-forte { stroke: #c75b12; opacity: 0.9; stroke-width: 1.6; }
+.sv-cota { stroke: #3b2412; stroke-width: 1.3; fill: none; }
+.sv-apoio { fill: #e9dcbc; stroke: #f6ecd2; stroke-width: 1.2; }
+.sv-apoio-claro { fill: #e3d3ad; stroke: #3b2412; stroke-width: 1.5; }
+.sv-trinca { fill: none; stroke: #2b1208; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: opacity 0.3s ease; }
+.sv-trinca-forte { stroke-width: 3.2; }
+.sv-fundo-ardosia { fill: #2b1a0c; }
+
+/* 0.3 torre no vento */
+.sv-torre { fill: #d9c9a3; stroke: #3b2412; stroke-width: 1.8; stroke-linejoin: round; }
+.sv-torre-andares { stroke: #3b2412; stroke-width: 1.1; opacity: 0.55; fill: none; }
+.sv-torre-topo { fill: #7a1f1f; stroke: #3b2412; stroke-width: 1.5; }
+.sv-particula { stroke: rgba(255, 255, 255, 0.85); stroke-width: 2; stroke-linecap: round; }
+.sv-seta-vento { transition: opacity 0.3s ease; }
+
+/* 0.7 viga sobre colunas */
+.sv-viga-grupo { transform-box: view-box; transform-origin: 300px 143px; transition: transform 0.7s cubic-bezier(0.34, 1.4, 0.5, 1); }
+.sv-seta-peso, .sv-seta-reacao { transition: opacity 0.3s ease; }
+.sv-selo-ok { opacity: 0; transition: opacity 0.4s ease; }
+.sv-em-equilibrio .sv-madeira { filter: drop-shadow(0 0 6px rgba(232, 190, 92, 0.95)); }
+
+/* 0.8 arco */
+.sv-peca .sv-peca-pedra { opacity: 0; transform: translateY(-40px); transition: opacity 0.35s ease, transform 0.5s cubic-bezier(0.3, 1.3, 0.5, 1); }
+.sv-peca.sv-colocada .sv-peca-pedra { opacity: 1; transform: none; }
+.sv-peca-fantasma { fill: rgba(255, 255, 255, 0.25); stroke: #3b2412; stroke-width: 1.2; stroke-dasharray: 4 4; opacity: 0.55; }
+.sv-peca.sv-colocada .sv-peca-fantasma { opacity: 0; }
+.sv-peca.sv-proxima .sv-peca-fantasma { stroke: #b8892c; stroke-width: 2.4; opacity: 1; fill: rgba(232, 190, 92, 0.25); }
+.sv-cimbre { opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease, transform 0.8s ease; }
+.sv-com-cimbre .sv-cimbre { opacity: 1; transform: none; }
+.sv-cimbre-arco { fill: none; stroke: #8a5a2b; stroke-width: 6; }
+.sv-cimbre-viga { stroke: #8a5a2b; stroke-width: 6; }
+.sv-cimbre-escora { stroke: #8a5a2b; stroke-width: 4; fill: none; }
+.sv-empuxo, .sv-peso-topo { opacity: 0; transition: opacity 0.6s 0.4s ease; }
+.sv-arco-travado .sv-empuxo, .sv-arco-travado .sv-peso-topo { opacity: 1; }
+.sv-fluxo { fill: none; stroke: #0097a7; stroke-width: 5; stroke-linecap: round; stroke-dasharray: 10 9; opacity: 0.85; }
+.sv-balanca { animation: svTreme 0.5s ease; }
+
+/* 0.9 viga com cores */
+.sv-viga-contorno { fill: none; stroke: #f6ecd2; stroke-width: 1.6; stroke-linejoin: round; }
+.sv-linha-neutra { fill: none; stroke: #fff; stroke-width: 1.4; stroke-dasharray: 6 5; opacity: 0.85; }
+
+/* Bloco 1 pilar */
+.sv-pilar-corpo { stroke: #3b2412; stroke-width: 2; transition: y 0.25s ease, height 0.25s ease; }
+.sv-caco { fill: #9b8b74; stroke: #3b2412; stroke-width: 1; opacity: 0; transform-box: fill-box; transform-origin: center; }
+.sv-colapso .sv-caco { opacity: 1; }
+
+/* Bloco 2 régua */
+.sv-tolerancia { fill: rgba(46, 125, 50, 0.28); }
+.sv-no-alvo .sv-tolerancia { fill: rgba(46, 125, 50, 0.6); }
+.sv-lupa-aro { fill: none; stroke: #3b2412; stroke-width: 4; }
+.sv-no-alvo .sv-lupa-aro { stroke: #2e7d32; }
+.sv-lupa-cabo { stroke: #6e4520; stroke-width: 7; stroke-linecap: round; }
+.sv-cursor { transition: transform 0.15s ease; }
+
+/* Bloco 3 mola */
+.sv-mola { fill: none; stroke: #5a6b7a; stroke-linejoin: round; stroke-linecap: round; }
+
+/* Bloco 4 fadiga */
+.sv-aco { fill: #9aa7b1; stroke: #3b2412; stroke-width: 1.5; }
+.sv-barra { transform-box: view-box; }
+.sv-barra-ponta { transform-box: view-box; transition: transform 0.9s cubic-bezier(0.5, 0, 0.7, 0.4); }
+.sv-partida .sv-barra-ponta { transform: translate(8px, 70px) rotate(24deg); opacity: 0.9; }
+.sv-trinca-fadiga { stroke: #2b1208; stroke-width: 2.4; }
+.sv-infinito { font-size: 20px; font-weight: 700; fill: #2e7d32; }
+
+/* Bloco 5 momento fletor */
+.sv-viga-simples { fill: none; stroke: #6e4520; stroke-width: 9; stroke-linecap: butt; stroke-linejoin: round; }
+.sv-eixo-dmf { stroke: #3b2412; stroke-width: 1.4; }
+.sv-dmf { fill: rgba(230, 120, 30, 0.35); stroke: #c75b12; stroke-width: 2; stroke-linejoin: round; }
+.sv-mostrador-compacto { height: auto !important; padding: 0.55rem !important; }
+.sv-mostrador-compacto > svg { display: none; }
+.sv-mostrador-compacto > #valor-momento { position: static !important; }
+
+/* Bloco 6 cidade */
+.sv-sol { fill: #f3c64a; stroke: #3b2412; stroke-width: 1.2; transition: opacity 0.4s ease; }
+.sv-janelas { fill: #fff2c4; stroke: #3b2412; stroke-width: 0.8; transition: opacity 0.4s ease; }
+.sv-travas { stroke: #3b2412; stroke-width: 1.6; fill: none; transition: opacity 0.4s ease; }
+.sv-bandeira-cidade { fill: #ab47bc; stroke: #3b2412; stroke-width: 0.8; transition: opacity 0.4s ease; }
+.sv-flores { transition: opacity 0.4s ease; }
+.sv-predio { transform-box: view-box; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .sv-arco-travado .sv-fluxo { animation: svFluxo 1.2s linear infinite; }
+  .sv-barra.sv-ciclando { animation: svCiclo 0.6s ease-in-out; }
+  .sv-colapso .sv-pilar { animation: svDesaba 0.6s ease-out both; }
+  .sv-colapso .sv-caco { animation: svCaco 0.9s cubic-bezier(0.3, 0, 0.7, 1) both; }
+  .sv-perigo .sv-predio { animation: svBalancaPredio 1.4s ease-in-out infinite alternate; }
+  .sv-perigo .sv-predio:nth-child(2n) { animation-delay: -0.7s; }
+  .sv-bandeira-cidade { animation: svBandeira 1.2s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: 0 50%; }
+  .sv-peca.sv-proxima .sv-peca-fantasma { animation: svPisca 1.1s ease-in-out infinite; }
+}
+@keyframes svTreme { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-6px); } 40% { transform: translateX(6px); } 60% { transform: translateX(-4px); } 80% { transform: translateX(3px); } }
+@keyframes svFluxo { to { stroke-dashoffset: -38; } }
+@keyframes svCiclo { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(calc(-1 * var(--sv-giro, 6deg))); } 75% { transform: rotate(var(--sv-giro, 6deg)); } }
+@keyframes svDesaba { 0% { transform: none; } 40% { transform: translateY(6px) scaleY(0.96); } 100% { transform: translateY(10px) scaleY(0.93); } }
+@keyframes svCaco { from { opacity: 1; transform: none; } to { opacity: 0.9; transform: translate(var(--dx, 20px), 60px) rotate(var(--rot, 90deg)); } }
+@keyframes svBalancaPredio { from { transform: rotate(-1.6deg); } to { transform: rotate(1.6deg); } }
+@keyframes svBandeira { from { transform: skewY(-6deg); } to { transform: skewY(6deg); } }
+@keyframes svPisca { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
+
+@media print { .sv-palco { display: none !important; } }
+.sv-valor { font-family: var(--font-body, Georgia, serif); font-weight: 700; font-size: 14px; fill: #2b1d10; }
