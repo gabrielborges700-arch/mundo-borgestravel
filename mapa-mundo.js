@@ -124,7 +124,8 @@
         '<path d="M52 30l9 6M108 30l-9 6M62 17l6 8M98 17l-6 8"' + TF + ' opacity=".55"/>' +
         '<path d="M28 92V70M132 92V70" stroke="' + TINTA + '" stroke-width="3"/>' +
         '<path class="mm-chama" d="M28 70q-5-6 0-13q5 7 0 13z" fill="#e8902a" stroke="#7a2e0e" stroke-width=".8"/>' +
-        '<path class="mm-chama mm-chama-2" d="M132 70q-5-6 0-13q5 7 0 13z" fill="#e8902a" stroke="#7a2e0e" stroke-width=".8"/>';
+        '<path class="mm-chama mm-chama-2" d="M132 70q-5-6 0-13q5 7 0 13z" fill="#e8902a" stroke="#7a2e0e" stroke-width=".8"/>' +
+        '<path class="mm-sombra" d="M108 44h8v50h-8zM80 6q38 4 38 40h-18q0-21-20-23z"/>';
     },
 
     // Vilarejo dos Sistemas Construtivos: enxaimel, tijolo e um poço
@@ -146,7 +147,8 @@
         '<path d="M48 100V86h10v14z" fill="#5a3a1c"' + T + '/>' +
         // poço
         '<path d="M64 104v-8h14v8z" fill="' + PEDRA2 + '"' + T + '/>' +
-        '<path d="M65 96V86M77 96V86M62 87h18l-9-5z"' + T + ' fill="#8a5a2b"/>';
+        '<path d="M65 96V86M77 96V86M62 87h18l-9-5z"' + T + ' fill="#8a5a2b"/>' +
+        '<path class="mm-sombra" d="M120 54h12v46h-12zM109 28L138 56H109ZM66 62h10v38h-10zM53 34L82 64H53Z"/>';
     },
 
     // Condado de MecTec: torre do relógio com engrenagem, moinho e tenda
@@ -172,7 +174,8 @@
         '<g class="mm-gira mm-moinho" style="transform-origin:124px 56px">' +
           '<path d="M124 56l-2-26h4zM124 56l26-2v4zM124 56l2 26h-4zM124 56l-26 2v-4z" fill="#f3e7c9"' + T + '/>' +
         '</g>' +
-        '<circle cx="124" cy="56" r="2.6" fill="' + TINTA + '"/>';
+        '<circle cx="124" cy="56" r="2.6" fill="' + TINTA + '"/>' +
+        '<path class="mm-sombra" d="M88 34h8v66h-8zM80 6L100 36H80ZM126 60h5l5 40h-10z"/>';
     },
 
     // Reino NEXUS (Tendões): ponte estaiada — os cabos são os tendões
@@ -190,7 +193,8 @@
         '</g>' +
         '<path d="M74 106L78 10h4l4 96z" class="mm-acento"' + T + '/>' +
         '<path d="M76 40h8M76.6 64h6.8"' + TF + ' opacity=".6"/>' +
-        '<circle cx="80" cy="12" r="3" fill="#fbf3dc"' + T + '/>';
+        '<circle cx="80" cy="12" r="3" fill="#fbf3dc"' + T + '/>' +
+        '<path class="mm-sombra" d="M80 10h2l4 96h-6z"/>';
     },
 
     // Reino dos Músculos: a forja com a fornalha acesa e a bigorna
@@ -206,7 +210,8 @@
         '<path d="M60 100V78q20-22 40 0v22z" fill="#2b1608"' + T + '/>' +
         '<path class="mm-fornalha" d="M64 100V80q16-17 32 0v20z"/>' +
         '<path d="M98 104h26l-4-6h-18z" fill="#4a4a4a"' + T + '/>' +
-        '<path d="M100 98q0-7 8-7h18q-6 3-6 7z" fill="#5c5c5c"' + T + '/>';
+        '<path d="M100 98q0-7 8-7h18q-6 3-6 7z" fill="#5c5c5c"' + T + '/>' +
+        '<path class="mm-sombra" d="M116 52h16v48h-16zM80 28L138 54H80ZM132 60l10 40h-10z"/>';
     },
 
     // Reino dos Esqueletos: torre treliçada com farol no alto
@@ -222,7 +227,8 @@
         '<path d="M66 26h28v6H66z" class="mm-acento"' + T + '/>' +
         '<path d="M72 26v-8h16v8z" fill="#fbf3dc"' + T + '/>' +
         '<circle class="mm-pulsa" cx="80" cy="16" r="5" fill="#fff6d8" stroke="' + TINTA + '" stroke-width="1"/>' +
-        '<path d="M76 10l4-6l4 6z" fill="' + TINTA + '"/>';
+        '<path d="M76 10l4-6l4 6z" fill="' + TINTA + '"/>' +
+        '<path class="mm-sombra" d="M89 26l21 78h-8l-17-78z"/>';
     },
 
     // A Grande Aliança: cidadela com cúpula, pórtico e torres com bandeiras
@@ -243,7 +249,8 @@
         '<circle cx="80" cy="10" r="2.6" fill="#e3b84a" stroke="' + TINTA + '" stroke-width="1"/>' +
         '<path d="M56 94V76M66 94V76M76 94V76M86 94V76M96 94V76M106 94V76" stroke="' + TINTA + '" stroke-width="2.4"/>' +
         '<path d="M52 76l28-12l28 12z" fill="' + PEDRA2 + '"' + T + '/>' +
-        '<path d="M50 94h60v6H50z" fill="' + PEDRA2 + '"' + T + '/>';
+        '<path d="M50 94h60v6H50z" fill="' + PEDRA2 + '"' + T + '/>' +
+        '<path class="mm-sombra" d="M137 58h7v36h-7zM27 58h7v36h-7zM80 20q26 0 26 28h-26zM96 48h12v22h-12z"/>';
     },
 
     // Ilha Amaldiçoada: rocha-caveira, árvore morta e a ponte quebrada
@@ -258,7 +265,8 @@
         '<path d="M120 92q0-16-6-26M114 66l-8-6M116 72l8-8M118 80l-9-4"' + ' stroke="' + TINTA + '" stroke-width="2" fill="none" stroke-linecap="round"/>' +
         '<path d="M4 84h26l6 4M14 84v18M26 84v14"' + T + ' fill="none"/>' +
         '<path d="M36 88l4 10M38 90l-3 9" stroke="' + TINTA + '" stroke-width="1.2" fill="none"/>' +
-        '<g class="mm-nevoa-ilha"><ellipse cx="50" cy="100" rx="22" ry="5"/><ellipse cx="110" cy="102" rx="20" ry="4"/></g>';
+        '<g class="mm-nevoa-ilha"><ellipse cx="50" cy="100" rx="22" ry="5"/><ellipse cx="110" cy="102" rx="20" ry="4"/></g>' +
+        '<path class="mm-sombra" d="M90 50q16 6 14 32q-2 10-8 12l-2 8h-6z"/>';
     },
   };
 
@@ -315,6 +323,10 @@
 
   // ---------------------------------------------------------------------
   // Terreno da carta do computador (viewBox 1600×1000, mesma proporção 16:10)
+  // Estilo das cartas náuticas do séc. XVI: moldura graduada, rosa-dos-
+  // ventos com flor-de-lis no Norte, linhas de rumo (preto = 8 ventos,
+  // verde = meios-ventos, vermelho = quartas), costa com linhas d'água,
+  // montanhas hachuradas, caravela, serpente marinha, cartucho e escala.
   // ---------------------------------------------------------------------
   var LARG = 1600, ALT = 1000;
   function emCarta(id) { var p = POSICOES[id]; return [p[0] / 100 * LARG, p[1] / 100 * ALT]; }
@@ -325,22 +337,205 @@
   var pontoPonteAntes = pontoBezier(segmentosEstrada[4], 0.47);
   var anguloPonte = Math.atan2(pontoPonte[1] - pontoPonteAntes[1], pontoPonte[0] - pontoPonteAntes[0]) * 180 / Math.PI;
 
+  // Hachura de gravura usada nos desenhos dos lugares (um <defs> só para a página)
+  function garantirDefsGlobais() {
+    if (document.getElementById("mm-defs")) return;
+    var svg = document.createElementNS(NS, "svg");
+    svg.setAttribute("id", "mm-defs");
+    svg.setAttribute("aria-hidden", "true");
+    svg.setAttribute("focusable", "false");
+    svg.setAttribute("width", "0");
+    svg.setAttribute("height", "0");
+    svg.style.cssText = "position:absolute;width:0;height:0;overflow:hidden";
+    svg.innerHTML =
+      '<defs>' +
+        '<pattern id="mm-hachura" width="3.2" height="3.2" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">' +
+          '<line x1="0" y1="0" x2="0" y2="3.2" stroke="' + TINTA + '" stroke-width="0.75" stroke-opacity="0.55"/></pattern>' +
+        '<pattern id="mm-hachura-cruzada" width="3.6" height="3.6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">' +
+          '<path d="M0 0V3.6M0 0H3.6" stroke="' + TINTA + '" stroke-width="0.7" stroke-opacity="0.55"/></pattern>' +
+      "</defs>";
+    (document.body || document.documentElement).appendChild(svg);
+  }
+
   function arvores(lista) {
-    return lista.map(function (a) {
+    return lista.map(function (a, i) {
       var x = a[0], y = a[1], s = a[2] || 1;
+      if (i % 3 === 1) {
+        // árvore redonda de gravura (copa com sombra hachurada à direita)
+        var r = 11 * s;
+        return '<path class="mm-tronco" d="M' + x + " " + (y + 4 * s) + "v" + n1(-12 * s) + '"/>' +
+          '<circle class="mm-arvore" cx="' + x + '" cy="' + n1(y - 14 * s) + '" r="' + n1(r) + '"/>' +
+          '<path class="mm-arvore-sombra" d="M' + n1(x + r * 0.2) + " " + n1(y - 14 * s - r * 0.95) + "A" + n1(r) + " " + n1(r) + " 0 0 1 " + n1(x + r * 0.2) + " " + n1(y - 14 * s + r * 0.95) +
+          "A" + n1(r * 0.75) + " " + n1(r) + " 0 0 0 " + n1(x + r * 0.2) + " " + n1(y - 14 * s - r * 0.95) + 'z"/>';
+      }
       return '<path d="M' + x + " " + (y - 30 * s) + "l" + (-11 * s) + " " + (22 * s) + "h" + (22 * s) + "z" +
         "M" + x + " " + (y - 20 * s) + "l" + (-13 * s) + " " + (24 * s) + "h" + (26 * s) + 'z" class="mm-arvore"/>' +
+        '<path d="M' + x + " " + (y - 20 * s) + "l" + n1(6.5 * s) + " " + n1(12 * s) + "M" + x + " " + (y - 12 * s) + "l" + n1(8 * s) + " " + n1(14 * s) + '" class="mm-arvore-risco"/>' +
         '<path d="M' + x + " " + (y + 4 * s) + "v" + (-6 * s) + '" class="mm-tronco"/>';
     }).join("");
   }
   function montanhas(lista) {
     return lista.map(function (m) {
       var x = m[0], y = m[1], w = m[2], h = m[3];
-      return '<path class="mm-montanha" d="M' + (x - w / 2) + " " + y + "L" + x + " " + (y - h) + "L" + (x + w / 2) + " " + y + 'z"/>' +
-        '<path class="mm-montanha-sombra" d="M' + x + " " + (y - h) + "L" + (x + w / 2) + " " + y + "L" + (x + w * 0.12) + " " + y + 'z"/>' +
-        '<path class="mm-neve" d="M' + (x - w * 0.11) + " " + (y - h * 0.78) + "L" + x + " " + (y - h) + "L" + (x + w * 0.11) + " " + (y - h * 0.78) +
-        "l" + (-w * 0.05) + " " + (h * 0.06) + "l" + (-w * 0.06) + " " + (-h * 0.05) + 'z"/>';
+      var esq = x - w / 2, dir = x + w / 2, pico = y - h;
+      // perfil um pouco irregular, como desenhado à pena
+      var d = "M" + esq + " " + y + "L" + n1(x - w * 0.22) + " " + n1(y - h * 0.55) + "L" + n1(x - w * 0.12) + " " + n1(y - h * 0.62) +
+        "L" + x + " " + pico + "L" + n1(x + w * 0.16) + " " + n1(y - h * 0.66) + "L" + n1(x + w * 0.24) + " " + n1(y - h * 0.6) + "L" + dir + " " + y + "z";
+      var hach = "";
+      for (var t = 0.14; t < 0.95; t += 0.11) {
+        var px = x + (dir - x) * t, py = pico + (y - pico) * t;
+        var comp = (y - py) * 0.62;
+        hach += "M" + n1(px - 2) + " " + n1(py + 2) + "l" + n1(-comp * 0.38) + " " + n1(comp);
+      }
+      return '<path class="mm-montanha" d="' + d + '"/>' +
+        '<path class="mm-montanha-hachura" d="' + hach + '"/>' +
+        '<path class="mm-neve" d="M' + n1(x - w * 0.1) + " " + n1(y - h * 0.8) + "L" + x + " " + pico + "L" + n1(x + w * 0.1) + " " + n1(y - h * 0.8) +
+        "l" + n1(-w * 0.05) + " " + n1(h * 0.06) + "l" + n1(-w * 0.05) + " " + n1(-h * 0.05) + 'z"/>';
     }).join("");
+  }
+
+  // Rosa-dos-ventos: 4 pontas maiores (meia clara, meia escura), 4 colaterais,
+  // 8 menores, anel com graus, flor-de-lis no Norte e a cruz no Leste
+  function rosaDosVentos(cx, cy, r, comFlor) {
+    function ponta(angGraus, comp, larg, claro) {
+      var a = (angGraus - 90) * Math.PI / 180, perp = a + Math.PI / 2;
+      var tx = cx + Math.cos(a) * comp, ty = cy + Math.sin(a) * comp;
+      var lx = cx + Math.cos(perp) * larg, ly = cy + Math.sin(perp) * larg;
+      var rx = cx - Math.cos(perp) * larg, ry = cy - Math.sin(perp) * larg;
+      return '<path class="mm-rosa-escura" d="M' + n1(cx) + " " + n1(cy) + "L" + n1(tx) + " " + n1(ty) + "L" + n1(lx) + " " + n1(ly) + 'z"/>' +
+        '<path class="' + (claro ? "mm-rosa-clara" : "mm-rosa-meia") + '" d="M' + n1(cx) + " " + n1(cy) + "L" + n1(tx) + " " + n1(ty) + "L" + n1(rx) + " " + n1(ry) + 'z"/>';
+    }
+    var g = '<g class="mm-rosa">';
+    g += '<circle class="mm-rosa-anel" cx="' + cx + '" cy="' + cy + '" r="' + r + '"/>';
+    g += '<circle class="mm-rosa-anel-fino" cx="' + cx + '" cy="' + cy + '" r="' + n1(r * 0.86) + '"/>';
+    var ticks = "";
+    for (var k = 0; k < 64; k++) {
+      var a = k * Math.PI / 32, t1 = r * (k % 2 ? 0.93 : 0.88);
+      ticks += "M" + n1(cx + Math.cos(a) * t1) + " " + n1(cy + Math.sin(a) * t1) + "L" + n1(cx + Math.cos(a) * r) + " " + n1(cy + Math.sin(a) * r);
+    }
+    g += '<path class="mm-rosa-graus" d="' + ticks + '"/>';
+    for (var i = 0; i < 8; i++) g += ponta(22.5 + i * 45, r * 0.62, r * 0.07, false);
+    for (var j = 0; j < 4; j++) g += ponta(45 + j * 90, r * 0.8, r * 0.12, false);
+    for (var c = 0; c < 4; c++) g += ponta(c * 90, r * 1.08, r * 0.17, true);
+    g += '<circle class="mm-rosa-centro" cx="' + cx + '" cy="' + cy + '" r="' + n1(r * 0.09) + '"/>';
+    if (comFlor) {
+      var s = r / 34;
+      g += '<g class="mm-flor-de-lis" transform="translate(' + cx + " " + n1(cy - r * 1.2) + ") scale(" + n1(s * 1.35) + ')">' +
+        '<path d="M0-17C5.5-11 5.5-4 0 2C-5.5-4-5.5-11 0-17ZM-1.5 1C-10-1-15-10-9.5-15C-8.5-9-5.5-4.5-1 -2.5ZM1.5 1C10-1 15-10 9.5-15C8.5-9 5.5-4.5 1-2.5ZM-7.5 2H7.5V5.5H-7.5ZM-3 5.5L0 11L3 5.5Z"/></g>';
+      g += '<path class="mm-cruz-leste" d="M' + n1(cx + r * 1.2) + " " + n1(cy - 8) + "v16M" + n1(cx + r * 1.2 - 6) + " " + n1(cy - 2) + 'h12"/>';
+    }
+    return g + "</g>";
+  }
+  // 32 linhas de rumo saindo da rosa, cortadas pela moldura
+  function linhasDeRumo(cx, cy) {
+    var preto = "", verde = "", vermelho = "";
+    for (var k = 0; k < 32; k++) {
+      var a = k * Math.PI / 16;
+      var d = "M" + cx + " " + cy + "L" + n1(cx + Math.cos(a) * 2200) + " " + n1(cy + Math.sin(a) * 2200);
+      if (k % 4 === 0) preto += d; else if (k % 2 === 0) verde += d; else vermelho += d;
+    }
+    return '<g class="mm-rumos" clip-path="url(#mm-recorte-carta)">' +
+      '<path class="mm-rumo-preto" d="' + preto + '"/><path class="mm-rumo-verde" d="' + verde + '"/><path class="mm-rumo-vermelho" d="' + vermelho + '"/></g>';
+  }
+  // Moldura graduada (faixa de quadradinhos alternados, como latitude/longitude)
+  function moldura() {
+    var m = 10, f = 12, passo = 50;
+    var marcas = "";
+    for (var x = m + f; x < LARG - m - f; x += passo * 2) {
+      marcas += "M" + x + " " + (m + f / 2) + "h" + Math.min(passo, LARG - m - f - x);
+      marcas += "M" + x + " " + (ALT - m - f / 2) + "h" + Math.min(passo, LARG - m - f - x);
+    }
+    for (var y = m + f; y < ALT - m - f; y += passo * 2) {
+      marcas += "M" + (m + f / 2) + " " + y + "v" + Math.min(passo, ALT - m - f - y);
+      marcas += "M" + (LARG - m - f / 2) + " " + y + "v" + Math.min(passo, ALT - m - f - y);
+    }
+    var cantos = [[m, m], [LARG - m - f, m], [m, ALT - m - f], [LARG - m - f, ALT - m - f]].map(function (c) {
+      return '<rect class="mm-moldura-canto" x="' + c[0] + '" y="' + c[1] + '" width="' + f + '" height="' + f + '"/>' +
+        '<circle class="mm-moldura-rosinha" cx="' + (c[0] + f / 2) + '" cy="' + (c[1] + f / 2) + '" r="3"/>';
+    }).join("");
+    return '<g class="mm-moldura">' +
+      '<rect class="mm-moldura-linha" x="' + m + '" y="' + m + '" width="' + (LARG - 2 * m) + '" height="' + (ALT - 2 * m) + '"/>' +
+      '<rect class="mm-moldura-linha" x="' + (m + f) + '" y="' + (m + f) + '" width="' + (LARG - 2 * (m + f)) + '" height="' + (ALT - 2 * (m + f)) + '"/>' +
+      '<rect class="mm-moldura-fina" x="' + (m + f + 5) + '" y="' + (m + f + 5) + '" width="' + (LARG - 2 * (m + f + 5)) + '" height="' + (ALT - 2 * (m + f + 5)) + '"/>' +
+      '<path class="mm-moldura-graus" d="' + marcas + '"/>' + cantos + "</g>";
+  }
+  // Cartucho do título, com cantos côncavos e volutas, no alto à esquerda
+  function cartucho() {
+    var x0 = 52, y0 = 42, x1 = 430, y1 = 146, c = 14;
+    function moldurinha(a0, b0, a1, b1, cc) {
+      return "M" + (a0 + cc) + " " + b0 + "H" + (a1 - cc) + "A" + cc + " " + cc + " 0 0 0 " + a1 + " " + (b0 + cc) +
+        "V" + (b1 - cc) + "A" + cc + " " + cc + " 0 0 0 " + (a1 - cc) + " " + b1 + "H" + (a0 + cc) +
+        "A" + cc + " " + cc + " 0 0 0 " + a0 + " " + (b1 - cc) + "V" + (b0 + cc) + "A" + cc + " " + cc + " 0 0 0 " + (a0 + cc) + " " + b0 + "Z";
+    }
+    var meio = (y0 + y1) / 2, cxm = (x0 + x1) / 2;
+    return '<g class="mm-cartucho">' +
+      // volutas (rolos do pergaminho) dos dois lados
+      '<path class="mm-voluta" d="M' + x0 + " " + (meio - 22) + "C" + (x0 - 30) + " " + (meio - 26) + " " + (x0 - 34) + " " + (meio + 18) + " " + (x0 - 12) + " " + (meio + 16) +
+        "C" + (x0 - 2) + " " + (meio + 14) + " " + (x0 - 4) + " " + (meio + 2) + " " + (x0 - 12) + " " + (meio + 4) + '"/>' +
+      '<path class="mm-voluta" d="M' + x1 + " " + (meio - 22) + "C" + (x1 + 30) + " " + (meio - 26) + " " + (x1 + 34) + " " + (meio + 18) + " " + (x1 + 12) + " " + (meio + 16) +
+        "C" + (x1 + 2) + " " + (meio + 14) + " " + (x1 + 4) + " " + (meio + 2) + " " + (x1 + 12) + " " + (meio + 4) + '"/>' +
+      // alças de cima e de baixo
+      '<path class="mm-voluta" d="M' + (cxm - 34) + " " + y0 + "C" + (cxm - 30) + " " + (y0 - 18) + " " + (cxm + 30) + " " + (y0 - 18) + " " + (cxm + 34) + " " + y0 + '"/>' +
+      '<path class="mm-voluta" d="M' + (cxm - 34) + " " + y1 + "C" + (cxm - 30) + " " + (y1 + 18) + " " + (cxm + 30) + " " + (y1 + 18) + " " + (cxm + 34) + " " + y1 + '"/>' +
+      '<path class="mm-cartucho-fundo" d="' + moldurinha(x0, y0, x1, y1, c) + '"/>' +
+      '<path class="mm-cartucho-filete" d="' + moldurinha(x0 + 8, y0 + 8, x1 - 8, y1 - 8, c - 4) + '"/>' +
+      '<text class="mm-cartucho-sobre" x="' + cxm + '" y="' + (y0 + 34) + '" text-anchor="middle">Nova e fiel descrição das</text>' +
+      '<text class="mm-cartucho-titulo" x="' + cxm + '" y="' + (y0 + 72) + '" text-anchor="middle">Terras de Borgestrável</text>' +
+      '<text class="mm-cartucho-sob" x="' + cxm + '" y="' + (y0 + 93) + '" text-anchor="middle">pelos Mestres Construtores · MMXXVI</text>' +
+      "</g>";
+  }
+  // Caravela com a cruz vermelha nas velas
+  function caravela() {
+    return '<g class="mm-navio"><g transform="translate(18 -92)">' +
+      '<path class="mm-casco" d="M1450 868H1550L1542 884Q1500 894 1460 884Z"/>' +
+      '<path class="mm-casco" d="M1528 868V856H1548L1551 868Z"/>' +
+      '<path d="M1456 875H1546" stroke="' + TINTA + '" stroke-width="1.4"/>' +
+      '<path d="M1478 868V816M1502 868V802M1526 856V822" stroke="' + TINTA + '" stroke-width="2.6"/>' +
+      '<path class="mm-vela" d="M1465 824Q1478 830 1491 824L1493 852Q1478 859 1463 852Z"/>' +
+      '<path class="mm-vela" d="M1487 810Q1502 817 1517 810L1519 846Q1502 854 1485 846Z"/>' +
+      '<path class="mm-vela" d="M1526 824L1542 856L1522 852Z"/>' +
+      '<path class="mm-cruz-vela" d="M1478 832V846M1472 838H1484M1502 820V838M1495 828H1509"/>' +
+      '<path class="mm-flamula" d="M1502 802l16 3l-16 5z"/>' +
+      '<path class="mm-onda-mar" d="M1440 892q14-7 28 0t28 0t28 0t28 0"/>' +
+      "</g></g>";
+  }
+  // Serpente marinha ("aqui há dragões") nadando ao lado da ilha
+  function serpente() {
+    return '<g class="mm-serpente">' +
+      '<path class="mm-serpente-corpo" d="M1124 972C1124 948 1150 948 1150 972Z"/>' +
+      '<path class="mm-serpente-corpo" d="M1160 972C1160 952 1182 952 1182 972Z"/>' +
+      '<path class="mm-serpente-corpo" d="M1190 972C1194 958 1204 950 1214 948C1206 956 1204 964 1206 972Z"/>' +
+      '<path class="mm-serpente-corpo" d="M1114 972C1110 950 1102 938 1088 936C1078 935 1070 942 1072 948L1086 950C1092 952 1098 960 1100 972Z"/>' +
+      '<path d="M1074 946L1084 948M1132 958l4 4M1140 956l4 4M1167 960l4 4M1174 958l4 4" stroke="' + TINTA + '" stroke-width="1.4"/>' +
+      '<circle cx="1084" cy="942" r="2" fill="' + TINTA + '"/>' +
+      '<path d="M1094 936l4-10l4 9M1102 939l5-9l3 10" class="mm-serpente-crista"/>' +
+      '<path class="mm-onda-mar" d="M1060 976q16-8 32 0t32 0t32 0t32 0t32 0t32 0"/>' +
+      "</g>";
+  }
+  // Escala de léguas com o compasso de pontas (divisor) por cima
+  function escala() {
+    var x0 = 1400, y = 934, seg = 40;
+    var barras = "";
+    for (var i = 0; i < 4; i++) barras += '<rect class="' + (i % 2 ? "mm-escala-clara" : "mm-escala-escura") + '" x="' + (x0 + i * seg) + '" y="' + (y - 4) + '" width="' + seg + '" height="8"/>';
+    return '<g class="mm-escala">' + barras +
+      '<text x="' + (x0 + 2 * seg) + '" y="' + (y + 24) + '" text-anchor="middle">escala de léguas mágicas</text>' +
+      '<text class="mm-escala-num" x="' + x0 + '" y="' + (y - 10) + '" text-anchor="middle">0</text>' +
+      '<text class="mm-escala-num" x="' + (x0 + 4 * seg) + '" y="' + (y - 10) + '" text-anchor="middle">4</text>' +
+      // compasso de pontas
+      '<g class="mm-compasso" transform="translate(' + (x0 + 2 * seg) + " " + (y - 70) + ')">' +
+        '<path d="M0 0L-38 60M0 0L36 60" stroke="' + TINTA + '" stroke-width="3" stroke-linecap="round"/>' +
+        '<path d="M-14 22Q0 30 13 22" fill="none" stroke="' + TINTA + '" stroke-width="1.6"/>' +
+        '<circle r="5" fill="#c9a14a" stroke="' + TINTA + '" stroke-width="1.6"/><path d="M0-5V-14" stroke="' + TINTA + '" stroke-width="2"/>' +
+      "</g></g>";
+  }
+  // Papel envelhecido: vincos de dobra e manchinhas
+  function envelhecimento() {
+    var manchas = [[300, 560, 60], [960, 160, 46], [1180, 600, 70], [620, 930, 40], [1500, 420, 52], [90, 260, 36]].map(function (m) {
+      return '<circle cx="' + m[0] + '" cy="' + m[1] + '" r="' + m[2] + '" fill="url(#mm-mancha)"/>';
+    }).join("");
+    return '<g class="mm-envelhecido">' + manchas +
+      '<path class="mm-vinco-claro" d="M800 22V978M22 500H1578"/>' +
+      '<path class="mm-vinco-escuro" d="M802.5 22V978M22 502.5H1578"/></g>';
   }
 
   function htmlTerreno() {
@@ -350,30 +545,44 @@
     ]));
 
     var mar = "M980 1000C1010 930 1080 880 1150 840S1290 760 1380 740S1520 690 1600 660V1000Z";
+    var costa = "M980 1000C1010 930 1080 880 1150 840S1290 760 1380 740S1520 690 1600 660";
     var ilhaTerra = "M1180 840C1190 790 1260 760 1320 770S1440 800 1440 845S1360 905 1300 900S1172 885 1180 840Z";
-    var ondas = [[1060, 960], [1140, 905], [1250, 880], [1470, 760], [1530, 820], [1420, 930], [1540, 950], [1110, 990]]
-      .map(function (o) { return '<path class="mm-onda-mar" d="M' + o[0] + " " + o[1] + "q12-8 24 0t24 0\"/>"; }).join("");
+    // linhas d'água: cópias da costa e da ilha, cada vez mais longe e mais claras
+    var linhasAgua = [14, 28, 46, 68].map(function (d, i) {
+      return '<path class="mm-linha-agua" style="opacity:' + (0.55 - i * 0.12) + '" transform="translate(' + d * 0.7 + " " + d + ')" d="' + costa + '"/>';
+    }).join("") + [1.07, 1.15, 1.25].map(function (s, i) {
+      return '<path class="mm-linha-agua" style="opacity:' + (0.5 - i * 0.13) + '" transform="translate(1310 835) scale(' + s + ') translate(-1310 -835)" d="' + ilhaTerra + '"/>';
+    }).join("");
+    var ondas = [[1250, 962], [1555, 902], [1120, 905], [1430, 760]]
+      .map(function (o) { return '<path class="mm-onda-mar" d="M' + o[0] + " " + o[1] + 'q12-8 24 0t24 0"/>'; }).join("");
 
     var html =
       '<svg class="mm-terreno" viewBox="0 0 ' + LARG + " " + ALT + '" preserveAspectRatio="none" aria-hidden="true" focusable="false">' +
-        // mar e costa (contorno duplo, como nas cartas antigas)
+        '<defs>' +
+          '<clipPath id="mm-recorte-carta"><rect x="27" y="27" width="' + (LARG - 54) + '" height="' + (ALT - 54) + '"/></clipPath>' +
+          '<radialGradient id="mm-mancha"><stop offset="0" stop-color="#8a5a2b" stop-opacity="0.13"/><stop offset="0.7" stop-color="#8a5a2b" stop-opacity="0.05"/><stop offset="1" stop-color="#8a5a2b" stop-opacity="0"/></radialGradient>' +
+        "</defs>" +
+        envelhecimento() +
+        // mar com linhas d'água (como nas gravuras), costa dupla e a ilha
         '<path class="mm-mar" d="' + mar + '"/>' +
-        '<path class="mm-costa-eco" d="M960 1000C990 920 1064 866 1136 826S1278 742 1372 722S1516 672 1600 640"/>' +
-        '<path class="mm-costa" d="M980 1000C1010 930 1080 880 1150 840S1290 760 1380 740S1520 690 1600 660"/>' +
-        ondas +
+        linhasAgua +
+        '<path class="mm-costa" d="' + costa + '"/>' +
         '<path class="mm-ilha-terra" d="' + ilhaTerra + '"/>' +
-        // navio
-        '<g class="mm-navio"><path d="M1470 872h56l-10 14h-38z" fill="#7a4a24" stroke="' + TINTA + '" stroke-width="2"/>' +
-          '<path d="M1498 872v-44M1498 830l22 30h-22zM1496 834l-18 26h18z" fill="#f6ecd2" stroke="' + TINTA + '" stroke-width="2"/></g>' +
+        // linhas de rumo saindo das duas rosas-dos-ventos (por baixo de tudo)
+        linhasDeRumo(560, 850) + linhasDeRumo(1290, 440) +
+        ondas +
+        caravela() +
+        serpente() +
         // rio
         '<path class="mm-rio-margem" d="' + dRio + '"/>' +
         '<path class="mm-rio" d="' + dRio + '"/>' +
+        '<path class="mm-rio-brilho" d="' + dRio + '"/>' +
         // montanhas e florestas
-        montanhas([[150, 120, 150, 90], [250, 140, 170, 120], [700, 120, 150, 95], [820, 150, 210, 140], [930, 130, 160, 100],
-                   [1250, 120, 170, 110], [1360, 100, 150, 80], [1545, 520, 120, 80], [1470, 545, 150, 100]]) +
-        arvores([[450, 560, 1], [480, 585, 1.15], [515, 560, 0.9], [630, 820, 1], [665, 845, 1.2], [700, 815, 0.9],
-                 [340, 470, 0.9], [985, 610, 1], [1020, 640, 1.1], [1180, 470, 0.9], [1215, 495, 1.05], [80, 520, 1.1], [115, 545, 0.9],
-                 [800, 330, 0.85], [1330, 520, 1], [1365, 540, 0.85]]) +
+        montanhas([[700, 120, 150, 95], [820, 150, 210, 140], [930, 130, 160, 100], [1250, 120, 170, 110], [1360, 100, 150, 80],
+                   [1545, 560, 120, 80], [1470, 585, 150, 100], [70, 470, 110, 70]]) +
+        arvores([[650, 470, 1], [690, 495, 1.15], [728, 470, 0.9], [760, 900, 1], [795, 925, 1.2], [835, 895, 0.9],
+                 [330, 470, 0.9], [985, 610, 1], [1020, 640, 1.1], [1190, 470, 0.9], [1225, 495, 1.05], [80, 560, 1.1], [118, 585, 0.9],
+                 [800, 330, 0.85], [370, 920, 1], [405, 945, 0.85], [1380, 520, 1], [960, 880, 0.9]]) +
         // estrada (base tracejada) e trilha morta da Ilha
         '<path class="mm-estrada-leito" d="' + caminhoContinuo(segmentosEstrada) + '"/>' +
         '<g class="mm-estrada">' +
@@ -387,12 +596,12 @@
           '<path d="M-26 -11h52M-26 11h52" stroke="' + TINTA + '" stroke-width="3"/>' +
           '<path d="M-22 -11v22M-12 -11v22M-2 -11v22M8 -11v22M18 -11v22" stroke="' + TINTA + '" stroke-width="1.6"/>' +
         "</g>" +
-        // cartucho do título e escala
-        '<g class="mm-cartucho"><path d="M40 930h300l14 22l-14 22H40l-14-22z"/>' +
-          '<text x="190" y="960" text-anchor="middle">Terras de Borgestrável</text></g>' +
-        '<g class="mm-escala"><path d="M1400 70h160M1400 64v12M1440 66v8M1480 64v12M1520 66v8M1560 64v12"/>' +
-          '<path d="M1400 70h40" stroke-width="6"/><path d="M1480 70h40" stroke-width="6"/>' +
-          '<text x="1480" y="52" text-anchor="middle">uma légua mágica</text></g>' +
+        // rosas-dos-ventos, cartucho, escala e moldura graduada
+        rosaDosVentos(560, 850, 62, true) +
+        rosaDosVentos(1290, 440, 30, false) +
+        cartucho() +
+        escala() +
+        moldura() +
       "</svg>" +
       // nuvens que passam por cima da carta (só enfeite)
       '<span class="mm-nuvem mm-nuvem-1" aria-hidden="true"></span>' +
@@ -691,6 +900,7 @@
   function decorar() {
     var lista = document.getElementById("lista-blocos");
     if (!lista) return;
+    garantirDefsGlobais();
     if (ehMapaDesktop() && lista.querySelector(".mapa-reino-grid")) montarCarta(lista);
     else if (lista.querySelector(":scope > [data-bloco-id]")) { montarTrilha(lista); vigiarTamanho(lista); }
   }
