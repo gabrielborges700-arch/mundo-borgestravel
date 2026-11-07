@@ -120,6 +120,14 @@
     el("rect", { x: x, y: y, width: w, height: h }, clip);
     el("path", { d: d, stroke: TINTA, "stroke-width": 1, opacity: 0.5, "clip-path": "url(#" + clipId + ")" }, pai);
   }
+  // Hachura de gravura (linhas finas inclinadas) para as sombras das cenas
+  function hachura45(svg, densa) {
+    var id = "svhach" + (++contador);
+    var defs = svg.querySelector("defs") || el("defs", null, svg);
+    var pt = el("pattern", { id: id, width: densa ? 3 : 4, height: densa ? 3 : 4, patternUnits: "userSpaceOnUse", patternTransform: "rotate(40)" }, defs);
+    el("line", { x1: 0, y1: 0, x2: 0, y2: densa ? 3 : 4, stroke: TINTA, "stroke-width": densa ? 0.9 : 0.8, "stroke-opacity": 0.6 }, pt);
+    return "url(#" + id + ")";
+  }
   function palco(painel, vb, larguraVB, alturaVB, onde, antesDe) {
     var caixa = document.createElement("div");
     caixa.className = "sv-palco";
@@ -188,6 +196,7 @@
     var setasVento = [];
     for (var i = 0; i < 5; i++) setasVento.push(criarSeta(svg, "#4e7c8a", 2.4, "sv-seta-vento"));
     var torre = el("path", { class: "sv-torre" }, svg);
+    var sombraTorre = el("path", { fill: hachura45(svg, true), class: "sv-sombra" }, svg);
     var andares = el("path", { class: "sv-torre-andares" }, svg);
     var topo = el("g", null, svg);
     var cupula = el("path", { class: "sv-torre-topo" }, topo);
@@ -207,16 +216,18 @@
     function forma(xi) { return xi * xi * (6 - 4 * xi + xi * xi) / 3; }
 
     function desenhar(deslocTopo, anguloPendulo) {
-      var esq = [], dir = [], linhas = "";
+      var esq = [], dir = [], meio = [], linhas = "";
       for (var k = 0; k <= 12; k++) {
         var xi = k / 12, y = BASE - xi * H;
         var u = deslocTopo * forma(xi);
         var w = (LB + (LT - LB) * xi) / 2;
         esq.push(n1(XC + u - w) + " " + n1(y));
         dir.unshift(n1(XC + u + w) + " " + n1(y));
+        meio.push(n1(XC + u + w * 0.15) + " " + n1(y));
         if (k > 0 && k < 12 && k % 2 === 0) linhas += "M" + n1(XC + u - w + 3) + " " + n1(y) + "H" + n1(XC + u + w - 3);
       }
       torre.setAttribute("d", "M" + esq.join("L") + "L" + dir.join("L") + "Z");
+      sombraTorre.setAttribute("d", "M" + meio.join("L") + "L" + dir.join("L") + "Z");
       andares.setAttribute("d", linhas);
       var ut = deslocTopo, yt = BASE - H;
       cupula.setAttribute("d", "M" + n1(XC + ut - LT / 2 - 3) + " " + yt + "L" + n1(XC + ut) + " " + (yt - 22) + "L" + n1(XC + ut + LT / 2 + 3) + " " + yt + "Z");
@@ -284,8 +295,10 @@
     var svg = c.svg;
     chao(svg, 205, 600);
     // colunas
+    var hach07 = hachura45(svg);
     [150, 450].forEach(function (x) {
       el("rect", { x: x - 16, y: 150, width: 32, height: 55, class: "sv-pedra" }, svg);
+      el("rect", { x: x + 4, y: 150, width: 12, height: 55, fill: hach07, class: "sv-sombra" }, svg);
       el("path", { d: "M" + (x - 16) + " 168h32M" + (x - 16) + " 186h32", class: "sv-juntas" }, svg);
     });
     var reacaoE = criarSeta(svg, CIANO, 4, "sv-seta-reacao");
@@ -294,6 +307,7 @@
     var viga = el("g", { class: "sv-viga-grupo" }, svg);
     el("rect", { x: 100, y: 136, width: 400, height: 14, rx: 2, class: "sv-madeira" }, viga);
     el("path", { d: "M110 141h120M260 145h90M380 140h110", class: "sv-veio" }, viga);
+    el("rect", { x: 100, y: 145, width: 400, height: 5, fill: hach07, class: "sv-sombra" }, viga);
     var pesoE = criarSeta(viga, "#c75b12", 4, "sv-seta-peso");
     var pesoD = criarSeta(viga, "#c75b12", 4, "sv-seta-peso");
     var caixaE = el("rect", { width: 30, height: 22, rx: 3, class: "sv-caixa-peso" }, viga);
@@ -343,11 +357,13 @@
     chao(svg, 208, 600);
     var CX = 300, CY = 160, RI = 84, RE = 112;
     function ponto(r, aGraus) { var a = aGraus * Math.PI / 180; return [CX + r * Math.cos(a), CY - r * Math.sin(a)]; }
-    function aduela(a1, a2) {
-      var p1 = ponto(RE, a1), p2 = ponto(RE, a2), p3 = ponto(RI, a2), p4 = ponto(RI, a1);
-      return "M" + n1(p1[0]) + " " + n1(p1[1]) + "A" + RE + " " + RE + " 0 0 " + (a1 > a2 ? 1 : 0) + " " + n1(p2[0]) + " " + n1(p2[1]) +
-        "L" + n1(p3[0]) + " " + n1(p3[1]) + "A" + RI + " " + RI + " 0 0 " + (a1 > a2 ? 0 : 1) + " " + n1(p4[0]) + " " + n1(p4[1]) + "Z";
+    function aduela(a1, a2, rIn, rOut) {
+      var ri = rIn || RI, re = rOut || RE;
+      var p1 = ponto(re, a1), p2 = ponto(re, a2), p3 = ponto(ri, a2), p4 = ponto(ri, a1);
+      return "M" + n1(p1[0]) + " " + n1(p1[1]) + "A" + re + " " + re + " 0 0 " + (a1 > a2 ? 1 : 0) + " " + n1(p2[0]) + " " + n1(p2[1]) +
+        "L" + n1(p3[0]) + " " + n1(p3[1]) + "A" + ri + " " + ri + " 0 0 " + (a1 > a2 ? 0 : 1) + " " + n1(p4[0]) + " " + n1(p4[1]) + "Z";
     }
+    var hachArco = hachura45(svg);
     // 5 peças, na ordem dos botões: pilar E, pilar D, ombro E, ombro D, pedra de fecho
     var formas = [
       ["M" + (CX - RE - 14) + " " + CY + "H" + (CX - RI + 4) + "V208H" + (CX - RE - 14) + "Z"],
@@ -368,12 +384,21 @@
     el("path", { d: montantes, class: "sv-cimbre-escora" }, cimbre);
     texto(cimbre, CX, CY + 30, "cimbre de madeira", { "text-anchor": "middle", class: "sv-texto sv-nota" });
 
+    // sombras: o lado de dentro do arco (intradorso) e a face direita dos pilares
+    var sombras = [
+      ["M" + (CX - RI - 8) + " " + CY + "H" + (CX - RI + 4) + "V208H" + (CX - RI - 8) + "Z"],
+      ["M" + (CX + RE + 2) + " " + CY + "H" + (CX + RE + 14) + "V208H" + (CX + RE + 2) + "Z"],
+      [aduela(180, 156, RI, RI + 9), aduela(156, 132, RI, RI + 9), aduela(132, 106, RI, RI + 9)],
+      [aduela(74, 48, RI, RI + 9), aduela(48, 24, RI, RI + 9), aduela(24, 0, RI, RI + 9)],
+      [aduela(106, 74, RI, RI + 9)],
+    ];
     var grupos = formas.map(function (lista, i) {
       var g = el("g", { class: "sv-peca", "data-peca": i }, svg);
       lista.forEach(function (d) {
         el("path", { d: d, class: "sv-peca-fantasma" }, g);
         el("path", { d: d, class: "sv-pedra sv-peca-pedra" }, g);
       });
+      sombras[i].forEach(function (d) { el("path", { d: d, fill: hachArco, class: "sv-sombra sv-peca-pedra" }, g); });
       return g;
     });
     // empuxo: compressão descendo pelo arco e empurrando os pilares para fora
@@ -517,6 +542,7 @@
     var X = 300, LARG = 90, TOPO0 = 64, BASE = 222;
     var grupo = el("g", { class: "sv-pilar" }, svg);
     var corpo = el("rect", { x: X - LARG / 2, width: LARG, class: "sv-pilar-corpo" }, grupo);
+    var sombraPilar = el("rect", { x: X + LARG * 0.22, width: LARG * 0.28, fill: hachura45(svg, true), class: "sv-sombra" }, grupo);
     var clip = el("clipPath", { id: idClip }, defs);
     var clipRect = el("rect", { x: X - LARG / 2 - 6, width: LARG + 12 }, clip);
     var trincas = el("g", { class: "sv-trincas", "clip-path": "url(#" + idClip + ")" }, grupo);
@@ -593,6 +619,7 @@
       var topo = TOPO0 + encurta;
       attr(corpo, { y: n1(topo), height: n1(BASE - topo), fill: "url(#" + mat.fundo + ")" });
       attr(clipRect, { y: n1(topo), height: n1(BASE - topo) });
+      attr(sombraPilar, { y: n1(topo), height: n1(BASE - topo) });
       attr(chapa, { y: n1(topo - 12) });
       [X - 46, X, X + 46].forEach(function (x, i) {
         var tam = 14 + carga * 0.22;
@@ -755,6 +782,9 @@
     el("rect", { x: 40, y: Y + ESP + 12, width: 56, height: 22, rx: 3, fill: "#5c5c5c", stroke: TINTA, "stroke-width": 1.5 }, svg);
     el("rect", { x: 60, y: Y - 12, width: 36, height: ESP + 24, fill: "#7a7a7a", stroke: TINTA, "stroke-width": 1.5 }, svg);
     el("rect", { x: 30, y: Y + ESP + 34, width: 76, height: 70, fill: "#6a6a6a", stroke: TINTA, "stroke-width": 1.5 }, svg);
+    var hachTorno = hachura45(svg, true);
+    el("rect", { x: 80, y: Y - 12, width: 16, height: ESP + 24, fill: hachTorno, class: "sv-sombra" }, svg);
+    el("rect", { x: 82, y: Y + ESP + 34, width: 24, height: 70, fill: hachTorno, class: "sv-sombra" }, svg);
     var barra = el("g", { class: "sv-barra" }, svg);
     barra.style.transformOrigin = XT + "px " + (Y + ESP / 2) + "px";
     var pedacoFixo = el("rect", { x: XT, y: Y, width: 14, height: ESP, class: "sv-aco" }, barra);
@@ -920,10 +950,12 @@
       { x: 86, w: 62, h: 110 }, { x: 162, w: 58, h: 150 }, { x: 410, w: 64, h: 125 }, { x: 490, w: 72, h: 92 },
     ];
     var corposPredios = [], janelas = [], bandeiras = [], trincasP = [], travas = [];
+    var hachCidade = hachura45(svg);
     predios.forEach(function (p, i) {
       var g = el("g", { class: "sv-predio" }, cidade);
       g.style.transformOrigin = (p.x + p.w / 2) + "px 200px";
       corposPredios.push({ g: g, corpo: el("rect", { x: p.x, y: 200 - p.h, width: p.w, height: p.h, stroke: TINTA, "stroke-width": 1.5 }, g), p: p });
+      el("rect", { x: p.x + p.w * 0.72, y: 200 - p.h, width: p.w * 0.28, height: p.h, fill: hachCidade, class: "sv-sombra" }, g);
       var dj = "";
       for (var yy = 200 - p.h + 14; yy < 188; yy += 22) for (var xx = p.x + 10; xx < p.x + p.w - 12; xx += 18) dj += "M" + xx + " " + yy + "h9v12h-9z";
       janelas.push(el("path", { d: dj, class: "sv-janelas" }, g));
@@ -1002,12 +1034,36 @@
     return "bloco" + id.split(".")[0];
   }
 
+  var PRANCHAS = {
+    "0.3": ["I", "Da torre açoitada pelo vento"],
+    "0.7": ["II", "Do equilíbrio da viga sobre duas colunas"],
+    "0.8": ["III", "Do arco romano e do seu cimbre"],
+    "0.9": ["IV", "Da viga que verga sob o peso"],
+    bloco1: ["V", "Do pilar e da força que o esmaga"],
+    bloco2: ["VI", "Da régua e da justa medida"],
+    bloco3: ["VII", "Da mola e da lei de Hooke"],
+    bloco4: ["VIII", "Da barra cansada pelos ciclos"],
+    bloco5: ["IX", "Do momento que dobra a viga"],
+    bloco6: ["X", "Da cidade entre a beleza e a segurança"],
+  };
+  function legenda(painel, chave) {
+    var cena = painel.querySelector(".sv-palco, .sv-caixa-cena");
+    var dados = PRANCHAS[chave];
+    if (!cena || !dados || painel.querySelector(".sv-legenda")) return;
+    var p = document.createElement("p");
+    p.className = "sv-legenda";
+    p.setAttribute("aria-hidden", "true");
+    p.innerHTML = "<b>Prancha " + dados[0] + "</b> " + dados[1];
+    cena.parentNode.insertBefore(p, cena.nextSibling);
+  }
+
   function montarCena(painel, runaId) {
     var chave = chaveCena(runaId);
     var construtor = chave && CENAS[chave];
     if (!construtor || painel.classList.contains("sv-vivo")) return;
     var atualizar = construtor(painel);
     if (!atualizar) return;
+    legenda(painel, chave);
     painel.classList.add("sv-vivo", "sv-" + chave.replace(".", "-"));
     var agendado = false;
     function agendar() {
