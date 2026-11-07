@@ -1,0 +1,399 @@
+/* =====================================================================
+   mapa-mundo.css — Mapa-mundo vivo (par do mapa-mundo.js)
+   ---------------------------------------------------------------------
+   Vem DEPOIS de todos os outros CSS. Tirar o <link> e o <script> do
+   mapa-mundo desfaz tudo: o app.js continua desenhando a grade/acordeão
+   de sempre.
+   Seções:
+     1. Peças comuns: ilustrações, nome, névoa, alfinete
+     2. Computador (≥ 1024 px): a carta 16:10, o palco e a câmera
+     3. Celular e tablet: a trilha vertical
+     4. Movimento (só sem prefers-reduced-motion)
+   ===================================================================== */
+
+/* ---------- 1. Peças comuns ---------- */
+.mm-local { position: relative; display: block; width: 100%; }
+.mm-ilustra { display: block; width: 100%; height: auto; overflow: visible; }
+.mm-ilustra .mm-chao { fill: rgba(59, 36, 18, 0.16); }
+.mm-ilustra .mm-halo { fill: none; }
+.mm-ilustra .mm-acento { fill: var(--cor-reino, #b8892c); }
+.mm-ilustra .mm-acento-escuro { filter: brightness(0.82); }
+.mm-ilustra .mm-portal-fundo { fill: var(--cor-reino, #5c6bc0); opacity: 0.92; }
+.mm-ilustra .mm-agua { fill: rgba(70, 112, 128, 0.28); stroke: rgba(59, 36, 18, 0.45); stroke-width: 1; }
+.mm-ilustra .mm-onda { fill: none; stroke: rgba(59, 36, 18, 0.45); stroke-width: 1.2; stroke-linecap: round; }
+.mm-ilustra .mm-colina { fill: #cdbb8c; stroke: #3b2412; stroke-width: 1.4; }
+.mm-ilustra .mm-listra { stroke: var(--cor-reino, #b8892c); stroke-width: 3; opacity: 0.75; }
+.mm-ilustra .mm-cabos path { stroke: #3b2412; stroke-width: 1.1; fill: none; }
+.mm-ilustra .mm-cabos-brilho path { stroke: #fff2c4; stroke-width: 1.4; fill: none; stroke-dasharray: 6 90; opacity: 0; }
+.mm-ilustra .mm-fumaca circle { fill: rgba(250, 243, 224, 0.85); stroke: rgba(59, 36, 18, 0.35); stroke-width: 0.8; }
+.mm-ilustra .mm-fumaca-escura circle { fill: rgba(120, 104, 88, 0.55); }
+.mm-ilustra .mm-faiscas circle { fill: #ffb347; opacity: 0; }
+.mm-ilustra .mm-fornalha { fill: #e8702a; }
+.mm-ilustra .mm-raio { fill: rgba(255, 246, 216, 0.55); opacity: 0.35; }
+.mm-ilustra .mm-bandeira { fill: var(--cor-reino, #ab47bc); stroke: #3b2412; stroke-width: 1; }
+.mm-ilustra .mm-olho { fill: #b3261e; }
+.mm-ilustra .mm-nevoa-ilha ellipse { fill: rgba(240, 232, 214, 0.55); }
+
+/* Nome do lugar: etiqueta de pergaminho com a faixa na cor do reino */
+.mm-nome {
+  display: block; position: relative; z-index: 2;
+  margin: -0.35rem auto 0; padding: 0.2rem 0.6rem 0.25rem;
+  width: max-content; max-width: 170%;
+  font-family: var(--font-titulo, "MedievalSharp", Georgia, serif);
+  font-size: 0.86rem; line-height: 1.12; text-align: center; color: var(--tinta, #2b1d10);
+  background: #f8efd8;
+  border: 1px solid rgba(59, 36, 18, 0.7);
+  border-top: 3px solid var(--cor-reino, #b8892c);
+  border-radius: 3px;
+  box-shadow: 0 2px 0 rgba(59, 36, 18, 0.18), 0 6px 14px rgba(59, 36, 18, 0.18);
+  text-wrap: balance;
+}
+.mm-nome small {
+  display: block; margin-bottom: 0.05rem;
+  font-family: var(--font-unicase, "Cinzel", Georgia, serif); font-weight: 700;
+  font-size: 0.56rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--vinho, #7a1f1f);
+}
+
+/* Névoa dos lugares ainda não visitados ("terra desconhecida") */
+.mm-nevoa { display: none; position: absolute; left: 0; right: 0; top: 0; height: 75%; pointer-events: none; z-index: 1; }
+.mm-nevoa i {
+  position: absolute; display: block; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(250, 244, 228, 0.62), rgba(250, 244, 228, 0));
+}
+.mm-nevoa i:nth-child(1) { width: 70%; height: 46%; left: -6%; top: 34%; }
+.mm-nevoa i:nth-child(2) { width: 64%; height: 40%; left: 44%; top: 58%; }
+.mm-nevoa i:nth-child(3) { width: 56%; height: 36%; left: 18%; top: 4%; }
+.estado-nao-iniciado .mm-nevoa { display: block; }
+.estado-nao-iniciado .mm-ilustra { filter: sepia(0.35) saturate(0.7); }
+
+/* Reino concluído: auréola dourada no chão e o lugar "aceso" */
+.estado-completo .mm-ilustra .mm-halo {
+  fill: rgba(232, 190, 92, 0.38); stroke: rgba(184, 137, 44, 0.75); stroke-width: 1.2;
+}
+
+/* "Você está aqui" */
+.mm-pino {
+  position: absolute; z-index: 3; pointer-events: none;
+  display: flex; flex-direction: column; align-items: center;
+}
+.mm-pino svg { width: 26px; height: 35px; filter: drop-shadow(0 3px 2px rgba(43, 22, 8, 0.35)); }
+.mm-pino b {
+  margin-top: 2px; padding: 0.08rem 0.4rem; white-space: nowrap;
+  font-family: var(--font-unicase, "Cinzel", Georgia, serif); font-size: 0.55rem; letter-spacing: 0.08em;
+  color: #fbf3dc; background: #8b1a1a; border-radius: 2px;
+  box-shadow: 0 2px 4px rgba(43, 22, 8, 0.35);
+}
+
+/* Texto escondido só da vista (o leitor de tela continua lendo) */
+.mm-so-leitor {
+  position: absolute !important; width: 1px !important; height: 1px !important; overflow: hidden !important;
+  clip: rect(0 0 0 0) !important; clip-path: inset(50%) !important; white-space: nowrap !important;
+  margin: -1px !important; padding: 0 !important; border: 0 !important;
+}
+
+/* Estrada (carta e trilha usam as mesmas classes) */
+.mm-estrada-leito, .mm-trilha-leito { fill: none; stroke: rgba(233, 218, 182, 0.75); stroke-width: 15; stroke-linecap: round; }
+.mm-trilha-leito { stroke-width: 12; }
+.mm-estrada-seg {
+  fill: none; stroke: rgba(92, 62, 34, 0.72); stroke-width: 4.5;
+  stroke-linecap: round; stroke-dasharray: 12 10;
+}
+.mm-estrada-seg.mm-acesa { stroke: #b8892c; stroke-width: 6; stroke-dasharray: 16 9; filter: drop-shadow(0 0 4px rgba(232, 190, 92, 0.85)); }
+.mm-trilha-morta { fill: none; stroke: rgba(150, 30, 30, 0.6); stroke-width: 3.5; stroke-linecap: round; stroke-dasharray: 2 11; }
+
+/* ---------- 2. Computador: a carta ---------- */
+@media (min-width: 1024px) {
+  .mm-palco {
+    position: relative; overflow: hidden;
+    margin: 0 0 2.25rem; border-radius: 14px;
+    background:
+      radial-gradient(ellipse at 50% 45%, rgba(255, 250, 235, 0.35), rgba(255, 250, 235, 0) 60%),
+      radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 55%, rgba(110, 70, 30, 0.22)),
+      #efe1bf;
+    box-shadow:
+      0 0 0 1px rgba(59, 36, 18, 0.55),
+      0 0 0 6px #f4e8cc,
+      0 0 0 7px rgba(59, 36, 18, 0.45),
+      0 18px 40px rgba(43, 22, 8, 0.28);
+    isolation: isolate;
+  }
+
+  .mapa-reino-grid.mm-mapa {
+    display: block; position: relative; width: 100%;
+    aspect-ratio: 16 / 10; margin: 0; gap: 0;
+    grid-template-areas: none; grid-template-columns: none;
+    transform-origin: var(--mm-foco-x, 50%) var(--mm-foco-y, 50%);
+    transition: transform 0.9s cubic-bezier(0.22, 0.7, 0.18, 1);
+    will-change: transform;
+  }
+  .mapa-reino-grid.mm-mapa.mm-zoom {
+    transform: scale(var(--mm-escala, 1.7)) translate(var(--mm-tx, 0), var(--mm-ty, 0));
+  }
+  .mapa-reino-grid.mm-mapa.mm-sem-transicao { transition: none; }
+
+  .mm-terreno { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+  .mm-terreno .mm-mar { fill: rgba(86, 128, 140, 0.2); }
+  .mm-terreno .mm-costa { fill: none; stroke: rgba(59, 36, 18, 0.7); stroke-width: 3; }
+  .mm-terreno .mm-costa-eco { fill: none; stroke: rgba(59, 36, 18, 0.25); stroke-width: 2; stroke-dasharray: 3 7; }
+  .mm-terreno .mm-onda-mar { fill: none; stroke: rgba(59, 36, 18, 0.4); stroke-width: 2.4; stroke-linecap: round; }
+  .mm-terreno .mm-ilha-terra { fill: #d9c79e; stroke: rgba(59, 36, 18, 0.7); stroke-width: 3; }
+  .mm-terreno .mm-rio-margem { fill: none; stroke: rgba(59, 36, 18, 0.55); stroke-width: 15; stroke-linecap: round; }
+  .mm-terreno .mm-rio { fill: none; stroke: #a9c3c4; stroke-width: 10; stroke-linecap: round; }
+  .mm-terreno .mm-montanha { fill: #e6d6b0; stroke: rgba(59, 36, 18, 0.75); stroke-width: 2.5; stroke-linejoin: round; }
+  .mm-terreno .mm-montanha-sombra { fill: rgba(59, 36, 18, 0.16); }
+  .mm-terreno .mm-neve { fill: #fbf6e8; }
+  .mm-terreno .mm-arvore { fill: #8a9a62; stroke: rgba(59, 36, 18, 0.75); stroke-width: 2; stroke-linejoin: round; }
+  .mm-terreno .mm-tronco { stroke: rgba(59, 36, 18, 0.85); stroke-width: 3; }
+  .mm-terreno .mm-estrada-leito { stroke-width: 22; }
+  .mm-terreno .mm-estrada-seg { stroke-width: 6; stroke-dasharray: 18 14; }
+  .mm-terreno .mm-estrada-seg.mm-acesa { stroke-width: 8; stroke-dasharray: 22 12; }
+  .mm-terreno .mm-trilha-morta { stroke-width: 5; stroke-dasharray: 3 16; }
+  .mm-terreno .mm-cartucho path { fill: #f8efd8; stroke: rgba(59, 36, 18, 0.7); stroke-width: 2.5; }
+  .mm-terreno .mm-cartucho text {
+    font-family: var(--font-titulo, "MedievalSharp", Georgia, serif); font-size: 26px; fill: var(--vinho, #7a1f1f);
+  }
+  .mm-terreno .mm-escala path { fill: none; stroke: rgba(59, 36, 18, 0.75); stroke-width: 2.5; }
+  .mm-terreno .mm-escala text {
+    font-family: var(--font-body, Georgia, serif); font-style: italic; font-size: 20px; fill: rgba(59, 36, 18, 0.85);
+  }
+
+  .mm-nuvem {
+    position: absolute; z-index: 3; pointer-events: none;
+    width: 22%; aspect-ratio: 3 / 1; border-radius: 50%;
+    background:
+      radial-gradient(closest-side at 30% 60%, rgba(255, 253, 245, 0.75), rgba(255, 253, 245, 0)),
+      radial-gradient(closest-side at 62% 45%, rgba(255, 253, 245, 0.8), rgba(255, 253, 245, 0)),
+      radial-gradient(closest-side at 80% 65%, rgba(255, 253, 245, 0.6), rgba(255, 253, 245, 0));
+  }
+  .mm-nuvem-1 { top: 6%; left: 38%; }
+  .mm-nuvem-2 { top: 58%; left: 64%; width: 17%; opacity: 0.8; }
+
+  /* Os quadros do mapa viram LUGARES soltos na carta */
+  .mm-mapa > .tile-reino.painel-reino-premium {
+    --mm-larg: 15%;
+    position: absolute; z-index: 2;
+    left: calc(var(--mm-x, 50) * 1%); top: calc(var(--mm-y, 50) * 1%);
+    width: var(--mm-larg); min-height: 0;
+    margin: calc(var(--mm-larg) * -0.65) 0 0 calc(var(--mm-larg) / -2);
+    padding: 0;
+    background: none; border: 0; border-radius: 0; box-shadow: none;
+    filter: none; transform: none; overflow: visible;
+  }
+  .mm-mapa > .tile-reino.painel-reino-premium::before,
+  .mm-mapa > .tile-reino.painel-reino-premium::after { display: none !important; }
+  .mm-mapa > .tile-reino .tile-clima,
+  .mm-mapa > .tile-reino .tile-brasao,
+  .mm-mapa > .tile-reino .tile-numero,
+  .mm-mapa > .tile-reino .prova-compacta { display: none !important; }
+
+  .mm-mapa > .tile-reino .tile-cabecalho {
+    position: relative; display: flex; flex-direction: column; align-items: center;
+    gap: 0.3rem; padding: 0; background: none; border: 0; box-shadow: none; opacity: 1; filter: none;
+    border-radius: 12px; outline-offset: 4px;
+  }
+  .mm-mapa > .tile-reino .mm-ilustra {
+    filter: drop-shadow(0 6px 6px rgba(43, 22, 8, 0.22));
+    transition: transform 0.35s cubic-bezier(0.3, 0.8, 0.3, 1.3), filter 0.35s ease;
+  }
+  .mm-mapa > .tile-reino.estado-nao-iniciado .mm-ilustra {
+    filter: sepia(0.35) saturate(0.7) drop-shadow(0 6px 6px rgba(43, 22, 8, 0.18));
+  }
+  .mm-mapa > .tile-reino .tile-cabecalho:hover .mm-ilustra,
+  .mm-mapa > .tile-reino .tile-cabecalho:focus-visible .mm-ilustra { transform: translateY(-5px) scale(1.06); }
+  .mm-mapa > .tile-reino .tile-cabecalho:focus-visible { outline: 3px solid var(--vinho, #7a1f1f); }
+
+  .mm-mapa > .tile-reino .tile-estado {
+    margin-top: 0.1rem; padding: 0.05rem 0.5rem;
+    font-size: 0.66rem; font-weight: 700; color: #fbf3dc;
+    background: rgba(58, 36, 18, 0.88); border: 1px solid rgba(201, 161, 74, 0.8); border-radius: 999px;
+  }
+  .mm-mapa > .tile-reino.estado-completo .tile-estado { background: #7a5a12; color: #fff6d8; }
+
+  /* Subtítulo do reino: aparece como dica ao passar o mouse ou focar */
+  .mm-mapa > .tile-reino .tile-subtitulo {
+    position: absolute; top: calc(100% + 0.45rem); left: 50%; z-index: 6;
+    width: max-content; max-width: 220px; padding: 0.35rem 0.6rem;
+    font-size: 0.76rem; line-height: 1.25; color: var(--tinta, #2b1d10); text-align: center;
+    background: #fbf3dc; border: 1px solid rgba(59, 36, 18, 0.55); border-radius: 6px;
+    box-shadow: 0 8px 20px rgba(43, 22, 8, 0.25);
+    opacity: 0; visibility: hidden; transform: translate(-50%, -4px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+    pointer-events: none;
+  }
+  .mm-mapa > .tile-reino.mm-dica-cima .tile-subtitulo { top: auto; bottom: calc(100% - 1.2rem); transform: translate(-50%, 4px); }
+  .mm-mapa > .tile-reino .tile-cabecalho:hover .tile-subtitulo,
+  .mm-mapa > .tile-reino .tile-cabecalho:focus-visible .tile-subtitulo {
+    opacity: 1; visibility: visible; transform: translate(-50%, 0);
+  }
+
+  /* Botões de Julgamento (jogo.js) viram estandartes pequenos sob o nome */
+  .mm-mapa > .tile-reino > .btn-gotico {
+    display: block; width: max-content !important; max-width: 160%; margin: 0.35rem auto 0 !important;
+    position: relative; left: 50%; transform: translateX(-50%);
+    font-size: 0.56rem !important; padding: 0.28rem 0.55rem !important; white-space: nowrap;
+  }
+
+  .mm-mapa > .tile-reino .mm-pino { right: -6%; top: -22%; }
+
+  /* Palco com o reino aberto: véu sobre a carta e o quadro de runas ao lado */
+  .mm-veu {
+    position: absolute; inset: 0; z-index: 4; cursor: zoom-out;
+    background: linear-gradient(90deg, rgba(36, 22, 10, 0.05) 0%, rgba(36, 22, 10, 0.05) 36%, rgba(36, 22, 10, 0.55) 46%, rgba(36, 22, 10, 0.62) 100%);
+  }
+  .mm-painel-esq .mm-veu {
+    background: linear-gradient(270deg, rgba(36, 22, 10, 0.05) 0%, rgba(36, 22, 10, 0.05) 36%, rgba(36, 22, 10, 0.55) 46%, rgba(36, 22, 10, 0.62) 100%);
+  }
+  .mm-palco > .painel-runas-aberto {
+    position: absolute; z-index: 5; top: 3.5%; bottom: 3.5%;
+    width: 58%; margin: 0 !important; overflow-y: auto; overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+  .mm-painel-dir > .painel-runas-aberto { right: 2.5%; }
+  .mm-painel-esq > .painel-runas-aberto { left: 2.5%; }
+  .mm-palco > .painel-runas-aberto .lista-runas { grid-template-columns: repeat(2, 1fr) !important; }
+
+  .mm-cena-reino { width: 104px; flex: 0 0 104px; margin: -0.6rem 0.2rem -0.4rem -0.4rem; }
+  .mm-palco .painel-runas-cabecalho { align-items: center; }
+  .mm-palco .painel-runas-cabecalho .painel-runas-identidade { flex: 1; }
+}
+
+/* ---------- 3. Celular e tablet: a trilha vertical ---------- */
+@media (max-width: 1023.98px) {
+  #lista-blocos.mm-trilha { position: relative; padding-top: 0.5rem; }
+  .mm-trilha-svg { position: absolute; left: 0; top: 0; z-index: 0; pointer-events: none; overflow: visible; }
+  #lista-blocos.mm-trilha > [data-bloco-id] { position: relative; z-index: 1; }
+
+  /* Parada da trilha (reino fechado): sÃ³ o desenho e a etiqueta, sem quadro */
+  #lista-blocos.mm-trilha > .mm-no:not(.mm-aberto) {
+    width: 100%; max-width: 560px; margin: 0 auto 1.15rem !important; padding: 0 !important;
+    background: none !important; border: 0 !important; box-shadow: none !important;
+    border-radius: 0; filter: none;
+  }
+  #lista-blocos.mm-trilha > .mm-no:not(.mm-aberto)::before,
+  #lista-blocos.mm-trilha > .mm-no:not(.mm-aberto)::after { display: none !important; }
+  #lista-blocos.mm-trilha > .mm-no:not(.mm-aberto) > .divisor-rune { display: none; }
+
+  .mm-no .cabecalho-bloco { position: relative; gap: 0.7rem; align-items: center !important; }
+  .mm-no .cabecalho-bloco > .mm-local { width: 116px; flex: 0 0 116px; }
+  .mm-no .cabecalho-bloco > .mm-nome { display: none; }
+  .mm-no.mm-lado-dir:not(.mm-aberto) .cabecalho-bloco { flex-direction: row-reverse; }
+
+  #lista-blocos.mm-trilha > .mm-no:not(.mm-aberto) .cabecalho-identidade {
+    flex: 1; min-width: 0; padding: 0.55rem 0.75rem;
+    background: #f8efd8; border: 1px solid rgba(59, 36, 18, 0.6);
+    border-left: 4px solid var(--cor-reino, #b8892c); border-radius: 6px;
+    box-shadow: 0 3px 0 rgba(59, 36, 18, 0.12), 0 8px 16px rgba(43, 22, 8, 0.14);
+  }
+  #lista-blocos.mm-trilha > .mm-no.mm-lado-dir:not(.mm-aberto) .cabecalho-identidade {
+    border-left-width: 1px; border-right: 4px solid var(--cor-reino, #b8892c); text-align: right;
+  }
+  #lista-blocos.mm-trilha > .mm-no:not(.mm-aberto) .cabecalho-identidade .tile-brasao { display: none; }
+  #lista-blocos.mm-trilha > .mm-no:not(.mm-aberto) .titulo-reino {
+    color: var(--tinta, #2b1d10) !important; text-shadow: none !important;
+    font-size: 1.02rem !important; line-height: 1.15;
+  }
+  #lista-blocos.mm-trilha > .mm-no:not(.mm-aberto) .cabecalho-identidade p {
+    font-size: 0.8rem; line-height: 1.25; color: var(--tinta-suave, #5a4228) !important;
+  }
+  /* a setinha â–¾ some: o lugar inteiro Ã© o botÃ£o */
+  #lista-blocos.mm-trilha > .mm-no:not(.mm-aberto) .cabecalho-bloco > span:not([class]) { display: none; }
+  /* anel de progresso (painel-reino.js) vira um selo no canto do desenho */
+  #lista-blocos.mm-trilha > .mm-no:not(.mm-aberto) .cabecalho-bloco > .anel-reino {
+    position: absolute; left: 88px; top: 52px; z-index: 3; transform: scale(0.85);
+  }
+  #lista-blocos.mm-trilha > .mm-no.mm-lado-dir:not(.mm-aberto) .cabecalho-bloco > .anel-reino { left: auto; right: 88px; }
+  #lista-blocos.mm-trilha > .mm-no:not(.mm-aberto) > .btn-gotico,
+  #lista-blocos.mm-trilha > .mm-no:not(.mm-aberto) > [class*="prova"] { width: auto !important; margin: 0.4rem 0 0 128px !important; }
+  #lista-blocos.mm-trilha > .mm-no.mm-lado-dir:not(.mm-aberto) > .btn-gotico,
+  #lista-blocos.mm-trilha > .mm-no.mm-lado-dir:not(.mm-aberto) > [class*="prova"] { margin: 0.4rem 128px 0 0 !important; }
+
+  /* Reino aberto: o quadro de madeira de sempre, com o desenho no topo */
+  /* Reino aberto: o desenho fica "sentado" em cima do quadro, sem roubar a largura do título */
+  #lista-blocos.mm-trilha > .mm-no.mm-aberto { margin-top: 3.4rem; }
+  #lista-blocos.mm-trilha > .mm-no.mm-aberto .cabecalho-bloco > .mm-local {
+    position: absolute; right: 2.4rem; top: -4.9rem; width: 96px; flex: none; z-index: 2;
+  }
+  .mm-no .mm-pino { left: 62%; top: -26%; }
+
+  @media (max-width: 380px) {
+    .mm-no .cabecalho-bloco > .mm-local { width: 96px; flex-basis: 96px; }
+    #lista-blocos.mm-trilha > .mm-no:not(.mm-aberto) .cabecalho-bloco > .anel-reino { left: 70px; top: 40px; }
+    #lista-blocos.mm-trilha > .mm-no.mm-lado-dir:not(.mm-aberto) .cabecalho-bloco > .anel-reino { right: 70px; }
+    #lista-blocos.mm-trilha > .mm-no:not(.mm-aberto) > .btn-gotico,
+    #lista-blocos.mm-trilha > .mm-no:not(.mm-aberto) > [class*="prova"] { margin-left: 108px !important; }
+    #lista-blocos.mm-trilha > .mm-no.mm-lado-dir:not(.mm-aberto) > .btn-gotico,
+    #lista-blocos.mm-trilha > .mm-no.mm-lado-dir:not(.mm-aberto) > [class*="prova"] { margin-right: 108px !important; }
+  }
+}
+
+/* ---------- 4. Movimento ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .mm-ilustra .mm-gira { animation: mmGira 9s linear infinite; transform-origin: 80px 60px; }
+  .mm-ilustra .mm-gira-lento { animation-duration: 14s; }
+  .mm-ilustra .mm-moinho { animation-duration: 5s; }
+  .mm-ilustra .mm-farol { animation: mmFarol 6s ease-in-out infinite; }
+  .mm-ilustra .mm-pulsa { animation: mmPulsa 2.6s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+  .mm-ilustra .mm-chama { animation: mmChama 0.9s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: 50% 100%; }
+  .mm-ilustra .mm-chama-2 { animation-delay: -0.45s; }
+  .mm-ilustra .mm-fornalha { animation: mmFornalha 1.6s ease-in-out infinite alternate; }
+  .mm-ilustra .mm-fumaca circle { animation: mmFumaca 4.5s ease-out infinite; transform-box: fill-box; transform-origin: center; }
+  .mm-ilustra .mm-fumaca circle:nth-child(2) { animation-delay: -1.5s; }
+  .mm-ilustra .mm-fumaca circle:nth-child(3) { animation-delay: -3s; }
+  .mm-ilustra .mm-faiscas circle { animation: mmFaisca 1.8s ease-out infinite; }
+  .mm-ilustra .mm-faiscas circle:nth-child(2) { animation-delay: -0.6s; }
+  .mm-ilustra .mm-faiscas circle:nth-child(3) { animation-delay: -1.2s; }
+  .mm-ilustra .mm-cabos-brilho path { animation: mmTensao 3.2s linear infinite; }
+  .mm-ilustra .mm-cabos-brilho path:nth-child(2) { animation-delay: -0.8s; }
+  .mm-ilustra .mm-cabos-brilho path:nth-child(3) { animation-delay: -1.6s; }
+  .mm-ilustra .mm-cabos-brilho path:nth-child(4) { animation-delay: -2.4s; }
+  .mm-ilustra .mm-bandeira { animation: mmBandeira 1.4s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: 0 50%; }
+  .mm-ilustra .mm-bandeira-2 { animation-delay: -0.7s; }
+  .mm-ilustra .mm-olho { animation: mmOlho 3.4s ease-in-out infinite; }
+  .mm-ilustra .mm-onda { animation: mmOnda 3s ease-in-out infinite alternate; }
+  .mm-ilustra .mm-nevoa-ilha { animation: mmDeriva 7s ease-in-out infinite alternate; }
+
+  .estado-nao-iniciado .mm-nevoa i { animation: mmDeriva 9s ease-in-out infinite alternate; }
+  .estado-nao-iniciado .mm-nevoa i:nth-child(2) { animation-duration: 11s; animation-delay: -4s; }
+  .estado-nao-iniciado .mm-nevoa i:nth-child(3) { animation-duration: 13s; animation-delay: -7s; }
+
+  .mm-pino { animation: mmPino 2.2s ease-in-out infinite; }
+  .estado-completo .mm-ilustra .mm-halo { animation: mmHalo 3s ease-in-out infinite; }
+
+  .mm-estrada-seg.mm-acesa { animation: mmEstrada 1.6s linear infinite; }
+  .mm-terreno .mm-navio { animation: mmNavio 26s ease-in-out infinite alternate; }
+  .mm-terreno .mm-onda-mar { animation: mmOnda 4s ease-in-out infinite alternate; }
+  .mm-nuvem-1 { animation: mmNuvem 70s linear infinite; }
+  .mm-nuvem-2 { animation: mmNuvem 95s linear infinite reverse; }
+
+  /* Chegada no reino (computador): o quadro sobe depois que a câmera chega */
+  .mm-palco.mm-chegando > .painel-runas-aberto { animation: mmQuadroChega 0.75s 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+  .mm-palco.mm-chegando > .mm-veu { animation: mmAparece 0.6s ease both; }
+  /* Chegada no reino (celular): o lugar dá um "pulo" de boas-vindas */
+  .mm-no.mm-chegando .cabecalho-bloco > .mm-local { animation: mmPulo 0.7s cubic-bezier(0.3, 1.4, 0.4, 1) both; }
+  .mm-no.mm-chegando > :not(.cabecalho-bloco) { animation: mmAparece 0.6s 0.15s ease both; }
+}
+
+@keyframes mmGira { to { transform: rotate(360deg); } }
+@keyframes mmFarol { 0%, 100% { transform: rotate(-24deg); } 50% { transform: rotate(24deg); } }
+@keyframes mmPulsa { 0%, 100% { transform: scale(0.85); opacity: 0.65; } 50% { transform: scale(1.2); opacity: 1; } }
+@keyframes mmChama { from { transform: scaleY(0.85) skewX(-4deg); } to { transform: scaleY(1.15) skewX(4deg); } }
+@keyframes mmFornalha { from { fill: #e8702a; } to { fill: #f6b04a; } }
+@keyframes mmFumaca {
+  0% { transform: translate(0, 8px) scale(0.6); opacity: 0; }
+  25% { opacity: 0.9; }
+  100% { transform: translate(6px, -14px) scale(1.25); opacity: 0; }
+}
+@keyframes mmFaisca { 0% { opacity: 0; transform: translateY(6px); } 30% { opacity: 1; } 100% { opacity: 0; transform: translateY(-14px); } }
+@keyframes mmTensao { 0% { stroke-dashoffset: 96; opacity: 0; } 15% { opacity: 1; } 70% { opacity: 1; } 100% { stroke-dashoffset: 0; opacity: 0; } }
+@keyframes mmBandeira { from { transform: skewY(-5deg) scaleX(0.95); } to { transform: skewY(5deg) scaleX(1.03); } }
+@keyframes mmOlho { 0%, 100% { opacity: 0.45; } 50% { opacity: 1; } }
+@keyframes mmOnda { from { transform: translateX(-3px); } to { transform: translateX(3px); } }
+@keyframes mmDeriva { from { transform: translateX(-8%); } to { transform: translateX(8%); } }
+@keyframes mmPino { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+@keyframes mmHalo { 0%, 100% { opacity: 0.65; } 50% { opacity: 1; } }
+@keyframes mmEstrada { to { stroke-dashoffset: -25; } }
+@keyframes mmNavio { from { transform: translate(0, 0); } to { transform: translate(-120px, 14px); } }
+@keyframes mmNuvem { from { transform: translateX(-60%); } to { transform: translateX(260%); } }
+@keyframes mmQuadroChega { from { opacity: 0; transform: translateY(26px) scale(0.97); } to { opacity: 1; transform: none; } }
+@keyframes mmAparece { from { opacity: 0; } to { opacity: 1; } }
+@keyframes mmPulo { 0% { transform: scale(0.7) translateY(10px); } 60% { transform: scale(1.12) translateY(-4px); } 100% { transform: none; } }
