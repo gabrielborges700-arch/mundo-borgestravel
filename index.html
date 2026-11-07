@@ -48,6 +48,8 @@
   <link rel="stylesheet" href="estilos/vida.css?fr=20">
   <!-- Mapa-mundo vivo: a carta ilustrada dos reinos (computador) e a trilha (celular). Tirar esta linha e o mapa-mundo.js desfaz -->
   <link rel="stylesheet" href="estilos/mapa-mundo.css?fr=20">
+  <!-- A runa vira um livro com abas (História, Segredos, Simulador, Desafio). Tirar esta linha e o livro.js desfaz -->
+  <link rel="stylesheet" href="estilos/livro.css?fr=20">
 </head>
 <body>
 
@@ -149,6 +151,8 @@
   <script src="vida.js?fr=20"></script>
   <!-- mapa-mundo.js vem por último: encadeia renderizarListaBlocos e aposRenderizarBlocos depois de todos -->
   <script src="mapa-mundo.js?fr=20"></script>
+  <!-- livro.js depois de atlas/glossário/vida: monta as abas quando eles já terminaram de mexer na runa -->
+  <script src="livro.js?fr=20"></script>
 
 </body>
 </html>

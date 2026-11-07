@@ -1,0 +1,164 @@
+/* =====================================================================
+   livro.css — A runa vira um livro com abas (par do livro.js)
+   ---------------------------------------------------------------------
+   O livro.js etiqueta cada filho do painel com data-livro-pg e marca a
+   página atual em data-pagina. Aqui só se esconde o que não é da página
+   atual e se desenha o livro (abas, lombada, folhas, rodapé).
+   Tirar o <link> e o <script> do livro devolve a runa inteira.
+   ===================================================================== */
+
+/* ---------- 1. Página atual: o resto some ---------- */
+.painel-leitura.livro[data-pagina="historia"] > [data-livro-pg]:not([data-livro-pg="historia"]),
+.painel-leitura.livro[data-pagina="segredos"] > [data-livro-pg]:not([data-livro-pg="segredos"]),
+.painel-leitura.livro[data-pagina="simulador"] > [data-livro-pg]:not([data-livro-pg="simulador"]),
+.painel-leitura.livro[data-pagina="desafio"] > [data-livro-pg]:not([data-livro-pg="desafio"]) {
+  display: none !important;
+}
+
+/* A capitular continua no 1º parágrafo do texto (agora depois da barra de abas) */
+.capitular > h2 + p + .livro-abas + p::first-letter {
+  font-family: var(--font-blackletter); font-size: 3.6em; float: left; line-height: 0.85;
+  padding: 0.05em 0.15em 0 0; margin: 0.05em 0.08em 0 0; color: #7a1414;
+  text-shadow: 0 0 1px #d4af37, 2px 2px 0 rgba(255,245,204,0.8), 3px 3px 0 rgba(212,175,55,0.5), 4px 4px 6px rgba(0,0,0,0.35);
+  font-weight: 700;
+}
+.capitular > h2 + p + .livro-abas + p { display: flow-root; }
+.modal-runa-negra.capitular > h2 + p + .livro-abas + p::first-letter { color: #4a1010; }
+
+/* ---------- 2. O livro ---------- */
+#modal-overlay > .painel-leitura.livro {
+  max-width: 760px !important;
+  min-height: min(80vh, 640px);
+  display: flex; flex-direction: column;
+  padding-left: 2.6rem !important;
+  /* lombada: sombra da costura à esquerda e as bordas das folhas à direita */
+  box-shadow:
+    inset 26px 0 26px -18px rgba(59, 36, 18, 0.32),
+    inset 2px 0 0 rgba(59, 36, 18, 0.18),
+    inset 0 0 0 2px rgba(122, 31, 31, 0.85),
+    inset 0 0 0 5px rgba(250, 243, 224, 0.45),
+    inset 0 0 0 6px rgba(184, 137, 44, 0.85),
+    3px 0 0 -1px #eadcb8, 6px 0 0 -2px #dccb9f, 9px 1px 0 -3px #cdb98a,
+    0 18px 40px rgba(28, 17, 8, 0.6);
+}
+#modal-overlay > .painel-leitura.livro:hover { transform: none; }
+#modal-overlay > .painel-leitura.livro > * { flex-shrink: 0; }
+.painel-leitura.livro > p, .painel-leitura.livro > div:not(.livro-abas):not(.livro-rodape) { margin-top: 0; }
+.painel-leitura.livro > h2 { margin-bottom: 0.15rem; }
+.painel-leitura.livro > h2 + p { margin: 0 0 0.9rem; }
+
+/* Abas: marcadores de página costurados no topo */
+.livro-abas {
+  display: flex; gap: 0.35rem; flex-wrap: nowrap;
+  margin: 0 -0.4rem 1.2rem; padding: 0 0.2rem;
+  border-bottom: 2px solid rgba(122, 31, 31, 0.55);
+  overflow-x: auto; scrollbar-width: none;
+}
+.livro-abas::-webkit-scrollbar { display: none; }
+.livro-aba {
+  position: relative; flex: 1 1 0; min-width: max-content;
+  display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+  margin-bottom: -2px; padding: 0.55rem 0.75rem 0.5rem;
+  font-family: var(--font-unicase, "Cinzel", Georgia, serif); font-weight: 700;
+  font-size: 0.78rem; letter-spacing: 0.05em; color: var(--tinta-suave, #5a4228);
+  background: rgba(234, 220, 184, 0.75);
+  border: 1px solid rgba(122, 31, 31, 0.35); border-bottom: 0; border-radius: 9px 9px 0 0;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+.livro-aba:hover { background: rgba(246, 236, 210, 0.95); color: var(--tinta, #2b1d10); transform: translateY(-2px); }
+.livro-aba[aria-selected="true"] {
+  color: #fbf3dc; background: linear-gradient(180deg, #5a1a1a, #3a1010);
+  border-color: #3a1010; transform: translateY(-3px);
+  box-shadow: 0 -3px 0 #b8892c inset, 0 4px 10px rgba(58, 16, 16, 0.25);
+}
+.livro-aba:focus-visible { outline: 3px solid var(--vinho, #7a1f1f); outline-offset: 2px; }
+.livro-aba-icone { font-size: 1rem; line-height: 1; }
+.livro-aba-num {
+  display: none; position: absolute; top: -7px; right: -5px;
+  width: 17px; height: 17px; border-radius: 50%;
+  font-size: 0.62rem; line-height: 17px; text-align: center; color: #fbf3dc; background: #8b1a1a;
+}
+
+/* Rodapé: ‹ anterior · pontos · próxima › */
+.livro-rodape {
+  margin-top: auto; padding-top: 1rem;
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 0.6rem;
+  border-top: 1px dashed rgba(122, 31, 31, 0.35);
+}
+.livro-virar {
+  justify-self: start; display: inline-flex; align-items: center; gap: 0.35rem;
+  padding: 0.45rem 0.8rem; border-radius: 8px;
+  font-family: var(--font-unicase, "Cinzel", Georgia, serif); font-weight: 700; font-size: 0.74rem;
+  color: var(--vinho, #7a1f1f); background: transparent; border: 1px solid rgba(122, 31, 31, 0.45);
+  cursor: pointer; transition: background 0.2s ease, color 0.2s ease;
+}
+.livro-proxima { justify-self: end; color: #fbf3dc; background: #5a1a1a; border-color: #3a1010; }
+.livro-virar:hover:not(:disabled) { background: rgba(122, 31, 31, 0.12); }
+.livro-proxima:hover:not(:disabled) { background: #7a1f1f; }
+.livro-virar:disabled { opacity: 0.35; cursor: default; }
+.livro-virar:focus-visible { outline: 3px solid var(--vinho, #7a1f1f); outline-offset: 2px; }
+.livro-pontos { display: flex; gap: 0.4rem; }
+.livro-pontos i {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: rgba(122, 31, 31, 0.25); transition: transform 0.2s ease, background 0.2s ease;
+}
+.livro-pontos i.ativo { background: #8b1a1a; transform: scale(1.35); }
+.livro-contagem {
+  position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
+}
+
+/* O simulador ocupa a página inteira dele, um pouco mais largo */
+.painel-leitura.livro > [data-livro-pg="simulador"] { margin: 0 -0.6rem 0.5rem !important; }
+
+/* Folha que vira (decorativa) */
+.livro-folha {
+  position: absolute; top: 0; bottom: 0; left: 0; right: 0; z-index: 3;
+  pointer-events: none; opacity: 0;
+  background: linear-gradient(90deg, rgba(241, 228, 195, 0) 0%, rgba(241, 228, 195, 0.9) 40%, rgba(214, 195, 155, 0.95) 92%, rgba(120, 84, 44, 0.35) 100%);
+  transform-origin: 0 50%;
+}
+
+/* ---------- 3. Celular ---------- */
+@media (max-width: 600px) {
+  #modal-overlay > .painel-leitura.livro { padding: 1.4rem 1.05rem 1rem 1.35rem !important; min-height: 78vh; }
+  .livro-abas { gap: 0.25rem; margin: 0 -0.3rem 1rem; }
+  .livro-aba {
+    min-width: 0; padding: 0.5rem 0.2rem 0.45rem; font-size: 0.6rem; flex-direction: column; gap: 0.15rem; letter-spacing: 0;
+  }
+  .livro-aba-nome { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .painel-leitura.livro > [data-livro-pg="simulador"] { margin: 0 0 0.5rem !important; }
+  .livro-aba-icone { font-size: 1.05rem; }
+  .livro-virar span { display: none; }
+  .livro-virar { padding: 0.5rem 0.9rem; font-size: 1rem; }
+}
+
+/* ---------- 4. Movimento: a página vira ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .livro-virando-frente > [data-livro-pg] { animation: livroEntraFrente 0.5s cubic-bezier(0.2, 0.75, 0.25, 1) both; }
+  .livro-virando-tras > [data-livro-pg] { animation: livroEntraTras 0.5s cubic-bezier(0.2, 0.75, 0.25, 1) both; }
+  .livro-virando-frente > .livro-folha { animation: livroFolhaFrente 0.55s ease-in both; }
+  .livro-virando-tras > .livro-folha { animation: livroFolhaTras 0.55s ease-in both; transform-origin: 100% 50%; }
+}
+@keyframes livroEntraFrente {
+  from { opacity: 0; transform: translateX(22px) perspective(900px) rotateY(-6deg); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes livroEntraTras {
+  from { opacity: 0; transform: translateX(-22px) perspective(900px) rotateY(6deg); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes livroFolhaFrente {
+  0% { opacity: 0.95; transform: perspective(1400px) rotateY(0deg); }
+  100% { opacity: 0; transform: perspective(1400px) rotateY(-75deg); }
+}
+@keyframes livroFolhaTras {
+  0% { opacity: 0.95; transform: perspective(1400px) rotateY(0deg); }
+  100% { opacity: 0; transform: perspective(1400px) rotateY(75deg); }
+}
+
+/* Impressão: nada de livro (imprime tudo) */
+@media print {
+  .livro-abas, .livro-rodape, .livro-folha { display: none !important; }
+  .painel-leitura.livro > [data-livro-pg] { display: block !important; }
+}
