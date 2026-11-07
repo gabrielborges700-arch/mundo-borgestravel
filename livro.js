@@ -45,6 +45,10 @@
     ],
   };
 
+  function romano(n) {
+    return ["", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix", "x"][n] || String(n);
+  }
+
   function ehSimulador(el) {
     var h4 = el.querySelector && el.querySelector(":scope > h4");
     return !!(h4 && /Painel de Simula/.test(h4.textContent));
@@ -63,7 +67,7 @@
     var usadas = {};
 
     filhos.forEach(function (el) {
-      if (el.matches("button[id^='fechar-modal'], #botao-favoritar-runa, .livro-abas, .livro-rodape, .livro-folha")) return;
+      if (el.matches("button[id^='fechar-modal'], #botao-favoritar-runa, .livro-abas, .livro-rodape, .livro-folha, .livro-fita")) return;
       if (cabecaVista < 2 && (el.tagName === "H2" || (cabecaVista === 1 && el.tagName === "P"))) {
         cabecaVista++;
         if (cabecaVista === 2) atual = "historia";
@@ -143,6 +147,12 @@
     if (subtitulo && subtitulo.parentNode === painel) painel.insertBefore(abas, subtitulo.nextSibling);
     else painel.insertBefore(abas, painel.firstChild);
 
+    // Fita marcadora de seda (só enfeite)
+    var fita = document.createElement("span");
+    fita.className = "livro-fita";
+    fita.setAttribute("aria-hidden", "true");
+    painel.appendChild(fita);
+
     // Folha que vira (só enfeite) e rodapé com ‹ ›
     var folha = document.createElement("span");
     folha.className = "livro-folha";
@@ -153,7 +163,8 @@
     rodape.className = "livro-rodape";
     rodape.innerHTML =
       '<button type="button" class="livro-virar livro-anterior" aria-label="Página anterior">‹ <span>Anterior</span></button>' +
-      '<span class="livro-pontos" aria-hidden="true">' + modelo.map(function () { return "<i></i>"; }).join("") + "</span>" +
+      '<span class="livro-meio" aria-hidden="true"><span class="livro-pontos">' + modelo.map(function () { return "<i></i>"; }).join("") + "</span>" +
+      '<span class="livro-folio"></span></span>' +
       '<span class="livro-contagem" aria-live="polite"></span>' +
       '<button type="button" class="livro-virar livro-proxima" aria-label="Próxima página"><span>Próxima</span> ›</button>';
     painel.appendChild(rodape);
@@ -175,6 +186,7 @@
       });
       rodape.querySelectorAll(".livro-pontos i").forEach(function (p, i) { p.classList.toggle("ativo", i === indice); });
       rodape.querySelector(".livro-contagem").textContent = "Página " + (indice + 1) + " de " + ordem.length + ": " + modelo[indice].nome;
+      rodape.querySelector(".livro-folio").textContent = "fólio " + romano(indice + 1) + " de " + romano(ordem.length);
       rodape.querySelector(".livro-anterior").disabled = indice === 0;
       var proxima = rodape.querySelector(".livro-proxima");
       proxima.disabled = indice === ordem.length - 1;
