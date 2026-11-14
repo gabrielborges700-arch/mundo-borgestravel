@@ -30,27 +30,29 @@
   <meta name="twitter:description" content="Explore os 7 reinos da engenharia, conquiste runas e descubra por que pontes, torres e castelos não caem!">
   <meta name="twitter:image" content="https://gabrielborges700-arch.github.io/mundo-borgestravel/imagens/og-borgestravel.png">
   <meta name="twitter:image:alt" content="Rosa dos ventos dourada cercada pelas gemas dos 7 reinos, ao lado do título Mundo Borgestrável">
-  <!-- ?fr=21 força navegadores a buscarem a versão nova após cada grande atualização -->
+  <!-- ?fr=22 força navegadores a buscarem a versão nova após cada grande atualização -->
   <!-- Fontes do Google sem travar a página (antes: @import no style.css, que bloqueava tudo) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,700;1,400&amp;family=Cinzel:wght@400;700&amp;family=MedievalSharp&amp;display=swap" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,700;1,400&amp;family=Cinzel:wght@400;700&amp;family=MedievalSharp&amp;display=swap"></noscript>
-  <link rel="stylesheet" href="style.css?fr=21">
+  <link rel="stylesheet" href="style.css?fr=22">
   <!-- Redesign "pergaminho", etapa 1 (cores e letras): vem DEPOIS do style.css pra ganhar dele. Tirar esta linha desfaz a etapa -->
-  <link rel="stylesheet" href="estilos/pergaminho-1-cores-fontes.css?fr=21">
+  <link rel="stylesheet" href="estilos/pergaminho-1-cores-fontes.css?fr=22">
   <!-- Redesign "pergaminho", etapa 2 (molduras e ornamentos): vem DEPOIS da etapa 1. Tirar esta linha desfaz a etapa -->
-  <link rel="stylesheet" href="estilos/pergaminho-2-molduras.css?fr=21">
-  <link rel="stylesheet" href="estilos/pergaminho-3-animacoes.css?fr=21">
+  <link rel="stylesheet" href="estilos/pergaminho-2-molduras.css?fr=22">
+  <link rel="stylesheet" href="estilos/pergaminho-3-animacoes.css?fr=22">
   <!-- Novidades: Glossário mágico, Chefões do Julgamento Supremo e Atlas das Maravilhas -->
-  <link rel="stylesheet" href="estilos/novidades.css?fr=21">
+  <link rel="stylesheet" href="estilos/novidades.css?fr=22">
   <!-- "Vida no mapa": as 20 animações (nuvens, Mago vivo, carimbo, trilha...) -->
-  <link rel="stylesheet" href="estilos/vida.css?fr=21">
+  <link rel="stylesheet" href="estilos/vida.css?fr=22">
   <!-- Mapa-mundo vivo: a carta ilustrada dos reinos (computador) e a trilha (celular). Tirar esta linha e o mapa-mundo.js desfaz -->
-  <link rel="stylesheet" href="estilos/mapa-mundo.css?fr=21">
+  <link rel="stylesheet" href="estilos/mapa-mundo.css?fr=22">
   <!-- A runa vira um livro com abas (História, Segredos, Simulador, Desafio). Tirar esta linha e o livro.js desfaz -->
-  <link rel="stylesheet" href="estilos/livro.css?fr=21">
-  <link rel="stylesheet" href="estilos/simuladores-vivos.css?fr=21">
+  <link rel="stylesheet" href="estilos/livro.css?fr=22">
+  <link rel="stylesheet" href="estilos/simuladores-vivos.css?fr=22">
+  <!-- Obras do Reino: a placa no quadro, o marco no mapa e a janela da obra. Tirar esta linha e o obras.js desfaz -->
+  <link rel="stylesheet" href="estilos/obras.css?fr=22">
 </head>
 <body>
 
@@ -130,32 +132,34 @@
        armazenamento do navegacao.js; app.js e jogo.js chamam todos eles (sempre com typeof);
        simuladores-polimento.js vem logo depois do simuladores.js (encadeia criarPainelSimulacao);
        cadeados.js, painel-reino.js e horizonte.js vêm por último porque encadeiam funções do jogo.js -->
-  <script src="dados.js?fr=21"></script>
-  <script src="brasoes.js?fr=21"></script>
-  <script src="efeitos.js?fr=21"></script>
-  <script src="simuladores.js?fr=21"></script>
-  <script src="simuladores-polimento.js?fr=21"></script>
+  <script src="dados.js?fr=22"></script>
+  <script src="brasoes.js?fr=22"></script>
+  <script src="efeitos.js?fr=22"></script>
+  <script src="simuladores.js?fr=22"></script>
+  <script src="simuladores-polimento.js?fr=22"></script>
   <!-- Cenas animadas dos simuladores (só leem os números do simulador; nada muda nos controles) -->
-  <script src="simuladores-vivos.js?fr=21"></script>
-  <script src="oraculo.js?fr=21"></script>
-  <script src="navegacao.js?fr=21"></script>
-  <script src="cronica.js?fr=21"></script>
-  <script src="som.js?fr=21"></script>
-  <script src="portal.js?fr=21"></script>
-  <script src="app.js?fr=21"></script>
-  <script src="jogo.js?fr=21"></script>
-  <script src="cadeados.js?fr=21"></script>
-  <script src="painel-reino.js?fr=21"></script>
-  <script src="horizonte.js?fr=21"></script>
-  <script src="revelar.js?fr=21"></script>
-  <script src="glossario.js?fr=21"></script>
-  <script src="chefoes.js?fr=21"></script>
-  <script src="atlas.js?fr=21"></script>
-  <script src="vida.js?fr=21"></script>
+  <script src="simuladores-vivos.js?fr=22"></script>
+  <script src="oraculo.js?fr=22"></script>
+  <script src="navegacao.js?fr=22"></script>
+  <script src="cronica.js?fr=22"></script>
+  <script src="som.js?fr=22"></script>
+  <script src="portal.js?fr=22"></script>
+  <script src="app.js?fr=22"></script>
+  <script src="jogo.js?fr=22"></script>
+  <script src="cadeados.js?fr=22"></script>
+  <script src="painel-reino.js?fr=22"></script>
+  <script src="horizonte.js?fr=22"></script>
+  <script src="revelar.js?fr=22"></script>
+  <script src="glossario.js?fr=22"></script>
+  <script src="chefoes.js?fr=22"></script>
+  <script src="atlas.js?fr=22"></script>
+  <script src="vida.js?fr=22"></script>
   <!-- mapa-mundo.js vem por último: encadeia renderizarListaBlocos e aposRenderizarBlocos depois de todos -->
-  <script src="mapa-mundo.js?fr=21"></script>
+  <script src="mapa-mundo.js?fr=22"></script>
   <!-- livro.js depois de atlas/glossário/vida: monta as abas quando eles já terminaram de mexer na runa -->
-  <script src="livro.js?fr=21"></script>
+  <script src="livro.js?fr=22"></script>
+  <!-- obras.js por último: encadeia aposRenderizarBlocos depois do mapa-mundo, para os lugares do mapa já existirem -->
+  <script src="obras.js?fr=22"></script>
 
 </body>
 </html>

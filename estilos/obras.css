@@ -1,0 +1,315 @@
+/* =====================================================================
+   obras.css — OBRAS DO REINO: a Mesa de Projeto (etapa A1 do "Reino Vivo")
+   Placa no quadro do reino, obra desenhada no lugar do mapa, e a janela da
+   mesa: prancha em escala, medidores de latão, cartas de material, ajustes,
+   orçamento e laudo selado. Carrega DEPOIS dos outros CSS; cores vêm das
+   variáveis do pergaminho. Tirar este <link> e o obras.js desfaz tudo.
+   ===================================================================== */
+
+/* ---------- 1. Placa no quadro aberto ---------- */
+.ob-placa {
+  display: flex; align-items: center; gap: 0.6rem;
+  margin: 0.6rem 0 0.2rem; padding: 0.55rem 0.75rem;
+  background: linear-gradient(180deg, #6b4423, #4a2e16);
+  border: 1px solid var(--latao, #c9a14a); border-radius: 8px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,235,190,0.18);
+  color: #f5dc9a;
+}
+.ob-placa-icone { flex: 0 0 auto; font-size: 1.3rem; line-height: 1; }
+.ob-placa-texto { display: flex; flex-direction: column; gap: 0.1rem; flex: 1 1 auto; min-width: 0; }
+.ob-placa-titulo { font-family: var(--font-display); font-size: 0.82rem; letter-spacing: 0.04em; color: #fff1c9; }
+.ob-placa-sub { font-family: var(--font-body); font-size: 0.78rem; line-height: 1.3; color: #e8d3a3; }
+.ob-placa .ob-botao { flex: 0 0 auto; font-size: 0.72rem !important; padding: 0.42rem 0.75rem !important; white-space: nowrap; }
+.ob-placa-ferida { border-color: #c0392b; box-shadow: 0 3px 8px rgba(0,0,0,0.4), 0 0 10px rgba(192,57,43,0.3), inset 0 1px 0 rgba(255,235,190,0.18); }
+.ob-placa-ferida .ob-placa-titulo { color: #ffd3c8; }
+.ob-placa-pe { border-color: #d4af37; }
+@media (max-width: 480px) {
+  .ob-placa { flex-wrap: wrap; }
+  .ob-placa .ob-botao { margin-left: auto; }
+}
+
+/* ---------- 2. A obra dentro do lugar do reino (mapa) ---------- */
+.mm-local, .mm-cena-reino { position: relative; }
+.ob-mapa {
+  position: absolute; left: 0; top: 0; width: 100%; aspect-ratio: 160 / 120; z-index: 2;
+  pointer-events: none;
+  transition: transform 0.35s cubic-bezier(0.3, 0.8, 0.3, 1.3), filter 0.35s ease;
+}
+.ob-mapa .ob-mapa-svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.ob-mapa .ob-mp-deck { fill: var(--cor-reino, #546e7a); }
+.ob-mapa .ob-m-range { transform-box: fill-box; transform-origin: 50% 50%; animation: obRange 2s ease-in-out infinite; }
+.ob-mapa .ob-andante circle, .ob-mapa .ob-andante path { fill: #3b2412; stroke: #3b2412; stroke-width: 0.7; stroke-linecap: round; }
+.ob-mapa .ob-andante path { fill: none; }
+.ob-mapa .ob-andante { animation: obAnda 7s linear infinite; }
+.ob-mapa .ob-andante-2 { animation-delay: -3.4s; }
+.ob-mapa .ob-mp-fumaca circle { fill: rgba(120, 104, 88, 0.6); stroke: rgba(59, 36, 18, 0.4); stroke-width: 0.6; animation: obFumaca 3.2s ease-out infinite; transform-box: fill-box; transform-origin: 50% 100%; }
+.ob-mapa .ob-mp-fumaca circle:nth-child(2) { animation-delay: -1.1s; }
+.ob-mapa .ob-mp-fumaca circle:nth-child(3) { animation-delay: -2.2s; }
+.ob-mapa-pe .ob-mp-deck, .ob-mapa-fraca .ob-mp-deck { animation: obSurgeMapa 0.6s ease both; }
+/* acompanha o salto da ilustração ao passar o mouse e a névoa dos reinos não iniciados (mapa-mundo.css) */
+.mm-mapa > .tile-reino .tile-cabecalho:hover .ob-mapa,
+.mm-mapa > .tile-reino .tile-cabecalho:focus-visible .ob-mapa { transform: translateY(-5px) scale(1.06); }
+.mm-mapa > .tile-reino.estado-nao-iniciado .ob-mapa { filter: sepia(0.35) saturate(0.7); }
+@keyframes obAnda { from { transform: translateX(0); } to { transform: translateX(54px); } }
+@keyframes obFumaca { 0% { opacity: 0.8; transform: translateY(0) scale(0.7); } 100% { opacity: 0; transform: translateY(-10px) scale(1.3); } }
+@keyframes obSurgeMapa { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+@keyframes obRange { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(1.2deg) translateY(1px); } }
+
+/* ---------- 3. A janela da Mesa ---------- */
+.ob-overlay {
+  position: fixed; inset: 0; z-index: 50;
+  background: var(--veu-sepia, rgba(6, 7, 10, 0.9));
+  display: flex; align-items: center; justify-content: center;
+  padding: 1rem;
+}
+.ob-janela {
+  position: relative; width: 100%; max-width: 780px; max-height: 90vh; overflow-y: auto; overflow-x: hidden;
+  padding: 1.6rem 1.5rem 1.4rem;
+}
+@media (max-width: 480px) { .ob-janela { padding: 1.2rem 0.85rem 1rem; } }
+.ob-fechar { position: absolute; top: 0.7rem; right: 0.7rem; padding: 0.3rem 0.7rem !important; font-size: 0.9rem !important; z-index: 2; }
+.ob-kicker { display: block; font-family: var(--font-unicase, "Cinzel", serif); font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ouro-tinta, #5c430c); padding-right: 3rem; }
+.ob-titulo { margin: 0.15rem 0 0.5rem; font-size: 1.45rem; color: var(--vinho, #7a1f1f); padding-right: 3rem; text-wrap: balance; }
+
+/* a guardiã (caixa própria: a fala troca a cada escolha) */
+.ob-guardia { display: flex; align-items: flex-start; gap: 0.6rem; margin: 0.4rem 0 0.8rem; }
+.ob-guardia-avatar {
+  flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; font-size: 1.3rem;
+  background: linear-gradient(145deg, #3a2412, #24160a); border: 2px solid var(--latao, #c9a14a);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4), 0 0 10px rgba(212,175,55,0.15);
+}
+.ob-guardia-balao {
+  flex: 1; min-width: 0; padding: 0.55rem 0.85rem; font-size: 0.88rem; line-height: 1.4;
+  background: var(--papel-claro, #faf3e0); border: 1px solid rgba(122, 31, 31, 0.5); border-radius: 10px;
+  box-shadow: inset 0 0 0 1px rgba(184,137,44,0.25);
+}
+.ob-guardia-nome { display: block; font-size: 0.8rem; margin-bottom: 0.1rem; color: var(--vinho, #6b1a1a); letter-spacing: 0.04em; }
+
+/* ---------- 4. A prancha (planta em escala) ---------- */
+.ob-prancha {
+  margin: 0.4rem 0 0.6rem; padding: 0.35rem 0.5rem 0.3rem;
+  background: #f6ecd4; border: 1px solid rgba(59, 36, 18, 0.6); border-radius: 4px;
+  box-shadow: inset 0 0 0 3px #f6ecd4, inset 0 0 0 4px rgba(59, 36, 18, 0.35), inset 0 0 28px rgba(59, 36, 18, 0.08);
+}
+.ob-prancha-cab { display: flex; justify-content: space-between; align-items: baseline; gap: 0.6rem; padding: 0.15rem 0.3rem; }
+.ob-prancha-rotulo { font-family: var(--font-unicase, "Cinzel", serif); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--tinta, #2b1d10); }
+.ob-prancha-escala { font-family: var(--font-body); font-size: 0.72rem; font-style: italic; color: var(--tinta-suave, #5a4228); white-space: nowrap; }
+.ob-cena-svg { display: block; width: 100%; height: auto; overflow: hidden; }
+.ob-cena-legenda { margin: 0; padding: 0.3rem 0.4rem 0.1rem; min-height: 1.5em; font-size: 0.8rem; font-style: italic; text-align: center; color: var(--tinta-suave, #5a4228); }
+
+.ob-ceu { fill: #f1e6cb; }
+.ob-nuvens path { fill: #fbf3dc; stroke: #3b2412; stroke-width: 1.2; stroke-linejoin: round; transition: fill 0.6s ease; }
+.ob-raio path { fill: #fff2a8; stroke: #3b2412; stroke-width: 1; opacity: 0; }
+.ob-vento path, .ob-chuva path { fill: none; stroke: #5a7f9a; stroke-width: 1.2; stroke-linecap: round; opacity: 0; transition: opacity 0.5s ease; }
+.ob-vento path { stroke: #7f8d96; stroke-dasharray: 10 6; }
+.ob-colina { fill: #e2d3ad; stroke: #3b2412; stroke-width: 1; opacity: 0.8; }
+.ob-rio { fill: #a9c0cd; stroke: #3b2412; stroke-width: 1; }
+.ob-onda { fill: none; stroke: #fbf3dc; stroke-width: 1; opacity: 0.85; }
+.ob-margem { fill: #d6c39b; stroke: #3b2412; stroke-width: 1.3; stroke-linejoin: round; }
+.ob-margem-borda { fill: none; stroke: #3b2412; stroke-width: 1.3; }
+.ob-hachura, .ob-hachura-forte { fill: none; stroke: #3b2412; stroke-width: 0.8; opacity: 0.45; }
+.ob-hachura-forte { stroke-width: 1; opacity: 0.6; }
+.ob-rocha { fill: #cdbb8c; stroke: #3b2412; stroke-width: 1.3; stroke-linejoin: round; }
+.ob-areia { fill: #ecdcb2; stroke: #3b2412; stroke-width: 0.9; }
+.ob-pontos { stroke: #3b2412; stroke-width: 1.3; stroke-linecap: round; opacity: 0.6; }
+.ob-ancora { fill: #b39c72; stroke: #3b2412; stroke-width: 1.2; transition: transform 0.8s ease; }
+.ob-torre { fill: #8f8a7f; stroke: #3b2412; stroke-width: 1.4; transform-box: fill-box; transform-origin: 50% 100%; transition: transform 0.8s ease; }
+.ob-torre-base { fill: #6f6a60; stroke: #3b2412; stroke-width: 1; }
+.ob-no { fill: none; stroke: #3b2412; stroke-width: 2.4; stroke-linecap: round; }
+.ob-cabo { fill: none; stroke: #3b2412; stroke-linecap: round; transition: opacity 0.8s ease, stroke 0.4s ease; }
+.ob-cabo-brilho { fill: none; stroke: #fbf3dc; stroke-dasharray: 3 4; opacity: 0.9; pointer-events: none; }
+.ob-cabo-elos { fill: none; stroke: #fbf3dc; stroke-dasharray: 5 4; stroke-linecap: round; opacity: 0.8; }
+.ob-cabo-bolhas { fill: none; stroke: #fbf3dc; stroke-dasharray: 1 7; stroke-linecap: round; opacity: 0.9; }
+.ob-cabo-fundido { stroke: #4b4b4b; }
+.ob-pendurais { fill: none; stroke: #3b2412; stroke-width: 1; transition: opacity 0.8s ease; }
+.ob-tabuleiro { fill: none; stroke: var(--cor-reino, #546e7a); stroke-width: 6; stroke-linecap: butt; transform-box: fill-box; transform-origin: 50% 50%; transition: transform 0.8s ease, opacity 0.8s ease; paint-order: stroke; }
+.ob-tabuleiro.ob-esboco, .ob-torre.ob-esboco, .ob-cabo-principal.ob-esboco, .ob-pendurais.ob-esboco { stroke-dasharray: 4 4; opacity: 0.45; }
+.ob-cabo-esboco { stroke: #3b2412; }
+.ob-trinca { fill: none; stroke: #a02020; stroke-width: 2; stroke-linejoin: round; opacity: 0; transition: opacity 0.3s ease 0.5s; }
+.ob-cabo-rompido { fill: none; stroke: #a02020; stroke-width: 2.4; stroke-linecap: round; opacity: 0; transition: opacity 0.3s ease; }
+.ob-bandeira-haste { stroke: #3b2412; stroke-width: 1.4; opacity: 0; transition: opacity 0.4s ease; }
+.ob-bandeira { fill: #d4af37; stroke: #3b2412; stroke-width: 0.8; opacity: 0; transition: opacity 0.4s ease; }
+.ob-cotas path { fill: none; stroke: #7a1f1f; stroke-width: 0.9; }
+.ob-cotas text { font-family: var(--font-body, Georgia, serif); font-size: 10px; font-style: italic; fill: #7a1f1f; paint-order: stroke; stroke: #f1e6cb; stroke-width: 3px; stroke-linejoin: round; }
+.ob-figura circle { fill: #3b2412; }
+.ob-figura path, .ob-carroca path { fill: none; stroke: #3b2412; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
+.ob-carroca rect { fill: #a8733d; stroke: #3b2412; stroke-width: 1.1; }
+.ob-carroca circle { fill: #d9c49a; stroke: #3b2412; stroke-width: 1.1; }
+.ob-carga { opacity: 0; }
+.ob-andantes-planta { opacity: 0; }
+
+/* montagem */
+.ob-erguendo .ob-torre { animation: obErgue var(--ob-dur, 1.4s) ease-out both; }
+.ob-erguendo .ob-cabo-principal, .ob-erguendo .ob-estais, .ob-erguendo .ob-cabo-brilho, .ob-erguendo .ob-cabo-elos, .ob-erguendo .ob-cabo-bolhas { stroke-dasharray: 600; stroke-dashoffset: 600; animation: obLanca 1.2s ease-out 0.4s both; }
+.ob-erguendo .ob-pendurais, .ob-erguendo .ob-tabuleiro { animation: obAssenta 0.6s ease-out 1s both; }
+@keyframes obErgue { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@keyframes obLanca { to { stroke-dashoffset: 0; } }
+@keyframes obAssenta { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+
+/* estágios de carga */
+.ob-est-aldeoes .ob-carga-aldeoes, .ob-est-carrocas .ob-carga-carrocas { opacity: 1; animation: obAtravessa var(--ob-dur, 1.8s) linear both; }
+.ob-est-tempestade .ob-chuva path, .ob-est-tempestade .ob-vento path { opacity: 1; }
+.ob-est-tempestade .ob-nuvens path { fill: #c9bda3; }
+.ob-est-tempestade .ob-raio path { animation: obRelampago 1.1s ease-out 1; }
+.ob-est-tempestade .ob-bandeira { transform-box: fill-box; transform-origin: 0 50%; animation: obTremula 0.5s ease-in-out infinite alternate; }
+@keyframes obAtravessa { from { transform: translateX(-60px); } to { transform: translateX(240px); } }
+@keyframes obRelampago { 0%, 100% { opacity: 0; } 8%, 20% { opacity: 1; } 12% { opacity: 0.2; } }
+@keyframes obTremula { from { transform: skewY(-6deg); } to { transform: skewY(6deg); } }
+
+/* como a ponte cai, por tipo de erro */
+.ob-falha-cabo .ob-cabo-principal, .ob-falha-cabo .ob-cabo-brilho, .ob-falha-cabo .ob-cabo-elos, .ob-falha-cabo .ob-cabo-bolhas { opacity: 0.18; }
+.ob-falha-cabo .ob-cabo-rompido { opacity: 1; }
+.ob-falha-cabo .ob-pendurais { opacity: 0.25; }
+.ob-falha-cabo .ob-tabuleiro { transform: translateY(30px) rotate(4deg); }
+.ob-falha-torre .ob-torre-e { transform: rotate(18deg); }
+.ob-falha-torre .ob-torre-d { transform: rotate(-18deg); }
+.ob-falha-torre .ob-tabuleiro { transform: translateY(18px); }
+.ob-falha-torre .ob-cabo-principal { opacity: 0.6; }
+.ob-falha-ancora .ob-ancora-d { transform: translateX(16px); }
+.ob-falha-ancora .ob-estais { opacity: 0.4; }
+.ob-falha-ancora .ob-tabuleiro { transform: rotate(-2deg); }
+.ob-falha-escoa .ob-cabo-principal { opacity: 0.75; }
+.ob-caiu .ob-trinca { opacity: 1; }
+.ob-caiu .ob-carga { opacity: 0 !important; animation: none !important; }
+.ob-ok .ob-bandeira, .ob-ok .ob-bandeira-haste { opacity: 1; }
+.ob-ok .ob-andantes-planta { opacity: 1; animation: obAtravessa 9s linear infinite; }
+.ob-range .ob-tabuleiro { animation: obRange 1.6s ease-in-out infinite; }
+
+/* ---------- 5. Medidores ---------- */
+.ob-medidores { display: grid; grid-template-columns: 150px 1fr; gap: 0.6rem; align-items: stretch; margin: 0.2rem 0 0.4rem; }
+@media (max-width: 560px) { .ob-medidores { grid-template-columns: 1fr; } }
+.ob-medidor {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.1rem;
+  padding: 0.5rem 0.4rem 0.4rem; text-align: center;
+  background: linear-gradient(180deg, #3a2412, #24160a); border: 1px solid var(--latao, #c9a14a); border-radius: 10px;
+  box-shadow: inset 0 1px 0 rgba(255,235,190,0.18), 0 3px 8px rgba(0,0,0,0.35);
+  color: #f5dc9a;
+}
+.ob-med-titulo { font-family: var(--font-unicase, "Cinzel", serif); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: #e8d3a3; }
+.ob-medidor-svg { width: 120px; height: auto; display: block; }
+.ob-med-aro { fill: none; stroke: #c9a14a; stroke-width: 3; }
+.ob-med-verde { fill: none; stroke: #6f9a4a; stroke-width: 7; }
+.ob-med-ambar { fill: none; stroke: #d2a13a; stroke-width: 7; }
+.ob-med-vermelho { fill: none; stroke: #b4382a; stroke-width: 7; }
+.ob-med-ticks { fill: none; stroke: #fbf3dc; stroke-width: 1.2; }
+.ob-med-txt { font-family: var(--font-unicase, "Cinzel", serif); font-size: 8px; fill: #fbf3dc; letter-spacing: 0.05em; }
+.ob-med-ponteiro { transform-box: view-box; transform-origin: 60px 64px; transform: rotate(-90deg); transition: transform 0.8s cubic-bezier(0.3, 0.9, 0.4, 1.2); }
+.ob-med-ponteiro path { fill: #fbf3dc; stroke: #3b2412; stroke-width: 0.6; }
+.ob-med-ponteiro circle { fill: #c9a14a; stroke: #3b2412; stroke-width: 0.8; }
+.ob-med-valor { font-family: var(--font-display); font-size: 1.05rem; color: #fff1c9; font-variant-numeric: tabular-nums; }
+.ob-med-sub { font-size: 0.7rem; color: #e8d3a3; }
+.ob-tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.5rem; }
+.ob-tile {
+  display: flex; flex-direction: column; gap: 0.05rem; min-width: 0; padding: 0.45rem 0.6rem;
+  background: var(--papel-claro, #faf3e0); border: 1px solid rgba(59, 36, 18, 0.35); border-radius: 8px;
+  box-shadow: inset 0 0 0 1px rgba(184,137,44,0.2);
+}
+.ob-tile-rotulo { font-family: var(--font-unicase, "Cinzel", serif); font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--tinta-suave, #5a4228); }
+.ob-tile-valor { font-family: var(--font-display); font-size: 1.1rem; color: var(--tinta, #2b1d10); font-variant-numeric: tabular-nums; }
+.ob-tile-sub { font-size: 0.68rem; line-height: 1.25; color: var(--tinta-suave, #5a4228); }
+.ob-bom { color: var(--musgo, #3e5a2b) !important; }
+.ob-atencao { color: var(--ouro-tinta, #5c430c) !important; }
+.ob-ruim { color: var(--cera, #8b1a1a) !important; }
+.ob-neutro { color: var(--tinta-suave, #5a4228) !important; }
+
+/* ---------- 6. Cartas, ajustes e orçamento ---------- */
+.ob-secao { margin: 0.9rem 0 0; }
+.ob-secao-titulo { margin: 0 0 0.45rem; font-size: 1rem; color: var(--vinho, #7a1f1f); }
+.ob-romano {
+  display: inline-block; min-width: 1.7em; margin-right: 0.3rem; padding: 0.05rem 0.3rem;
+  font-family: var(--font-unicase, "Cinzel", serif); font-size: 0.72rem; text-align: center;
+  color: #fff6d8; background: var(--madeira, #3a2412); border: 1px solid var(--latao, #c9a14a); border-radius: 4px;
+}
+.ob-cartas { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.5rem; }
+@media (max-width: 480px) { .ob-cartas { grid-template-columns: 1fr; } }
+.ob-carta {
+  display: grid; grid-template-columns: 1fr; gap: 0.15rem; text-align: left; cursor: pointer; min-width: 0;
+  padding: 0.55rem 0.6rem 0.5rem; font-family: var(--font-body);
+  background: var(--papel-claro, #faf3e0); color: var(--tinta, #2b1d10);
+  border: 1px solid rgba(59, 36, 18, 0.45); border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(43, 29, 16, 0.2), inset 0 0 0 1px rgba(184,137,44,0.22);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+@media (max-width: 480px) { .ob-carta { grid-template-columns: 56px 1fr; column-gap: 0.6rem; align-items: center; } .ob-carta .ob-carta-icone { grid-row: 1 / span 3; } }
+.ob-carta:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(43, 29, 16, 0.28), inset 0 0 0 1px rgba(184,137,44,0.3); }
+.ob-carta:focus-visible { outline: 3px solid var(--vinho, #7a1f1f); outline-offset: 2px; }
+.ob-carta-marcada { border-color: var(--vinho, #7a1f1f); box-shadow: 0 0 0 2px var(--vinho, #7a1f1f), 0 4px 10px rgba(43, 29, 16, 0.25); background: #fffaf0; }
+.ob-carta-icone { display: block; height: 34px; }
+.ob-carta-icone svg { width: 100%; height: 100%; display: block; }
+.ob-carta-nome { font-family: var(--font-display); font-size: 0.82rem; letter-spacing: 0.03em; color: var(--vinho, #7a1f1f); }
+.ob-carta-marcada .ob-carta-nome::before { content: "✓ "; }
+.ob-carta-resumo { font-size: 0.74rem; line-height: 1.25; color: var(--tinta-suave, #5a4228); }
+.ob-carta-preco { font-family: var(--font-unicase, "Cinzel", serif); font-size: 0.66rem; letter-spacing: 0.1em; color: var(--ouro-tinta, #5c430c); }
+
+.ob-ajustes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.6rem 1rem; }
+@media (max-width: 560px) { .ob-ajustes { grid-template-columns: 1fr; } }
+.ob-ajuste { display: flex; flex-direction: column; gap: 0.2rem; min-width: 0; }
+.ob-ajuste-rotulo { font-family: var(--font-display); font-size: 0.8rem; color: var(--tinta, #2b1d10); }
+.ob-ajuste-rotulo output { display: block; font-family: var(--font-body); font-size: 0.8rem; font-weight: 400; color: var(--tinta-suave, #5a4228); font-variant-numeric: tabular-nums; }
+.ob-ajuste input[type="range"] { width: 100%; margin: 0.15rem 0; accent-color: var(--vinho, #7a1f1f); }
+.ob-ajuste-dica { font-size: 0.72rem; line-height: 1.3; color: var(--tinta-suave, #5a4228); font-style: italic; }
+
+.ob-orcamento { margin: 0.9rem 0 0.2rem; padding: 0.55rem 0.7rem; background: var(--papel-claro, #faf3e0); border: 1px solid rgba(59, 36, 18, 0.4); border-radius: 8px; }
+.ob-orc-cab { display: flex; justify-content: space-between; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; }
+.ob-orc-rotulo { font-family: var(--font-unicase, "Cinzel", serif); font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--tinta-suave, #5a4228); }
+.ob-orc-valor { font-family: var(--font-display); font-size: 0.95rem; color: var(--tinta, #2b1d10); font-variant-numeric: tabular-nums; }
+.ob-orc-barra { display: flex; height: 10px; margin: 0.35rem 0 0.25rem; background: rgba(59, 36, 18, 0.12); border: 1px solid rgba(59, 36, 18, 0.35); border-radius: 999px; overflow: hidden; }
+.ob-orc-barra i { display: block; height: 100%; transition: width 0.3s ease; }
+.ob-orc-cabo { background: #7a1f1f; }
+.ob-orc-anc { background: #b8892c; }
+.ob-orc-torres { background: #5a7f9a; }
+.ob-orc-detalhe { font-size: 0.72rem; color: var(--tinta-suave, #5a4228); }
+.ob-orc-estourado { border-color: var(--cera, #8b1a1a); }
+.ob-orc-estourado .ob-orc-valor, .ob-orc-estourado .ob-orc-detalhe { color: var(--cera, #8b1a1a); }
+.ob-erguer { display: block; width: 100%; margin-top: 0.8rem; padding: 0.75rem !important; font-size: 0.88rem !important; }
+.ob-erguer:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+/* ---------- 7. O laudo ---------- */
+.ob-laudo {
+  position: relative; margin-top: 1rem; padding: 0.9rem 1rem 0.8rem; border-radius: 6px;
+  background: var(--papel-claro, #faf3e0); color: var(--tinta, #2b1d10); font-size: 0.9rem; line-height: 1.45;
+  border: 1px solid rgba(59, 36, 18, 0.55);
+  box-shadow: inset 0 0 0 3px var(--papel-claro, #faf3e0), inset 0 0 0 4px rgba(59, 36, 18, 0.35), 0 6px 14px rgba(43, 29, 16, 0.22);
+}
+.ob-laudo-cab { display: grid; grid-template-columns: 1fr auto; column-gap: 0.8rem; align-items: center; margin-bottom: 0.5rem; }
+.ob-laudo-cab .ob-kicker { grid-column: 1; padding-right: 0; }
+.ob-laudo-cab h3 { grid-column: 1; margin: 0; font-size: 1.2rem; color: var(--vinho, #7a1f1f); }
+.ob-carimbo {
+  grid-column: 2; grid-row: 1 / span 2; justify-self: end;
+  padding: 0.3rem 0.6rem; transform: rotate(-8deg);
+  font-family: var(--font-unicase, "Cinzel", serif); font-weight: 700; font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; white-space: nowrap;
+  border: 3px double currentColor; border-radius: 6px; opacity: 0.92;
+  animation: obCarimba 0.35s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+}
+.ob-laudo-pe .ob-carimbo { color: var(--musgo, #3e5a2b); }
+.ob-laudo-fraca .ob-carimbo { color: var(--ouro-tinta, #5c430c); }
+.ob-laudo-ferida .ob-carimbo { color: var(--cera, #8b1a1a); }
+@keyframes obCarimba { from { opacity: 0; transform: rotate(-8deg) scale(1.6); } to { opacity: 0.92; transform: rotate(-8deg) scale(1); } }
+.ob-laudo-tabela-caixa { overflow-x: auto; margin: 0.3rem 0 0.5rem; }
+.ob-laudo-tabela { width: 100%; border-collapse: collapse; font-size: 0.8rem; font-variant-numeric: tabular-nums; }
+.ob-laudo-tabela th { font-family: var(--font-unicase, "Cinzel", serif); font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; text-align: left; color: var(--tinta-suave, #5a4228); padding: 0.2rem 0.4rem; border-bottom: 1px solid rgba(59, 36, 18, 0.45); }
+.ob-laudo-tabela td { padding: 0.28rem 0.4rem; border-bottom: 1px dashed rgba(59, 36, 18, 0.25); white-space: nowrap; }
+.ob-laudo-tabela td:first-child { white-space: normal; }
+.ob-laudo-tabela td:last-child { font-weight: 700; text-align: center; }
+.ob-laudo-texto { margin: 0.4rem 0 0; }
+.ob-laudo-itens { margin: 0.5rem 0 0; padding-left: 1.1rem; font-size: 0.84rem; }
+.ob-laudo-itens li { margin: 0.15rem 0; }
+.ob-laudo-medalha { margin: 0.5rem 0 0; font-weight: 700; color: var(--ouro-tinta, #5c430c); }
+.ob-xp { margin: 0.4rem 0 0; font-weight: 700; color: var(--ouro-tinta, #5c430c); }
+.ob-assinatura { margin: 0.6rem 0 0; font-style: italic; font-size: 0.82rem; color: var(--tinta-suave, #5a4228); text-align: right; }
+.ob-acoes { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.7rem; }
+.ob-acoes .btn-gotico { font-size: 0.75rem !important; padding: 0.45rem 0.7rem !important; }
+.ob-nota { margin: 0.6rem 0 0; font-size: 0.72rem; line-height: 1.3; color: var(--tinta-suave, #5a4228); }
+
+/* ---------- 8. Sem movimento e impressão ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .ob-torre, .ob-tabuleiro, .ob-cabo, .ob-pendurais, .ob-ancora, .ob-chuva path, .ob-vento path, .ob-trinca, .ob-bandeira, .ob-bandeira-haste, .ob-nuvens path, .ob-med-ponteiro, .ob-orc-barra i, .ob-carta, .ob-mapa { transition: none !important; }
+  .ob-erguendo .ob-torre, .ob-erguendo .ob-cabo-principal, .ob-erguendo .ob-estais, .ob-erguendo .ob-cabo-brilho, .ob-erguendo .ob-cabo-elos, .ob-erguendo .ob-cabo-bolhas, .ob-erguendo .ob-pendurais, .ob-erguendo .ob-tabuleiro,
+  .ob-est-aldeoes .ob-carga-aldeoes, .ob-est-carrocas .ob-carga-carrocas, .ob-est-tempestade .ob-raio path, .ob-est-tempestade .ob-bandeira,
+  .ob-range .ob-tabuleiro, .ob-ok .ob-andantes-planta, .ob-carimbo, .ob-mapa .ob-andante, .ob-mapa .ob-mp-fumaca circle, .ob-mapa .ob-m-range, .ob-mapa-pe .ob-mp-deck, .ob-mapa-fraca .ob-mp-deck { animation: none !important; }
+  .ob-est-aldeoes .ob-carga-aldeoes, .ob-est-carrocas .ob-carga-carrocas { transform: translateX(90px); }
+  .ob-ok .ob-andantes-planta { transform: translateX(60px); }
+  .ob-est-tempestade .ob-raio path { opacity: 0.6; }
+}
+@media print { .ob-overlay, .ob-mapa { display: none !important; } }
