@@ -1,0 +1,95 @@
+/* =====================================================================
+   clima.css — O CLIMA DO DIA (etapa B1 do "Reino Vivo")
+   O clima.js põe <html data-clima-reino="sol|vento|chuva|neblina|tempestade">.
+   Chuva, névoa e relâmpago usam as camadas de fundo do relogio.css
+   (.rr-veu-pagina e .rr-veu-carta, por ::before): nunca cobrem o texto.
+   Tirar este <link> e o clima.js desfaz tudo.
+   ===================================================================== */
+
+/* ---------- 1. Chuva, tempestade e neblina ---------- */
+.rr-veu-pagina::before, .rr-veu-carta::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity 1.5s ease;
+}
+[data-clima-reino="chuva"] .rr-veu-pagina::before, [data-clima-reino="chuva"] .rr-veu-carta::before,
+[data-clima-reino="tempestade"] .rr-veu-pagina::before, [data-clima-reino="tempestade"] .rr-veu-carta::before {
+  opacity: 1;
+  background-image: repeating-linear-gradient(105deg, transparent 0 22px, rgba(70, 100, 130, 0.22) 22px 23.5px, transparent 23.5px 47px);
+  background-size: 140px 140px;
+  animation: clChove 0.9s linear infinite;
+}
+[data-clima-reino="tempestade"] .rr-veu-pagina::before, [data-clima-reino="tempestade"] .rr-veu-carta::before {
+  background-image: repeating-linear-gradient(110deg, transparent 0 14px, rgba(50, 70, 100, 0.3) 14px 16px, transparent 16px 30px);
+  animation: clChove 0.6s linear infinite, clRelampago 9s ease-out infinite;
+}
+[data-clima-reino="tempestade"] .rr-veu-pagina { background-color: rgba(30, 36, 52, 0.3); }
+[data-clima-reino="tempestade"] .rr-veu-carta { background-color: rgba(34, 40, 60, 0.26); }
+[data-clima-reino="tempestade"][data-hora-reino="noite"] .rr-veu-pagina { background-color: rgba(12, 18, 50, 0.5); }
+[data-clima-reino="neblina"] .rr-veu-pagina::before, [data-clima-reino="neblina"] .rr-veu-carta::before {
+  opacity: 1;
+  background:
+    radial-gradient(ellipse 40% 18% at 20% 30%, rgba(245, 240, 230, 0.75), transparent 70%),
+    radial-gradient(ellipse 45% 20% at 75% 55%, rgba(245, 240, 230, 0.7), transparent 70%),
+    radial-gradient(ellipse 50% 16% at 40% 85%, rgba(245, 240, 230, 0.7), transparent 70%);
+  animation: clNevoa 18s ease-in-out infinite alternate;
+}
+/* vento: rajadas de tinta (o mesmo traço das plantas da Mesa) correndo devagar */
+[data-clima-reino="vento"] .rr-veu-pagina::before, [data-clima-reino="vento"] .rr-veu-carta::before {
+  opacity: 1;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180' viewBox='0 0 320 180'%3E%3Cg fill='none' stroke='%235f6f78' stroke-width='1.6' stroke-linecap='round' stroke-dasharray='14 7' opacity='.55'%3E%3Cpath d='M10 40q30-10 60 0t56 0q14-4 16-14q2-10-8-10'/%3E%3Cpath d='M150 110q26-9 52 0t48 0'/%3E%3Cpath d='M40 150q22-7 44 0t40 0q12-3 13-11'/%3E%3Cpath d='M210 30q20-6 40 0t36 0'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 320px 180px;
+  animation: clVenta 7s linear infinite;
+}
+[data-clima-reino="vento"] .mm-nuvem { animation-duration: 40s; }
+@keyframes clVenta { from { background-position: 0 0; } to { background-position: 320px 12px; } }
+@keyframes clChove { from { background-position: 0 0; } to { background-position: -38px 140px; } }
+@keyframes clRelampago { 0%, 90%, 100% { background-color: transparent; } 91% { background-color: rgba(255, 250, 220, 0.35); } 92% { background-color: transparent; } 93.5% { background-color: rgba(255, 250, 220, 0.22); } 95% { background-color: transparent; } }
+@keyframes clNevoa { from { transform: translateX(-3%); } to { transform: translateX(3%); } }
+
+/* o clima no medalhão do relógio */
+.rr-clima { white-space: nowrap; }
+
+/* ---------- 2. Obra derrubada pela tempestade, vista na Mesa ---------- */
+.ob-caiu.ob-falha-tempestade .ob-estrutura { transform: translateY(6px) rotate(2.5deg); filter: grayscale(0.45) brightness(0.9); transform-box: view-box; transform-origin: 50% 100%; }
+.ob-caiu.ob-falha-tempestade .ob-chuva path, .ob-caiu.ob-falha-tempestade .ob-vento path { opacity: 0.7; }
+
+/* ---------- 3. O pergaminho de aviso ---------- */
+.cl-overlay {
+  position: fixed; inset: 0; z-index: 70;
+  background: var(--veu-sepia, rgba(6, 7, 10, 0.88));
+  display: flex; align-items: center; justify-content: center; padding: 1rem;
+}
+.cl-aviso { width: 100%; max-width: 540px; max-height: 88vh; overflow-y: auto; padding: 1.4rem 1.3rem 1.2rem; }
+.cl-kicker { display: block; font-family: var(--font-unicase, "Cinzel", serif); font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ouro-tinta, #5c430c); }
+.cl-titulo { margin: 0.2rem 0 0.6rem; font-size: 1.35rem; color: var(--vinho, #7a1f1f); text-wrap: balance; }
+.cl-aviso p { margin: 0.45rem 0; line-height: 1.45; }
+.cl-lista { list-style: none; margin: 0.5rem 0; padding: 0; display: flex; flex-direction: column; gap: 0.55rem; }
+.cl-lista li {
+  display: grid; grid-template-columns: 1fr auto; gap: 0.2rem 0.7rem; align-items: center;
+  padding: 0.55rem 0.7rem; background: var(--papel-claro, #faf3e0);
+  border: 1px solid rgba(139, 26, 26, 0.45); border-radius: 8px;
+}
+.cl-nome { font-family: var(--font-display); color: var(--cera, #8b1a1a); }
+.cl-motivo { grid-column: 1; font-size: 0.82rem; color: var(--tinta-suave, #5a4228); }
+.cl-reformar { grid-column: 2; grid-row: 1 / span 2; font-size: 0.72rem !important; padding: 0.42rem 0.7rem !important; white-space: nowrap; }
+@media (max-width: 480px) {
+  .cl-lista li { grid-template-columns: 1fr; }
+  .cl-reformar { grid-column: 1; grid-row: auto; justify-self: start; }
+}
+.cl-resistiram { font-size: 0.9rem; color: var(--musgo, #3e5a2b); }
+.cl-licao { font-size: 0.85rem; font-style: italic; color: var(--tinta-suave, #5a4228); }
+.cl-acoes { display: flex; justify-content: flex-end; margin-top: 0.8rem; }
+
+/* ---------- 3b. O Arauto (arauto.js): o mesmo pergaminho, em seções ---------- */
+.ar-pergaminho { max-width: 580px; }
+.ar-abertura { font-style: italic; color: var(--tinta-suave, #5a4228); }
+.ar-secao { margin: 0.75rem 0 0; padding-top: 0.6rem; border-top: 1px dashed rgba(59, 36, 18, 0.3); }
+.ar-subtitulo { margin: 0 0 0.3rem; font-family: var(--font-display); font-size: 0.98rem; color: var(--vinho, #7a1f1f); }
+.ar-tempestade { border-top: 0; padding: 0.55rem 0.7rem; background: rgba(139, 26, 26, 0.06); border: 1px solid rgba(139, 26, 26, 0.35); border-radius: 8px; }
+.ar-passo { display: flex; align-items: center; justify-content: space-between; gap: 0.7rem; flex-wrap: wrap; }
+.ar-passo .btn-gotico { font-size: 0.72rem !important; padding: 0.42rem 0.8rem !important; white-space: nowrap; }
+
+/* ---------- 4. Sem movimento e impressão ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .rr-veu-pagina::before, .rr-veu-carta::before { animation: none !important; transition: none !important; }
+}
+@media print { .cl-overlay { display: none !important; } }
