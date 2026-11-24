@@ -240,8 +240,46 @@ function montarBotaoVoltarTopo() {
   });
 }
 
+// ---------- Flutuantes que se recolhem ao rolar (só no celular) ----------
+// No celular o som (esquerda), o ↑ e o Mago (direita) cobriam as pontas dos
+// botões de Julgamento quando eles passavam pelo pé da tela. Agora, abaixo de
+// 1024 px, eles descem e somem enquanto a pessoa rola PARA BAIXO e voltam ao
+// rolar para cima ou ao parar de rolar (0,7 s). Só mexe numa classe do <body>;
+// o CSS (style.css, "Flutuantes recolhidos") faz o resto.
+// Nunca recolhe com o chat do Mago aberto nem com o foco do teclado num deles.
+function configurarFlutuantesRecolhiveis() {
+  const celular = window.matchMedia ? window.matchMedia("(max-width: 1023.98px)") : null;
+  const CLASSE = "flutuantes-recolhidos";
+  let ultimoY = window.scrollY;
+  let relogio = null;
+
+  function mostrar() { document.body.classList.remove(CLASSE); }
+
+  function podeRecolher() {
+    if (!celular || !celular.matches) return false;
+    if (document.querySelector("#oraculo-container .balao-fala")) return false;
+    const foco = document.activeElement;
+    if (foco && foco.closest && foco.closest("#botao-topo, .som-controles, #oraculo-container")) return false;
+    return true;
+  }
+
+  window.addEventListener("scroll", () => {
+    const y = window.scrollY;
+    const delta = y - ultimoY;
+    ultimoY = y;
+    if (Math.abs(delta) < 4) return; // tremidinha do dedo não conta
+    if (delta > 0 && y > 120 && podeRecolher()) document.body.classList.add(CLASSE);
+    else mostrar();
+    clearTimeout(relogio);
+    relogio = setTimeout(mostrar, 700); // parou de rolar: eles voltam
+  }, { passive: true });
+
+  if (celular && celular.addEventListener) celular.addEventListener("change", mostrar);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   montarBarraNavegacao();
   montarBotaoVoltarTopo();
+  configurarFlutuantesRecolhiveis();
   configurarObservadorSecaoAtiva();
 });

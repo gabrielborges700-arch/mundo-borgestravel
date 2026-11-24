@@ -181,6 +181,18 @@
     return botao;
   }
 
+  // A 1ª palavra do parágrafo que ganha a capitular (filho direto de .capitular)
+  // não vira botão: o ::first-letter não entra num botão e a runa ficava sem a
+  // letra iluminada (ex.: 4.1). A palavra ainda é marcada mais adiante no texto.
+  function abreCapitular(no, indice) {
+    var pai = no.parentElement;
+    if (!pai || pai.tagName !== "P" || !pai.parentElement || !pai.parentElement.classList.contains("capitular")) return false;
+    if (no.data.slice(0, indice).trim()) return false; // tem texto antes da palavra
+    var antes = no.previousSibling; // nada de texto antes, dentro do mesmo parágrafo
+    while (antes) { if ((antes.textContent || "").trim()) return false; antes = antes.previousSibling; }
+    return true;
+  }
+
   function marcarTermos(raiz) {
     if (!buscaOk || !raiz || raiz.getAttribute("data-glossario") === "ok") return;
     raiz.setAttribute("data-glossario", "ok");
@@ -193,6 +205,7 @@
         palavra.re.lastIndex = 0;
         var achado = palavra.re.exec(no.data);
         if (!achado) continue;
+        if (abreCapitular(no, achado.index)) continue; // a letra iluminada não entra em botão
         var meio = no.splitText(achado.index);
         var depois = meio.splitText(achado[0].length);
         meio.parentNode.replaceChild(criarTermo(palavra, achado[0]), meio);

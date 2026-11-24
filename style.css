@@ -1095,6 +1095,24 @@ body:has(#oraculo-container .balao-fala) #pilha-toasts { bottom: calc(1rem + 400
   display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
 }
 
+/* Flutuantes recolhidos (navegacao.js, configurarFlutuantesRecolhiveis):
+   no celular, ao rolar para baixo, o ↑, os botões de som e o Mago descem e
+   somem (sem receber clique) para não cobrir os botões de Julgamento; voltam
+   ao rolar para cima ou ao parar. Os avisos (toasts) continuam visíveis. */
+#botao-topo, .som-controles, #oraculo-container {
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+body.flutuantes-recolhidos #botao-topo,
+body.flutuantes-recolhidos .som-controles,
+body.flutuantes-recolhidos #oraculo-container {
+  transform: translateY(calc(100% + 1.5rem));
+  opacity: 0;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  #botao-topo, .som-controles, #oraculo-container { transition: none; }
+}
+
 /* Medalhão de metal escuro com aro dourado (mesma família do .widget-diario) */
 .botao-som {
   width: 42px; height: 42px; border-radius: 50%; padding: 0;

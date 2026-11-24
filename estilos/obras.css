@@ -1,5 +1,5 @@
 /* =====================================================================
-   obras.css — OBRAS DO REINO: a Mesa de Projeto (etapa A1 do "Reino Vivo")
+   obras.css — OBRAS DO REINO: a Mesa de Projeto (etapas A1 e A2 do "Reino Vivo")
    Placa no quadro do reino, obra desenhada no lugar do mapa, e a janela da
    mesa: prancha em escala, medidores de latão, cartas de material, ajustes,
    orçamento e laudo selado. Carrega DEPOIS dos outros CSS; cores vêm das
@@ -40,7 +40,7 @@
 .ob-mapa .ob-m-range { transform-box: fill-box; transform-origin: 50% 50%; animation: obRange 2s ease-in-out infinite; }
 .ob-mapa .ob-andante circle, .ob-mapa .ob-andante path { fill: #3b2412; stroke: #3b2412; stroke-width: 0.7; stroke-linecap: round; }
 .ob-mapa .ob-andante path { fill: none; }
-.ob-mapa .ob-andante { animation: obAnda 7s linear infinite; }
+.ob-mapa .ob-andante { animation: obAnda 7s linear infinite; } /* o trecho vem do catálogo em --ob-anda */
 .ob-mapa .ob-andante-2 { animation-delay: -3.4s; }
 .ob-mapa .ob-mp-fumaca circle { fill: rgba(120, 104, 88, 0.6); stroke: rgba(59, 36, 18, 0.4); stroke-width: 0.6; animation: obFumaca 3.2s ease-out infinite; transform-box: fill-box; transform-origin: 50% 100%; }
 .ob-mapa .ob-mp-fumaca circle:nth-child(2) { animation-delay: -1.1s; }
@@ -50,7 +50,7 @@
 .mm-mapa > .tile-reino .tile-cabecalho:hover .ob-mapa,
 .mm-mapa > .tile-reino .tile-cabecalho:focus-visible .ob-mapa { transform: translateY(-5px) scale(1.06); }
 .mm-mapa > .tile-reino.estado-nao-iniciado .ob-mapa { filter: sepia(0.35) saturate(0.7); }
-@keyframes obAnda { from { transform: translateX(0); } to { transform: translateX(54px); } }
+@keyframes obAnda { from { transform: translateX(0); } to { transform: translateX(var(--ob-anda, 54px)); } }
 @keyframes obFumaca { 0% { opacity: 0.8; transform: translateY(0) scale(0.7); } 100% { opacity: 0; transform: translateY(-10px) scale(1.3); } }
 @keyframes obSurgeMapa { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
 @keyframes obRange { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(1.2deg) translateY(1px); } }
@@ -176,6 +176,151 @@
 .ob-ok .ob-andantes-planta { opacity: 1; animation: obAtravessa 9s linear infinite; }
 .ob-range .ob-tabuleiro { animation: obRange 1.6s ease-in-out infinite; }
 
+/* ---------- 4b. As 6 obras da etapa A2 ----------
+   Cada obra desenha as próprias peças (obras-catalogo.js). Os nomes de
+   queda se repetem entre obras ("tomba", "rompe"...), então toda queda
+   vale só dentro da janela daquela obra: .ob-obra-<bloco>.
+   Grupos com transform-origin no style (pé da torre, base da treliça...)
+   giram em torno desse ponto, em coordenadas do desenho. */
+
+/* cenários e peças comuns */
+.ob-mar { fill: #a9c0cd; stroke: #3b2412; stroke-width: 1; }
+.ob-barquinho { fill: #fbf3dc; stroke: #3b2412; stroke-width: 1; stroke-linejoin: round; }
+.ob-campo { fill: #cfd3a0; stroke: #3b2412; stroke-width: 0.8; opacity: 0.85; }
+.ob-feno { fill: #e3c56a; stroke: #3b2412; stroke-width: 1; opacity: 0.9; }
+.ob-fundacao { fill: #b39c72; stroke: #3b2412; stroke-width: 1.2; }
+.ob-lama { fill: #9c8a6a; stroke: #3b2412; stroke-width: 1; }
+.ob-estacas { fill: none; stroke: #6b4a2a; stroke-width: 3; stroke-linecap: round; }
+.ob-cascata { fill: #a9c0cd; stroke: #3b2412; stroke-width: 1; }
+.ob-forja { fill: #8a6a4a; stroke: #3b2412; stroke-width: 1.3; stroke-linejoin: round; }
+.ob-forja-boca { fill: #c0582a; stroke: #3b2412; stroke-width: 1; animation: obBrasa 1.6s ease-in-out infinite alternate; }
+.ob-setas-vento path { fill: none; stroke: #5a7f9a; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.ob-setas-forte path { stroke: #3f5f78; stroke-width: 2.6; }
+.ob-cena-svg g.ob-esboco { opacity: 0.45; }
+.ob-cena-svg g.ob-esboco path, .ob-cena-svg g.ob-esboco rect { stroke-dasharray: 4 4; }
+@keyframes obBrasa { from { fill: #a8441f; } to { fill: #e0782f; } }
+
+/* cargas: cada estágio acende a sua */
+.ob-est-brisa .ob-carga-brisa, .ob-est-vendaval .ob-carga-vendaval, .ob-est-tempestade .ob-carga-tempestade,
+.ob-est-colheita .ob-carga-colheita, .ob-est-pendurar .ob-carga-pendurar, .ob-est-festa .ob-carga-festa,
+.ob-est-visitantes .ob-carga-visitantes, .ob-est-multidao .ob-carga-multidao, .ob-est-inauguracao .ob-carga-inauguracao,
+.ob-est-feira .ob-carga-feira, .ob-est-procissao .ob-carga-procissao, .ob-est-cerco .ob-carga-cerco { opacity: 1; transition: opacity 0.3s ease; }
+.ob-est-feira .ob-carga-feira, .ob-est-procissao .ob-carga-procissao { animation: obAtravessa var(--ob-dur, 1.8s) linear both; }
+.ob-est-brisa .ob-setas-vento, .ob-est-vendaval .ob-setas-vento, .ob-est-tempestade .ob-setas-vento { animation: obSopra 0.7s ease-in-out infinite alternate; }
+.ob-est-cerco .ob-ci-ariete { animation: obAriete 0.6s ease-in infinite alternate; }
+.ob-janela:not(.ob-obra-bloco3):not(.ob-obra-bloco2) .ob-ok .ob-andantes-planta { animation: obPasseia 4s ease-in-out infinite alternate; }
+@keyframes obSopra { from { transform: translateX(-4px); } to { transform: translateX(4px); } }
+@keyframes obAriete { from { transform: translateX(0); } to { transform: translateX(22px); } }
+@keyframes obPasseia { from { transform: translateX(0); } to { transform: translateX(28px); } }
+
+/* bloco0 · Torre de Vigia */
+.ob-tv-torre { transition: transform 0.9s cubic-bezier(0.5, 0, 0.7, 1); }
+.ob-tv-parede, .ob-tv-ameias { stroke: #3b2412; stroke-width: 1.3; stroke-linejoin: round; }
+.ob-tv-juntas { fill: none; stroke: #3b2412; stroke-width: 0.6; opacity: 0.45; }
+.ob-tv-janela { fill: none; stroke: #3b2412; stroke-width: 2.4; stroke-linecap: round; }
+.ob-tv-porta { fill: #3b2412; }
+.ob-tv-vista { fill: none; stroke-width: 1; stroke-dasharray: 2 4; }
+.ob-tv-vista-ok { stroke: #3e5a2b; }
+.ob-tv-vista-nao { stroke: #a02020; opacity: 0.7; }
+.ob-erguendo .ob-tv-torre { animation: obErgue var(--ob-dur, 1.4s) ease-out both; }
+.ob-obra-bloco0 .ob-falha-afunda .ob-tv-torre { transform: translateY(8px) rotate(7deg); }
+.ob-obra-bloco0 .ob-falha-tomba .ob-tv-torre { transform: rotate(32deg); }
+.ob-obra-bloco0 .ob-falha-derrete .ob-tv-torre { transform: scaleY(0.72) skewX(-4deg); filter: saturate(0.6); }
+.ob-obra-bloco0 .ob-falha-esmaga .ob-tv-torre { transform: scaleY(0.86); }
+
+/* bloco1 · Celeiro */
+.ob-ce-parede { stroke: #3b2412; stroke-width: 1.3; transition: transform 0.9s cubic-bezier(0.5, 0, 0.7, 1); }
+.ob-ce-cinta { fill: #5c5c5c; stroke: #3b2412; stroke-width: 0.6; }
+.ob-ce-podre { fill: none; stroke: #6b8e3a; stroke-width: 2; stroke-dasharray: 2 2; }
+.ob-ce-telhado { transition: transform 0.9s cubic-bezier(0.5, 0, 0.7, 1); }
+.ob-ce-tesoura { fill: none; stroke-width: 3; stroke-linejoin: round; stroke-linecap: round; }
+.ob-ce-barras { fill: none; stroke-width: 1.6; stroke-linecap: round; }
+.ob-ce-telhas { fill: none; stroke: #7a1f1f; stroke-width: 4; stroke-linejoin: round; stroke-linecap: round; opacity: 0.85; }
+.ob-erguendo .ob-ce-parede { animation: obErgue var(--ob-dur, 1.4s) ease-out both; }
+.ob-erguendo .ob-ce-telhado { animation: obAssenta 0.6s ease-out 0.8s both; }
+.ob-obra-bloco1 .ob-falha-verga .ob-ce-telhado { transform: translateY(9px) scaleX(0.97); }
+.ob-obra-bloco1 .ob-falha-quebra .ob-ce-telhado { transform: translateY(34px) rotate(9deg); }
+.ob-obra-bloco1 .ob-falha-tomba .ob-ce-parede-e { transform: rotate(-22deg); }
+.ob-obra-bloco1 .ob-falha-tomba .ob-ce-parede-d { transform: rotate(22deg); }
+.ob-obra-bloco1 .ob-falha-tomba .ob-ce-telhado { transform: translateY(30px); }
+.ob-obra-bloco1 .ob-range .ob-ce-telhado { animation: obRange 1.6s ease-in-out infinite; }
+
+/* bloco2 · Ponte do Mercado */
+.ob-pm-viga { transition: transform 0.9s cubic-bezier(0.5, 0, 0.7, 1); }
+.ob-pm-aco { fill: #8f8a7f; stroke: #3b2412; stroke-width: 1.2; }
+.ob-pm-vigas-linhas { fill: none; stroke: #3b2412; stroke-width: 0.7; opacity: 0.6; }
+.ob-pm-guarda, .ob-mi-guarda { fill: none; stroke: #3b2412; stroke-width: 1; stroke-linecap: round; }
+.ob-pm-barracas path { fill: #e3c56a; stroke: #3b2412; stroke-width: 0.9; stroke-linejoin: round; }
+.ob-pm-apoio-curto { fill: none; stroke: #a02020; stroke-width: 2; stroke-linecap: round; }
+.ob-pm-secao-caixa { fill: #fbf3dc; stroke: #3b2412; stroke-width: 1; }
+.ob-pm-i { fill: none; stroke: #3b2412; stroke-width: 1.6; stroke-linecap: square; }
+.ob-pm-secao-txt { font-family: var(--font-body, Georgia, serif); font-size: 8px; font-style: italic; fill: #7a1f1f; }
+.ob-pm-estandarte { fill: #7a1f1f; stroke: #3b2412; stroke-width: 0.8; }
+.ob-erguendo .ob-pm-viga { animation: obAssenta 0.8s ease-out 0.3s both; }
+.ob-obra-bloco2 .ob-falha-curta .ob-pm-viga { transform: translate(12px, 44px) rotate(14deg); }
+.ob-obra-bloco2 .ob-falha-rompe .ob-pm-viga { transform: translateY(16px) rotate(3deg); }
+
+/* bloco4 · Sino da Forja */
+.ob-sf-poste, .ob-sf-trave { fill: #8a5a2b; stroke: #3b2412; stroke-width: 1.2; }
+.ob-sf-sino { transition: transform 0.7s cubic-bezier(0.5, 0, 0.9, 0.6); }
+.ob-sf-tirante { fill: none; stroke-linecap: round; }
+.ob-sf-olhal { fill: none; stroke: #3b2412; stroke-width: 1.6; }
+.ob-sf-solda { fill: #5c5c5c; stroke: #3b2412; stroke-width: 0.6; }
+.ob-sf-corda { fill: none; stroke: #a8733d; stroke-width: 2; stroke-linecap: round; }
+.ob-sf-bronze { fill: #b08850; stroke: #3b2412; stroke-width: 1.3; stroke-linejoin: round; }
+.ob-sf-badalo { fill: #5c430c; stroke: #3b2412; stroke-width: 0.8; }
+.ob-sf-polia path { fill: none; stroke: #3b2412; stroke-width: 1.2; stroke-dasharray: 3 3; }
+.ob-erguendo .ob-sf-portico rect { animation: obErgue var(--ob-dur, 1.4s) ease-out both; transform-box: fill-box; transform-origin: 50% 100%; }
+.ob-erguendo .ob-sf-sino { animation: obAssenta 0.7s ease-out 0.8s both; }
+.ob-est-badalar .ob-sf-sino, .ob-est-festa .ob-sf-sino { animation: obBadala 0.5s ease-in-out infinite alternate; }
+.ob-obra-bloco4 .ob-caiu .ob-sf-sino, .ob-obra-bloco4 .ob-ok .ob-sf-sino, .ob-obra-bloco4 .ob-range .ob-sf-sino { animation: none; }
+.ob-obra-bloco4 .ob-falha-corda .ob-sf-sino, .ob-obra-bloco4 .ob-falha-rompe .ob-sf-sino, .ob-obra-bloco4 .ob-falha-fadiga .ob-sf-sino { transform: translateY(26px) rotate(-12deg); }
+.ob-obra-bloco4 .ob-falha-escoa .ob-sf-sino { transform: translateY(14px); }
+@keyframes obBadala { from { transform: rotate(-9deg); } to { transform: rotate(9deg); } }
+
+/* bloco5 · Mirante Treliçado */
+.ob-mi-trelica { transition: transform 0.9s cubic-bezier(0.5, 0, 0.7, 1); }
+.ob-mi-barras { fill: none; stroke: #8a5a2b; stroke-width: 1.6; stroke-linecap: round; }
+.ob-mi-banzo { fill: none; stroke: #5c3a1c; stroke-width: 3; stroke-linecap: round; }
+.ob-mi-raiz { fill: #b39c72; stroke: #3b2412; stroke-width: 1; opacity: 0.7; }
+.ob-mi-tirante { fill: none; stroke: #3b2412; stroke-width: 2; }
+.ob-mi-pino { fill: #c9a14a; stroke: #3b2412; stroke-width: 0.8; }
+.ob-mi-fogos { fill: none; stroke: #d4af37; stroke-width: 1.6; stroke-linecap: round; animation: obRelampago 1s ease-out infinite; }
+.ob-erguendo .ob-mi-trelica { animation: obAssenta 0.8s ease-out 0.3s both; }
+/* a deformação do estágio fica no style da treliça; a queda passa por cima */
+.ob-obra-bloco5 .ob-falha-mecanismo .ob-mi-trelica { transform: translate(6px, 30px) rotate(38deg) !important; }
+.ob-obra-bloco5 .ob-falha-tomba .ob-mi-trelica { transform: rotate(26deg) !important; }
+.ob-obra-bloco5 .ob-falha-rompe .ob-mi-trelica { transform: rotate(14deg) !important; }
+
+/* bloco6 · Cidadela da Aliança */
+.ob-ci-muralha { transition: transform 0.9s cubic-bezier(0.5, 0, 0.7, 1); }
+.ob-ci-pedra, .ob-ci-ameias { fill: #d9c49a; stroke: #3b2412; stroke-width: 1.2; stroke-linejoin: round; }
+.ob-ci-esp { fill: rgba(122, 31, 31, 0.14); stroke: #7a1f1f; stroke-width: 0.8; stroke-dasharray: 2 2; }
+.ob-ci-arco { fill: #5a4228; stroke: #3b2412; stroke-width: 1.2; }
+.ob-ci-fecho { fill: #cdbb8c; stroke: #3b2412; stroke-width: 1; transition: transform 0.7s cubic-bezier(0.5, 0, 0.9, 0.6); }
+.ob-ci-vigas { fill: none; stroke: #8a5a2b; stroke-width: 2.4; }
+.ob-ci-contraforte { fill: #cdbb8c; stroke: #3b2412; stroke-width: 1.2; }
+.ob-ci-vitral { fill: #5a7f9a; stroke: #3b2412; stroke-width: 1; }
+.ob-ci-cupula { fill: #8f8a7f; stroke: #3b2412; stroke-width: 1.2; }
+.ob-ci-teto, .ob-ci-flamula { fill: #7a1f1f; stroke: #3b2412; stroke-width: 1; }
+.ob-ci-cupula.ob-ci-ouro, .ob-ci-teto.ob-ci-ouro, circle.ob-ci-ouro { fill: #d4af37; }
+.ob-ci-ariete rect { fill: #8a5a2b; stroke: #3b2412; stroke-width: 1; }
+.ob-ci-ariete circle { fill: #d9c49a; stroke: #3b2412; stroke-width: 1; }
+.ob-ci-ariete path { fill: none; stroke: #3b2412; stroke-width: 1; }
+.ob-ci-fita { fill: none; stroke: #d2a13a; stroke-width: 9; stroke-dasharray: 10 6; opacity: 0; transition: opacity 0.3s ease; }
+.ob-ci-fita-txt { font-family: var(--font-unicase, "Cinzel", serif); font-size: 8px; font-weight: 700; letter-spacing: 0.08em; fill: #3b2412; opacity: 0; transition: opacity 0.3s ease; }
+.ob-erguendo .ob-ci-muralha, .ob-erguendo .ob-ci-torre rect { animation: obErgue var(--ob-dur, 1.4s) ease-out both; }
+.ob-erguendo .ob-ci-torre rect { transform-box: fill-box; transform-origin: 50% 100%; }
+.ob-erguendo .ob-ci-salao { animation: obAssenta 0.7s ease-out 0.8s both; }
+.ob-obra-bloco6 .ob-falha-norma .ob-ci-fita, .ob-obra-bloco6 .ob-falha-norma .ob-ci-fita-txt { opacity: 1; }
+.ob-obra-bloco6 .ob-falha-norma .ob-trinca { opacity: 0; }
+.ob-obra-bloco6 .ob-falha-afunda .ob-ci-mur-e { transform: translateY(8px) rotate(-5deg); }
+.ob-obra-bloco6 .ob-falha-afunda .ob-ci-mur-d { transform: translateY(8px) rotate(5deg); }
+.ob-obra-bloco6 .ob-falha-abre .ob-ci-mur-e { transform: rotate(-10deg); }
+.ob-obra-bloco6 .ob-falha-abre .ob-ci-mur-d { transform: rotate(10deg); }
+.ob-obra-bloco6 .ob-falha-abre .ob-ci-fecho { transform: translateY(28px) rotate(30deg); }
+.ob-obra-bloco6 .ob-falha-tomba .ob-ci-mur-e { transform: rotate(-38deg); }
+
 /* ---------- 5. Medidores ---------- */
 .ob-medidores { display: grid; grid-template-columns: 150px 1fr; gap: 0.6rem; align-items: stretch; margin: 0.2rem 0 0.4rem; }
 @media (max-width: 560px) { .ob-medidores { grid-template-columns: 1fr; } }
@@ -256,9 +401,11 @@
 .ob-orc-valor { font-family: var(--font-display); font-size: 0.95rem; color: var(--tinta, #2b1d10); font-variant-numeric: tabular-nums; }
 .ob-orc-barra { display: flex; height: 10px; margin: 0.35rem 0 0.25rem; background: rgba(59, 36, 18, 0.12); border: 1px solid rgba(59, 36, 18, 0.35); border-radius: 999px; overflow: hidden; }
 .ob-orc-barra i { display: block; height: 100%; transition: width 0.3s ease; }
-.ob-orc-cabo { background: #7a1f1f; }
-.ob-orc-anc { background: #b8892c; }
-.ob-orc-torres { background: #5a7f9a; }
+/* faixas do orçamento: uma por item de custo, na ordem do catálogo */
+.ob-orc-seg-0 { background: #7a1f1f; }
+.ob-orc-seg-1 { background: #b8892c; }
+.ob-orc-seg-2 { background: #5a7f9a; }
+.ob-orc-seg-3 { background: #6b7a3a; }
 .ob-orc-detalhe { font-size: 0.72rem; color: var(--tinta-suave, #5a4228); }
 .ob-orc-estourado { border-color: var(--cera, #8b1a1a); }
 .ob-orc-estourado .ob-orc-valor, .ob-orc-estourado .ob-orc-detalhe { color: var(--cera, #8b1a1a); }
@@ -285,6 +432,11 @@
 .ob-laudo-pe .ob-carimbo { color: var(--musgo, #3e5a2b); }
 .ob-laudo-fraca .ob-carimbo { color: var(--ouro-tinta, #5c430c); }
 .ob-laudo-ferida .ob-carimbo { color: var(--cera, #8b1a1a); }
+/* tela estreita: o carimbo desce para baixo do título (nomes longos o empurravam para fora) */
+@media (max-width: 400px) {
+  .ob-laudo-cab { grid-template-columns: 1fr; }
+  .ob-carimbo { grid-column: 1; grid-row: auto; justify-self: start; margin-top: 0.45rem; }
+}
 @keyframes obCarimba { from { opacity: 0; transform: rotate(-8deg) scale(1.6); } to { opacity: 0.92; transform: rotate(-8deg) scale(1); } }
 .ob-laudo-tabela-caixa { overflow-x: auto; margin: 0.3rem 0 0.5rem; }
 .ob-laudo-tabela { width: 100%; border-collapse: collapse; font-size: 0.8rem; font-variant-numeric: tabular-nums; }
@@ -304,10 +456,14 @@
 
 /* ---------- 8. Sem movimento e impressão ---------- */
 @media (prefers-reduced-motion: reduce) {
+  .ob-tv-torre, .ob-ce-parede, .ob-pm-viga, .ob-mi-trelica, .ob-ci-muralha, .ob-ci-fecho, .ob-ci-fita, .ob-ci-fita-txt,
   .ob-torre, .ob-tabuleiro, .ob-cabo, .ob-pendurais, .ob-ancora, .ob-chuva path, .ob-vento path, .ob-trinca, .ob-bandeira, .ob-bandeira-haste, .ob-nuvens path, .ob-med-ponteiro, .ob-orc-barra i, .ob-carta, .ob-mapa { transition: none !important; }
   .ob-erguendo .ob-torre, .ob-erguendo .ob-cabo-principal, .ob-erguendo .ob-estais, .ob-erguendo .ob-cabo-brilho, .ob-erguendo .ob-cabo-elos, .ob-erguendo .ob-cabo-bolhas, .ob-erguendo .ob-pendurais, .ob-erguendo .ob-tabuleiro,
   .ob-est-aldeoes .ob-carga-aldeoes, .ob-est-carrocas .ob-carga-carrocas, .ob-est-tempestade .ob-raio path, .ob-est-tempestade .ob-bandeira,
-  .ob-range .ob-tabuleiro, .ob-ok .ob-andantes-planta, .ob-carimbo, .ob-mapa .ob-andante, .ob-mapa .ob-mp-fumaca circle, .ob-mapa .ob-m-range, .ob-mapa-pe .ob-mp-deck, .ob-mapa-fraca .ob-mp-deck { animation: none !important; }
+  .ob-range .ob-tabuleiro, .ob-ok .ob-andantes-planta, .ob-carimbo,
+  .ob-forja-boca, .ob-setas-vento, .ob-ci-ariete, .ob-sf-sino, .ob-mi-fogos, .ob-carga, .ob-ce-telhado,
+  .ob-erguendo .ob-tv-torre, .ob-erguendo .ob-ce-parede, .ob-erguendo .ob-pm-viga, .ob-erguendo .ob-sf-portico rect, .ob-erguendo .ob-mi-trelica,
+  .ob-erguendo .ob-ci-muralha, .ob-erguendo .ob-ci-torre rect, .ob-erguendo .ob-ci-salao, .ob-mapa .ob-andante, .ob-mapa .ob-mp-fumaca circle, .ob-mapa .ob-m-range, .ob-mapa-pe .ob-mp-deck, .ob-mapa-fraca .ob-mp-deck { animation: none !important; }
   .ob-est-aldeoes .ob-carga-aldeoes, .ob-est-carrocas .ob-carga-carrocas { transform: translateX(90px); }
   .ob-ok .ob-andantes-planta { transform: translateX(60px); }
   .ob-est-tempestade .ob-raio path { opacity: 0.6; }
